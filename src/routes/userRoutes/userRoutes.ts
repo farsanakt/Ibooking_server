@@ -7,5 +7,9 @@ const user_route=express.Router()
 
 user_route.get('/findauditorium',userController.findAuditorium)
 
+user_route.get('/findvenues/:id',userController.findVenues)
+
+user_route.get('/findVenueDetails/:id',userController.findVenueDetails)
+
 
 export default user_route

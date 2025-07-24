@@ -40,7 +40,7 @@ export class AuditoriumRepositories{
         return await Venue.findOne({name:data.name})
     }
 
-     async findAuditorium(event: string, place: string): Promise<IAuditoriumUser[] | null> {
+    async findAuditorium(event: string, place: string): Promise<IAuditoriumUser[] | null> {
 
         try {
             
@@ -79,7 +79,7 @@ export class AuditoriumRepositories{
         }
 
 
-          async findVenuesByAuditoriumIds(auditoriumIds: string): Promise<IVenue[]> {
+     async findVenuesByAuditoriumIds(auditoriumIds: string): Promise<IVenue[]> {
     try {
       const venues = await Venue.find({
         audiUserId: { $in: auditoriumIds },
@@ -89,7 +89,20 @@ export class AuditoriumRepositories{
     } catch (error) {
       throw new Error(`Failed to find venues: ${error}`);
     }
-  }
+     }
+
+
+     async findVenuesById(id:string):Promise<IVenue[]>{
+
+        return await Venue.find({audiUserId:id})
+
+     }
+
+     async findVenueDetailsById(id:string):Promise<IVenue | null>{
+
+      return await Venue.findOne({_id:id})
+
+     }
 
 
 }

@@ -7,28 +7,91 @@ class UserController{
 
     async findAuditorium(req: Request, res: Response) {
 
-        console.log('hiiiiii')
-  try {
+     try {
+
     const event = req.query.event as string
+
     const place = req.query.place as string
 
-    console.log('Controller received:', { event, place });
-
-    
     const response = await userService.findAuditorium(place, event)
 
     if (response) {
-      res.status(200).json(response);
+
+      res.status(200).json(response)
+
       return
+
     }
 
-     res.status(404).json({ message: 'No matching auditoriums found' });
+     res.status(404).json({ message: 'No matching auditoriums found' })
+
      return
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+
+    console.error(error)
+
+    res.status(500).json({ message: 'Internal server error' })
+
   }
 }
+
+    async findVenues(req:Request,res:Response){
+
+      try {
+
+        const id=req.params.id
+
+        const response=await userService.findVenues(id)
+
+        if (response) {
+
+          res.status(200).json(response);
+          return
+        }
+
+        res.status(404).json({ message: 'No matching auditoriums found' });
+
+        return
+            
+      } catch (error) {
+
+         console.error(error)
+
+         res.status(500).json({ message: 'Internal server error' })
+        
+      }
+
+    }
+
+    async findVenueDetails(req:Request,res:Response){
+
+      try {
+        
+        const id=req.params.id
+
+        const response=await userService.findVenueDetails(id)
+
+        if (response) {
+
+          res.status(200).json(response);
+          return
+        }
+
+        res.status(404).json({ message: 'No matching auditoriums found' });
+
+        return
+            
+      } catch (error) {
+
+         console.error(error)
+
+         res.status(500).json({ message: 'Internal server error' })
+        
+      }
+
+    }
+
 
 
 }
