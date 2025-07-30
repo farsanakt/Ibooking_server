@@ -1,19 +1,30 @@
 
+import { rmSync } from "fs";
 import { IAuditoriumUser } from "../../models/auditorium/auditoriumUserModel";
 import { IVenue } from "../../models/auditorium/venueModel";
 import { AuditoriumRepositories } from "../../repositories/implemention/AuditoriumRepositories";
+import { MailService } from '../MailService'// adjust path as needed
 
 interface EnrichedVenue {
   images: string;
   auditorium: IAuditoriumUser | undefined;
 }
+
+
+const mailService = new MailService();
+
+
+
+
 export  class UserService{
 
 private auditoriumRepositories:AuditoriumRepositories
+private mailService: MailService;
 
 constructor(){
 
     this.auditoriumRepositories=new AuditoriumRepositories()
+    this.mailService = new MailService()
 
 }
 
@@ -80,13 +91,28 @@ constructor(){
     }
 
 
-    async createBookings(data:any){
+  async createBookings(data: any) {
 
-      try {
+  try {
 
-         const updateVenue=await this.auditoriumRepositories.updateVenueSlot(data.timeSlot)
+    await this.auditoriumRepositories.updateVenueSlot(data.timeSlot);
 
-     const l=  await this.auditoriumRepositories.createBooking({
+    const venue = await this.auditoriumRepositories.findVenueById(data.venueId);
+
+    let auditoriumEmail = ''
+
+    if (venue) {
+
+      const auditorium = await this.auditoriumRepositories.findAuditoriumById(venue.audiUserId)
+
+      if (auditorium) {
+
+        auditoriumEmail = auditorium.email
+
+      }
+    }
+
+    const booking = await this.auditoriumRepositories.createBooking({
       userEmail: data.userEmail,
       venueName: data.venueName,
       bookeddate: data.bookingDate,
@@ -97,14 +123,37 @@ constructor(){
       paymentStatus: 'pending',
     });
 
-    console.log('m',l)
-
-        
-      } catch (error) {
-        
-      }
-
+     if (!booking) {
+      return { status: false, message: 'Booking creation failed.' };
     }
+
+
+    if (booking) {
+      
+      await this.mailService.sendMail({
+        to: data.userEmail,
+        subject: 'Booking Confirmation - Your Slot is Reserved',
+        html: `<p>Dear user,</p><p>Your booking for ${data.venueName} on ${data.bookingDate} at ${data.timeSlot} is confirmed.</p><p>Thank you!</p>`
+      });
+
+      // Step 2: Send confirmation to auditorium
+      if (auditoriumEmail) {
+        await this.mailService.sendMail({
+          to: auditoriumEmail,
+          subject: 'New Booking Received',
+          html: `<p>Dear Auditorium Owner,</p><p>You have received a new booking for ${data.venueName} on ${data.bookingDate} at ${data.timeSlot}.</p><p>Please prepare accordingly.</p>`
+        });
+      }
+    }
+
+    return {status:true,message:'booking confirmed'}
+
+  } catch (error) {
+    
+    console.error("Error in booking creation or email sending:", error);
+  }
+}
+
 
 
 

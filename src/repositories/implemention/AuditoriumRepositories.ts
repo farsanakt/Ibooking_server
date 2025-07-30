@@ -41,6 +41,12 @@ export class AuditoriumRepositories{
         return await Venue.findOne({name:data.name})
     }
 
+    async findAuditoriumById(id:any){
+        const audi=await AuditoriumUser.findById({_id:id})
+
+        return audi?.email
+    }
+
     async findAuditorium(event: string, place: string): Promise<IAuditoriumUser[] | null> {
 
         try {
