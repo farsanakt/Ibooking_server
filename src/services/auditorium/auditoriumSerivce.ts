@@ -25,6 +25,8 @@ constructor(){
 
           }
 
+          console.log(data.totalamount,'lp')
+
           const savedVenue = await this.auditoriumRepositories.createVenue({
             name: data.name,
             address: data.address,
@@ -45,6 +47,8 @@ constructor(){
             tariff: data.tariff,
             cancellationPolicy: data.cancellationPolicy,
             stageSize: data.stageSize,
+            totalamount:data.totalamount,
+            advAmnt:data.advAmnt,
             images: data.images,
             timeSlots: data.timeSlots,
           
@@ -102,5 +106,29 @@ constructor(){
       }
 
       }
+
+      async deleteVenue(id: string): Promise<{ status: boolean; message: string }> {
+
+      try {
+        const deletedVenue = await this.auditoriumRepositories.deleteVenueById(id)
+
+
+        if (!deletedVenue) {
+
+          return { status: false, message: 'Venue not found or already deleted.' }
+
+        }
+
+        return { status: true, message: 'Venue successfully deleted.' }
+
+
+      } catch (error) {
+        console.error("Error deleting venue:", error)
+
+
+        return { status: false, message: 'An error occurred while deleting the venue.' }
+      }
+    }
+
 
 }

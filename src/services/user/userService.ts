@@ -95,7 +95,11 @@ constructor(){
 
   try {
 
-    await this.auditoriumRepositories.updateVenueSlot(data.timeSlot);
+    console.log(data.timeSlot,'kooee')
+
+    const m=await this.auditoriumRepositories.updateVenueSlot(data.timeSlot);
+
+console.log(m,'me')
 
     const venue = await this.auditoriumRepositories.findVenueById(data.venueId);
 
@@ -153,6 +157,32 @@ constructor(){
     console.error("Error in booking creation or email sending:", error);
   }
 }
+
+  async fechingExistingBookings(id:string){
+
+    try {
+
+      const extBkngs=await this.auditoriumRepositories.findBookingsByVenueId(id)
+
+      return extBkngs
+      
+    } catch (error) {
+      
+    }
+
+  }
+
+  async allVenues(){
+
+    try {
+
+      return await this.auditoriumRepositories.AllVenues()
+      
+    } catch (error) {
+      
+    }
+
+  }
 
 
 

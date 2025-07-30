@@ -1,6 +1,7 @@
 import AuditoriumUser,{ IAuditoriumUser } from "../../models/auditorium/auditoriumUserModel";
 import Venue, { IVenue } from "../../models/auditorium/venueModel";
-import Booking from "../../models/auditorium/bookingModel";
+import Booking, { IBooking } from "../../models/auditorium/bookingModel";
+import bookingModel from "../../models/auditorium/bookingModel";
 
 export class AuditoriumRepositories{
 
@@ -127,6 +128,22 @@ export class AuditoriumRepositories{
     createBooking=async(bookingData:any)=>{
         const newBooking=new Booking(bookingData)
         return await newBooking.save()
+    }
+
+    async findBookingsByVenueId(id:string):Promise<IBooking[]|null>{
+        return await bookingModel.find({venueId:id})
+    }
+
+    async AllVenues():Promise<IVenue[]|null>{
+
+        return await Venue.find()
+
+    }
+
+    async deleteVenueById(id: string) {
+
+    return await Venue.findByIdAndDelete(id); 
+    
     }
 
 

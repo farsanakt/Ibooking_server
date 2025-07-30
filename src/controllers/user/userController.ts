@@ -1,5 +1,6 @@
 import { Request,Response } from "express";
 import { UserService } from "../../services/user/userService";
+import { HttpStatus } from "../../enums/httpStatus";
 
 const userService=new UserService()
 
@@ -113,6 +114,60 @@ class UserController{
         return
         
       } catch (error) {
+        
+      }
+
+    }
+
+
+    async existingBookings(req:Request,res:Response){
+
+      try {
+
+        const id=req.params.id
+
+        console.log(id,'mo')
+         
+        const response=await userService.fechingExistingBookings(id)
+
+        console.log(response,'joppe')
+
+        if(response){
+
+          res.status(HttpStatus.CREATED).json(response)
+
+          return
+
+        }
+        
+      } catch (error) {
+
+        console.log('something went wrong')
+        
+      }
+
+    }
+
+    async allVenues(req:Request,res:Response){
+   try {
+
+        
+         
+        const response=await userService.allVenues()
+
+        console.log(response,'joppe')
+
+        if(response){
+
+          res.status(HttpStatus.CREATED).json(response)
+
+          return
+
+        }
+        
+      } catch (error) {
+
+        console.log('something went wrong')
         
       }
 

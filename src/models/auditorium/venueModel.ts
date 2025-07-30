@@ -36,6 +36,8 @@ export interface IVenue extends Document {
   tariff: ITariff;
   cancellationPolicy: string;
   stageSize: string;
+  totalamount:string;
+  advAmnt:string;
   images: string[];
   timeSlots: ITimeSlot[];
   auditoriumId?: mongoose.Types.ObjectId; // link to the auditorium owner
@@ -83,6 +85,8 @@ const venueSchema: Schema<IVenue> = new Schema(
     },
     cancellationPolicy: { type: String, required: true },
     stageSize: { type: String, required: true },
+    totalamount:{type:String,required:true},
+    advAmnt:{type:String,required:true},
     images: { type: [String], default: [] },
     timeSlots: { type: [timeSlotSchema], required: true },
     auditoriumId: { type: mongoose.Schema.Types.ObjectId, ref: 'AuditoriumUser' }

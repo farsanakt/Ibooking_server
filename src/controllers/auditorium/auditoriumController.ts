@@ -8,6 +8,8 @@ class AuditoriumController{
 
     async addVenue(req:Request,res:Response){
 
+        console.log('hiiii')
+
         try {
 
             const data=req.body
@@ -55,6 +57,8 @@ class AuditoriumController{
 
             const audiUserId = req.query.audiUserId as string
 
+            console.log(audiUserId,'koooooo')
+
             const response=await auditoriumService.allVenues(audiUserId)
 
             console.log('ithan',response)
@@ -99,6 +103,43 @@ class AuditoriumController{
         }
 
     }
+
+
+    async deleteVenue(req: Request, res: Response) {
+
+    try {
+
+        const id = req.params.id
+
+
+        const response = await auditoriumService.deleteVenue(id)
+
+
+        if (response.status) {
+
+         res.status(200).json({ success: true, message: response.message })
+
+         return
+
+        } else {
+
+         res.status(404).json({ success: false, message: response.message })
+
+         return
+
+        }
+
+    } catch (error) {
+
+        console.error("Controller error while deleting venue:", error)
+
+         res.status(500).json({ success: false, message: 'Internal server error.' })
+
+         return
+
+    }
+    }
+
 
 }
 
