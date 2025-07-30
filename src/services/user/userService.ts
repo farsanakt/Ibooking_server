@@ -80,6 +80,33 @@ constructor(){
     }
 
 
+    async createBookings(data:any){
+
+      try {
+
+         const updateVenue=await this.auditoriumRepositories.updateVenueSlot(data.timeSlot)
+
+     const l=  await this.auditoriumRepositories.createBooking({
+      userEmail: data.userEmail,
+      venueName: data.venueName,
+      bookeddate: data.bookingDate,
+      timeSlot: data.timeSlot,
+      amount: data.totalAmount,
+      advanceAmount: data.advanceAmount,
+      venueId: data.venueId,
+      paymentStatus: 'pending',
+    });
+
+    console.log('m',l)
+
+        
+      } catch (error) {
+        
+      }
+
+    }
+
+
 
 
 

@@ -1,5 +1,6 @@
 import AuditoriumUser,{ IAuditoriumUser } from "../../models/auditorium/auditoriumUserModel";
 import Venue, { IVenue } from "../../models/auditorium/venueModel";
+import Booking from "../../models/auditorium/bookingModel";
 
 export class AuditoriumRepositories{
 
@@ -103,6 +104,25 @@ export class AuditoriumRepositories{
       return await Venue.findOne({_id:id})
 
      }
+
+   async updateVenueSlot(slot: string): Promise<IVenue | null> {
+
+    return await Venue.findOneAndUpdate(
+
+        { "timeSlots.id": slot },
+
+        { $set: { "timeSlots.$.status": "booked" } },
+
+        { new: true } 
+    );
+    }
+
+    
+    createBooking=async(bookingData:any)=>{
+        const newBooking=new Booking(bookingData)
+        return await newBooking.save()
+    }
+
 
 
 }

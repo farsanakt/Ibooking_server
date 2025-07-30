@@ -6,6 +6,7 @@ export interface ITimeSlot {
   label: string;
   startTime: string;
   endTime: string;
+  status:string
 }
 
 // Tariff Interface
@@ -46,7 +47,13 @@ const timeSlotSchema: Schema = new Schema<ITimeSlot>(
     id: { type: String, required: true },
     label: { type: String, required: true },
     startTime: { type: String, required: true },
-    endTime: { type: String, required: true }
+    endTime: { type: String, required: true },
+    status: { 
+      type: String, 
+      required: true, 
+      enum: ['pending', 'booked', 'unavailable'], // Optional: restrict to specific values
+      default: 'pending' 
+    }
   },
   { _id: false }
 );

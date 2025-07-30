@@ -11,5 +11,7 @@ user_route.get('/findvenues/:id',userController.findVenues)
 
 user_route.get('/findVenueDetails/:id',userController.findVenueDetails)
 
+user_route.post('/bookings',userController.bookings)
+
 
 export default user_route

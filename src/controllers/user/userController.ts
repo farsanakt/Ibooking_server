@@ -92,6 +92,32 @@ class UserController{
 
     }
 
+    async bookings(req:Request,res:Response){
+
+      try {
+
+        const data=req.body
+
+        console.log('iam reachedd mole ',data)
+
+        const response=await userService.createBookings(data)
+
+         if (response) {
+
+          res.status(200).json(response);
+          return
+        }
+
+        res.status(404).json({ message: 'No matching auditoriums found' });
+
+        return
+        
+      } catch (error) {
+        
+      }
+
+    }
+
 
 
 }
