@@ -48,6 +48,18 @@ export class AuditoriumRepositories{
         return audi?.email
     }
 
+    async findAudiById(id:any){
+        const audi=await AuditoriumUser.findById({_id:id})
+
+        return audi
+    }
+
+    async findEventsById(id:string):Promise<IBooking[]|null>{
+
+        return await Booking.find({auditoriumId:id,status:'pending'})
+
+    }
+
     async findAuditorium(event: string, place: string): Promise<IAuditoriumUser[] | null> {
 
         try {

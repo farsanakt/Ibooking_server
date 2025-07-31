@@ -130,5 +130,25 @@ constructor(){
       }
     }
 
+     async upcomingEvents(id:string){
+
+      try {
+
+        const auditorium=await this.auditoriumRepositories.findAudiById(id)
+
+        const auditoriumName=auditorium?.auditoriumName
+
+        const events=await this.auditoriumRepositories.findEventsById(id)
+
+        console.log(events,'events')
+
+        return {events,auditoriumName}
+        
+      } catch (error) {
+        
+      }
+
+     }
+
 
 }

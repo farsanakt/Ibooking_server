@@ -15,4 +15,6 @@ auditorium_route.put('/updatevenues',auditoriumController.updateVenues)
 
 auditorium_route.delete('/deletevenue/:id',auditoriumController.deleteVenue)
 
+auditorium_route.get('/upcomigevents/:id',auditoriumController.getUpcomingEvents)
+
 export default auditorium_route

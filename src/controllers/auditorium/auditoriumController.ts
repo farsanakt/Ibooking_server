@@ -140,6 +140,28 @@ class AuditoriumController{
     }
     }
 
+    async getUpcomingEvents(req:Request,res:Response){
+
+        try {
+
+            const id=req.params.id
+
+            const response=await auditoriumService.upcomingEvents(id)
+
+            if(response){
+
+                res.status(HttpStatus.CREATED).json(response)
+
+            }
+
+            res.status(HttpStatus.BAD_REQUEST).json(response)
+            
+        } catch (error) {
+            
+        }
+
+    }
+
 
 }
 

@@ -95,11 +95,7 @@ constructor(){
 
   try {
 
-    console.log(data.timeSlot,'kooee')
-
     const m=await this.auditoriumRepositories.updateVenueSlot(data.timeSlot);
-
-console.log(m,'me')
 
     const venue = await this.auditoriumRepositories.findVenueById(data.venueId);
 
@@ -124,6 +120,7 @@ console.log(m,'me')
       amount: data.totalAmount,
       advanceAmount: data.advanceAmount,
       venueId: data.venueId,
+      auditoriumId:venue?.audiUserId,
       paymentStatus: 'pending',
     });
 

@@ -149,10 +149,9 @@ class UserController{
     }
 
     async allVenues(req:Request,res:Response){
-   try {
 
-        
-         
+    try {
+
         const response=await userService.allVenues()
 
         console.log(response,'joppe')
