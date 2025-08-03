@@ -2,6 +2,7 @@ import AuditoriumUser,{ IAuditoriumUser } from "../../models/auditorium/auditori
 import Venue, { IVenue } from "../../models/auditorium/venueModel";
 import Booking, { IBooking } from "../../models/auditorium/bookingModel";
 import bookingModel from "../../models/auditorium/bookingModel";
+import userModel, { IUser } from "../../models/user/userModel";
 
 export class AuditoriumRepositories{
 
@@ -12,6 +13,12 @@ export class AuditoriumRepositories{
     async findUserByEmail(email:string):Promise<IAuditoriumUser |null>{
         return await AuditoriumUser.findOne({email:email})
     }
+    
+    async findUser(email:string):Promise<IUser |null>{
+        return await userModel.findOne({email:email})
+    }
+
+
 
     async findUserByOwnerName(ownername:string):Promise<IAuditoriumUser| null>{
 
@@ -57,6 +64,12 @@ export class AuditoriumRepositories{
     async findEventsById(id:string):Promise<IBooking[]|null>{
 
         return await Booking.find({auditoriumId:id,status:'pending'})
+
+    }
+
+    async findBookingsByAuditoriumId(id:string):Promise<IBooking[]|null>{
+
+        return await Booking.find({auditoriumId:id})
 
     }
 

@@ -155,11 +155,60 @@ class AuditoriumController{
             }
 
             res.status(HttpStatus.BAD_REQUEST).json(response)
-            
+            console.log()
         } catch (error) {
             
         }
 
+    }
+
+    async existingBookings(req:Request,res:Response){
+
+          try {
+
+            const id=req.params.id
+
+            const response=await auditoriumService.existingBookings(id)
+
+            if(response){
+
+                res.status(HttpStatus.CREATED).json(response)
+
+            }
+
+            res.status(HttpStatus.BAD_REQUEST).json(response)
+            console.log()
+        } catch (error) {
+            
+        }
+
+    }
+
+    async checkUserExist(req:Request,res:Response){
+ 
+        try {
+
+            const {email}=req.body
+
+            const response=await auditoriumService.checkUserExist(email)
+
+            console.log(response,'g')
+          
+            if(response?.success){
+
+                res.status(HttpStatus.CREATED).json(response)
+
+                return
+
+            }
+
+            res.status(HttpStatus.BAD_REQUEST).json(response)
+
+            return
+            
+        } catch (error) {
+            
+        }
     }
 
 

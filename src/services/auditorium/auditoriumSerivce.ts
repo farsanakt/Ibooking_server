@@ -150,5 +150,39 @@ constructor(){
 
      }
 
+     async existingBookings(id:string){
+
+      try {
+
+        const existingBok=await this.auditoriumRepositories.findBookingsByAuditoriumId(id)
+
+        return existingBok
+        
+      } catch (error) {
+        
+      }
+
+     }
+
+     async checkUserExist(email:string){
+
+      try {
+
+        const existingUser=await this.auditoriumRepositories.findUser(email)
+
+        if(!existingUser){
+
+          return {success:false,message:'user Not found.'}
+
+        }
+
+        return {success:true,message:'user Found'}
+        
+      } catch (error) {
+        
+      }
+
+     }
+
 
 }

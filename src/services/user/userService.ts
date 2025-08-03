@@ -93,6 +93,8 @@ constructor(){
 
   async createBookings(data: any) {
 
+    console.log('hiiiiiiii')
+
   try {
 
     const m=await this.auditoriumRepositories.updateVenueSlot(data.timeSlot);
@@ -130,7 +132,12 @@ constructor(){
 
 
     if (booking) {
-      
+
+       console.log('hiiiiiiihi')
+
+        console.log('hiiiiiiii',data.userEmail)
+
+      console.log(booking)
       await this.mailService.sendMail({
         to: data.userEmail,
         subject: 'Booking Confirmation - Your Slot is Reserved',
