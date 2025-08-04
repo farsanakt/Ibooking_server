@@ -172,11 +172,25 @@ constructor(){
 
         if(!existingUser){
 
-          return {success:false,message:'user Not found.'}
+          return {success:false,message:'user Not found,Create new account'}
 
         }
 
         return {success:true,message:'user Found'}
+        
+      } catch (error) {
+        
+      }
+
+     }
+   
+     async userDetails(email:string){
+
+      try {
+
+        const user=await this.auditoriumRepositories.findUser(email)
+
+        return user
         
       } catch (error) {
         

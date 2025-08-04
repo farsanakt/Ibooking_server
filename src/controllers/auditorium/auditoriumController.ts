@@ -184,32 +184,60 @@ class AuditoriumController{
 
     }
 
-    async checkUserExist(req:Request,res:Response){
- 
-        try {
+  async checkUserExist(req: Request, res: Response) {
 
-            const {email}=req.body
+    try {
+        const { email } = req.body
 
-            const response=await auditoriumService.checkUserExist(email)
+        const response = await auditoriumService.checkUserExist(email);
+        
+        res.status(HttpStatus.CREATED).json(response)
 
-            console.log(response,'g')
-          
-            if(response?.success){
+        return
 
-                res.status(HttpStatus.CREATED).json(response)
+    } catch (error) {
 
-                return
+        console.error("Server error:", error)
 
-            }
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: "Server error. Please try again later.",
+        })
 
-            res.status(HttpStatus.BAD_REQUEST).json(response)
-
-            return
-            
-        } catch (error) {
-            
-        }
     }
+    }
+
+   async userDetails(req: Request, res: Response) {
+
+  try {
+
+    console.log('meeeeeeee')
+    const  email = req.query.email as string
+
+    console.log(email,'meee')
+
+    const response = await auditoriumService.userDetails(email);
+    
+    if(response){
+    
+        res.status(HttpStatus.CREATED).json(response)
+
+        return
+
+    }
+
+  } catch (error) {
+
+    console.error("Server error:", error)
+
+    res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Server error. Please try again later.",
+    })
+    
+  }
+}
+
 
 
 }
