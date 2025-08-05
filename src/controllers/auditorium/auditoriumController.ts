@@ -238,6 +238,24 @@ class AuditoriumController{
   }
 }
 
+   
+    async findAuditoriumUser(req:Request,res:Response){
+
+        try {
+            const id=req.params.id
+
+            console.log(id,'usere')
+
+            const response=await auditoriumService.findAuditoriumUser(id)
+
+            console.log(response)
+            
+        } catch (error) {
+            
+        }
+
+    }
+
 
 
 }

@@ -93,7 +93,7 @@ constructor(){
 
   async createBookings(data: any) {
 
-    console.log('hiiiiiiii')
+    console.log('hiiiiiiii',data)
 
   try {
 
@@ -117,10 +117,12 @@ constructor(){
     const booking = await this.auditoriumRepositories.createBooking({
       userEmail: data.userEmail,
       venueName: data.venueName,
-      bookeddate: data.bookingDate,
+      bookeddate: data.bookedDate,
       timeSlot: data.timeSlot,
-      amount: data.totalAmount,
-      advanceAmount: data.advanceAmount,
+      totalAmount: data.totalAmount ,
+      paidAmount: data.paidAmount || data.balanceAmount,
+      balanceAmount:data.balanceAmount,
+      address:data.address,
       venueId: data.venueId,
       auditoriumId:venue?.audiUserId,
       paymentStatus: 'pending',

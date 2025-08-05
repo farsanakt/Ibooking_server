@@ -198,5 +198,20 @@ constructor(){
 
      }
 
+     async findAuditoriumUser(id:string){
+
+      try {
+
+        return this.auditoriumRepositories.findAudiById(id)
+
+        
+        
+      } catch (error) {
+        
+      }
+
+     }
+ 
+     
 
 }
