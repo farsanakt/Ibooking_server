@@ -17,9 +17,11 @@ constructor(){
 
         try {
 
-          const existingVenue = await this.auditoriumRepositories.findVenueByName(data.name);
+          // const existingVenue = await this.auditoriumRepositories.findVenueByName(data.name);
 
-          if (existingVenue) {
+          const existingMakeUp=await this.auditoriumRepositories.findMakeUpByName(data.name)
+
+          if (existingMakeUp) {
 
           return {success:false,message:'This is venue is already existed'}
 
@@ -27,7 +29,7 @@ constructor(){
 
           console.log(data.totalamount,'lp')
 
-          const savedVenue = await this.auditoriumRepositories.createVenue({
+          const savedVenue = await this.auditoriumRepositories.createMakeupArtist({
             name: data.name,
             address: data.address,
             audiUserId:data.audiUserId,

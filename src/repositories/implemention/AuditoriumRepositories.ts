@@ -3,6 +3,7 @@ import Venue, { IVenue } from "../../models/auditorium/venueModel";
 import Booking, { IBooking } from "../../models/auditorium/bookingModel";
 import bookingModel from "../../models/auditorium/bookingModel";
 import userModel, { IUser } from "../../models/user/userModel";
+import MakeupModel, { IMakeupArtist } from "../../models/auditorium/MakeupModel";
 
 export class AuditoriumRepositories{
 
@@ -32,6 +33,10 @@ export class AuditoriumRepositories{
 
     }
 
+    async createMakeupArtist(data:any):Promise<IMakeupArtist|null>{
+        return await MakeupModel.create(data)
+    }
+
     async getAllVenues(audiUserId:string):Promise<IVenue[]|null>{
 
         return await Venue.find({audiUserId:audiUserId})
@@ -47,6 +52,10 @@ export class AuditoriumRepositories{
 
     async findVenueByName(data:any){
         return await Venue.findOne({name:data.name})
+    }
+
+      async findMakeUpByName(data:any){
+        return await MakeupModel.findOne({name:data.name})
     }
 
     async findAuditoriumById(id:any){
