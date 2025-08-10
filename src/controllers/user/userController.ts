@@ -99,7 +99,7 @@ class UserController{
 
         const data=req.body
 
-        console.log('iam reachedd mole ',data)
+        
 
         const response=await userService.createBookings(data)
 
@@ -126,11 +126,10 @@ class UserController{
 
         const id=req.params.id
 
-        console.log(id,'mo')
          
         const response=await userService.fechingExistingBookings(id)
 
-        console.log(response,'joppe')
+        
 
         if(response){
 

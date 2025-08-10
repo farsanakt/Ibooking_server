@@ -16,7 +16,7 @@ export interface ITariff {
 }
 
 
-export interface IMakeupArtist extends Document {
+export interface Ivendor extends Document {
   name: string;
   address: string;
   audiUserId: string;
@@ -41,7 +41,7 @@ export interface IMakeupArtist extends Document {
   images: string[];
   timeSlots: ITimeSlot[];
   auditoriumId?: mongoose.Types.ObjectId;
-  vendorType: 'makeup artist';
+  vendorType: 'event management';
 }
 
 
@@ -62,7 +62,7 @@ const timeSlotSchema: Schema = new Schema<ITimeSlot>(
 );
 
 
-const makeupArtistSchema: Schema<IMakeupArtist> = new Schema(
+const vendorSchema: Schema<Ivendor> = new Schema(
   {
     name: { type: String, required: true },
     address: { type: String, required: true },
@@ -72,20 +72,20 @@ const makeupArtistSchema: Schema<IMakeupArtist> = new Schema(
     email: { type: String, required: true },
     pincode: { type: String, required: true },
     cities: { type: [String], required: true },
-    acType: { type: String, enum: ['AC', 'Non-AC', 'Both'], required: true },
-    seatingCapacity: { type: String, required: true },
-    diningCapacity: { type: String, required: true },
-    parkingSlots: { type: String, required: true },
-    changingRooms: { type: String, required: true },
-    amenities: { type: [String], default: [] },
-    foodPolicy: { type: String, required: true },
-    decorPolicy: { type: String, required: true },
-    tariff: {
-      wedding: { type: String, required: true },
-      reception: { type: String, required: true }
-    },
+    // acType: { type: String, enum: ['AC', 'Non-AC', 'Both'], required: true },
+    // seatingCapacity: { type: String, required: true },
+    // diningCapacity: { type: String, required: true },
+    // parkingSlots: { type: String, required: true },
+    // changingRooms: { type: String, required: true },
+    // amenities: { type: [String], default: [] },
+    // foodPolicy: { type: String, required: true },
+    // decorPolicy: { type: String, required: true },
+    // tariff: {
+    //   wedding: { type: String, required: true },
+    //   reception: { type: String, required: true }
+    // },
     cancellationPolicy: { type: String, required: true },
-    stageSize: { type: String, required: true },
+    // stageSize: { type: String, required: true },
     totalamount: { type: String, required: true },
     advAmnt: { type: String, required: true },
     images: { type: [String], default: [] },
@@ -93,11 +93,11 @@ const makeupArtistSchema: Schema<IMakeupArtist> = new Schema(
     auditoriumId: { type: mongoose.Schema.Types.ObjectId, ref: 'AuditoriumUser' },
 
    
-    vendorType: { type: String, default: 'makeup artist', required: false }
+    vendorType: { type: String, default: 'event management', required: false }
   },
   {
     timestamps: true
   }
 );
 
-export default mongoose.model<IMakeupArtist>('MakeupArtist', makeupArtistSchema);
+export default mongoose.model<Ivendor>('vendor', vendorSchema);
