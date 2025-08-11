@@ -175,6 +175,18 @@ export class AuditoriumRepositories{
 
     }
 
+    async allVendors():Promise<Ivendor[]|null>{
+
+        return await vendorModel.find()
+
+    }
+
+     async findSingleVendorById(id:string):Promise<Ivendor|null>{
+
+        return await vendorModel.findOne({_id:id})
+
+    }
+
     async deleteVenueById(id: string) {
 
     return await Venue.findByIdAndDelete(id); 

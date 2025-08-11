@@ -153,6 +153,29 @@ class UserController{
 
         const response=await userService.allVenues()
 
+        if(response){
+
+          res.status(HttpStatus.CREATED).json(response)
+
+          return
+
+        }
+        
+      } catch (error) {
+
+        console.log('something went wrong')
+        
+      }
+
+    }
+
+
+    async allVendors(req:Request,res:Response){
+
+    try {
+
+        const response=await userService.allVendors()
+
         console.log(response,'joppe')
 
         if(response){
@@ -170,6 +193,33 @@ class UserController{
       }
 
     }
+
+      async singleVendor(req:Request,res:Response){
+
+    try {
+
+         const id=req.params.id
+
+        const response=await userService.singleVendor(id)
+
+        console.log(response,'joppe')
+
+        if(response){
+
+          res.status(HttpStatus.CREATED).json(response)
+
+          return
+
+        }
+        
+      } catch (error) {
+
+        console.log('something went wrong')
+        
+      }
+
+    }
+
 
 
 

@@ -17,6 +17,10 @@ user_route.get('/existingBookings/:id',userController.existingBookings)
 
 user_route.get('/venues',userController.allVenues)
 
+user_route.get('/allvendors',userController.allVendors)
+
+user_route.get('/singlevendor/:id',userController.singleVendor)
+
 
 
 

@@ -186,8 +186,30 @@ constructor(){
 
   }
 
+  async allVendors(){
+
+    try {
+
+      return await this.auditoriumRepositories.allVendors()
+      
+    } catch (error) {
+      
+    }
+
+  }
 
 
+async singleVendor(id:string){
+
+    try {
+
+      return await this.auditoriumRepositories.findSingleVendorById(id)
+      
+    } catch (error) {
+      
+    }
+
+  }
 
 
 
