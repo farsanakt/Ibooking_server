@@ -4,6 +4,7 @@ import Booking, { IBooking } from "../../models/auditorium/bookingModel";
 import bookingModel from "../../models/auditorium/bookingModel";
 import userModel, { IUser } from "../../models/user/userModel";
 import vendorModel, { Ivendor } from "../../models/auditorium/vendorModel";
+import vendorBookingModel from "../../models/user/vendorBookingModel";
 
 
 export class AuditoriumRepositories{
@@ -45,6 +46,10 @@ export class AuditoriumRepositories{
 
     async findVenueById(id: string): Promise<IVenue | null> {
     return await Venue.findById(id);
+   }
+
+     async findVendorById(id: string): Promise<IVenue | null> {
+    return await vendorModel.findById(id);
    }
 
     async updateVenue(id: string, data: Partial<IVenue>): Promise<IVenue | null> {
@@ -163,6 +168,14 @@ export class AuditoriumRepositories{
     createBooking=async(bookingData:any)=>{
         const newBooking=new Booking(bookingData)
         return await newBooking.save()
+    }
+
+    createVendorBooking=async(data:any)=>{
+
+        const newBooking=new vendorBookingModel(data)
+
+        return await newBooking.save()
+
     }
 
     async findBookingsByVenueId(id:string):Promise<IBooking[]|null>{

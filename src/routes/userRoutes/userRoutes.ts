@@ -21,6 +21,8 @@ user_route.get('/allvendors',userController.allVendors)
 
 user_route.get('/singlevendor/:id',userController.singleVendor)
 
+user_route.post('/vendorbookings',userController.createVendorBooking)
+
 
 
 

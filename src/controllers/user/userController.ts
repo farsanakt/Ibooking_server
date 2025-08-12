@@ -119,6 +119,33 @@ class UserController{
 
     }
 
+     async createVendorBooking(req:Request,res:Response){
+
+      try {
+
+        const data=req.body
+
+        console.log('dataaa',data)
+
+        const response=await userService.createVendorBookings(data)
+
+         if (response) {
+
+          res.status(200).json(response);
+          return
+        }
+
+        res.status(404).json({ message: 'No matching auditoriums found' });
+
+        return
+        
+      } catch (error) {
+        
+      }
+
+    }
+
+
 
     async existingBookings(req:Request,res:Response){
 

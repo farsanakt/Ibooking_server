@@ -93,8 +93,6 @@ constructor(){
 
   async createBookings(data: any) {
 
-    
-
   try {
 
     const m=await this.auditoriumRepositories.updateVenueSlot(data.timeSlot);
@@ -157,6 +155,64 @@ constructor(){
   } catch (error) {
     
     console.error("Error in booking creation or email sending:", error);
+  }
+}
+
+async createVendorBookings(data:any) {
+  try {
+    
+    if (!data.vendorId || !data.userEmail || !data.vendorName || !data.bookedDate || !data.timeSlot || !data.totalAmount || !data.paidAmount || !data.balanceAmount || !data.address || !data.paymentMethod || !data.paymentType || !data.advanceAmount) {
+      return { status: false, message: 'Missing required fields.' };
+    }
+
+   
+    const vendor = await this.auditoriumRepositories.findVendorById(data.vendorId);
+    if (!vendor) {
+      return { status: false, message: 'Vendor not found.' };
+    }
+
+   
+    const booking = await this.auditoriumRepositories.createVendorBooking({
+      userEmail: data.userEmail,
+      vendorName: data.vendorName,
+      vendorId: data.vendorId,
+      totalAmount: data.totalAmount,
+      advanceAmount: data.advanceAmount,
+      paidAmount: data.paidAmount,
+      balanceAmount: data.balanceAmount,
+      status: 'pending',
+      paymentStatus: 'pending',
+      paymentMethod: data.paymentMethod,
+      paymentType: data.paymentType,
+      bookeddate: data.bookedDate,
+      timeSlot: data.timeSlot,
+      address: data.address,
+    });
+
+    if (!booking) {
+      return { status: false, message: 'Booking creation failed.' };
+    }
+
+    
+    await this.mailService.sendMail({
+      to: data.userEmail,
+      subject: 'Booking Confirmation - Your Slot is Reserved',
+      html: `<p>Dear user,</p><p>Your booking for ${data.vendorName} on ${data.bookedDate} at ${data.timeSlot} is confirmed.</p><p>Thank you!</p>`
+    });
+
+    
+    if (vendor.email) {
+      await this.mailService.sendMail({
+        to: vendor.email,
+        subject: 'New Booking Received',
+        html: `<p>Dear Vendor,</p><p>You have received a new booking for ${data.vendorName} on ${data.bookedDate} at ${data.timeSlot}.</p><p>Please prepare accordingly.</p>`
+      });
+    }
+
+    return { status: true, message: 'Booking confirmed' };
+  } catch (error) {
+    console.error("Error in booking creation or email sending:", error);
+    return { status: false, message: 'An error occurred while processing the booking.' };
   }
 }
 
