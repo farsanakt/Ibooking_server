@@ -174,6 +174,34 @@ class UserController{
 
     }
 
+    async existingVendorBookings(req:Request,res:Response){
+
+      try {
+
+        const id=req.params.id
+    
+        console.log(id,'l')
+         
+        const response=await userService.existingVendorBookings(id)
+
+        console.log(response,'joppeeeeee')
+
+        if(response){
+
+          res.status(HttpStatus.CREATED).json(response)
+
+          return
+
+        }
+        
+      } catch (error) {
+
+        console.log('something went wrong')
+        
+      }
+
+    }
+
     async allVenues(req:Request,res:Response){
 
     try {

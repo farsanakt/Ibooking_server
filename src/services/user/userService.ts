@@ -230,6 +230,20 @@ async createVendorBookings(data:any) {
 
   }
 
+    async existingVendorBookings(id:string){
+
+    try {
+
+      const extBkngs=await this.auditoriumRepositories.findVendorBookingsByVenueId(id)
+
+      return extBkngs
+      
+    } catch (error) {
+      
+    }
+
+  }
+
   async allVenues(){
 
     try {

@@ -4,7 +4,7 @@ import Booking, { IBooking } from "../../models/auditorium/bookingModel";
 import bookingModel from "../../models/auditorium/bookingModel";
 import userModel, { IUser } from "../../models/user/userModel";
 import vendorModel, { Ivendor } from "../../models/auditorium/vendorModel";
-import vendorBookingModel from "../../models/user/vendorBookingModel";
+import vendorBookingModel, { IVendorBooking } from "../../models/user/vendorBookingModel";
 
 
 export class AuditoriumRepositories{
@@ -180,6 +180,12 @@ export class AuditoriumRepositories{
 
     async findBookingsByVenueId(id:string):Promise<IBooking[]|null>{
         return await bookingModel.find({venueId:id})
+    }
+
+    async findVendorBookingsByVenueId(id:string):Promise<IVendorBooking[]|null>{
+
+        return await vendorBookingModel.find({vendorId:id})
+
     }
 
     async AllVenues():Promise<IVenue[]|null>{

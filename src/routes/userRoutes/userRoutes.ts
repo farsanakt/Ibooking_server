@@ -15,6 +15,8 @@ user_route.post('/bookings',userController.bookings)
 
 user_route.get('/existingBookings/:id',userController.existingBookings)
 
+user_route.get('/existingVendorBookings/:id',userController.existingVendorBookings)
+
 user_route.get('/venues',userController.allVenues)
 
 user_route.get('/allvendors',userController.allVendors)
