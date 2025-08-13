@@ -1,4 +1,5 @@
 import User,{ IUser } from "../../models/user/userModel";
+import vendorUser, { IVendorUser } from "../../models/vendor/vendorUser";
 
 export class UserRepositories{
 
@@ -14,6 +15,14 @@ export class UserRepositories{
 
         return await User.findOne({ownerName:ownername})
 
+    }
+
+    async createVendorUser(data:any):Promise<IVendorUser|null>{
+       return await vendorUser.create(data)
+    }
+
+    async findVendorByEmail(email:string):Promise<IVendorUser|null>{
+        return await vendorUser.findOne({email:email})
     }
 
 }

@@ -26,7 +26,7 @@ export class AuthService{
 
           }
 
-          const existingUser=await this.userRepositories.findUserByOwnerName(firstName)
+          const existingUser=await this.userRepositories.findVendorByEmail(firstName)
 
           if(existingUser){
 
@@ -102,5 +102,49 @@ export class AuthService{
     return { success: false, message: 'Internal server error' };
   }
 }
+
+   async vendorRegistration(formData:any){
+
+        const {name,vendortype,email,phone,password,confirmPassword}=formData
+
+        try {
+
+          if(password!==confirmPassword){
+
+            return {success:false,message:'password and confirm password are not match'}
+
+          }
+
+          const existingUser=await this.userRepositories.findUserByOwnerName(email)
+
+          if(existingUser){
+
+            return {success:false,message:'Username already existed'}
+
+          }else{
+
+              const savedDetails = await this.userRepositories.createVendorUser({
+
+                  name: name,
+                  phone:phone,
+                  vendortype:vendortype,
+                  email: email,
+                  password: password,
+                  role:'vendor'
+
+                })
+
+                 return {success:true,message:'registered succefully..!'}
+
+          }
+
+                
+        } catch (error) {
+
+          console.log('error in authservice')
+            
+        }
+
+    }
 
 }

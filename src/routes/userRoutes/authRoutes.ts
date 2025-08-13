@@ -12,6 +12,6 @@ userAuth_route.post('/registration',authController.userRegistration)
 userAuth_route.post('/signin',authController.login)
 
 
-
+userAuth_route.post('/vendorregistration',authController.vendorRegistration)
 
 export default userAuth_route

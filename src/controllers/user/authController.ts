@@ -67,6 +67,30 @@ async login(req: Request, res: Response) {
   }
 }
 
+ async vendorRegistration(req: Request, res: Response) {
+  try {
+    const formData = req.body;
+    console.log(formData,'po')
+    const response = await authService.vendorRegistration(formData);
+
+    console.log(response);
+
+    if (!response?.success) {
+      console.log('me');
+      res.status(HttpStatus.BAD_REQUEST).json(response);
+    } else {
+      res.status(HttpStatus.CREATED).json({ message: 'Registered successfully!!' });
+    }
+
+  } catch (error) {
+    console.error('Signup error:', error);
+    res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+}
+
 
 // async refreshToken (req: Request, res: Response)  {
 
