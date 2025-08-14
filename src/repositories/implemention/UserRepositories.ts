@@ -11,6 +11,12 @@ export class UserRepositories{
         return await User.findOne({email:email})
     }
 
+    async findVendorUserByEmail(email:string):Promise<IVendorUser|null>{
+
+        return await vendorUser.findOne({email:email})
+
+    }
+
     async findUserByOwnerName(ownername:string):Promise<IUser| null>{
 
         return await User.findOne({ownerName:ownername})

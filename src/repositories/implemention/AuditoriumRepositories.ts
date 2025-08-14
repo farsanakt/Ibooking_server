@@ -3,8 +3,9 @@ import Venue, { IVenue } from "../../models/auditorium/venueModel";
 import Booking, { IBooking } from "../../models/auditorium/bookingModel";
 import bookingModel from "../../models/auditorium/bookingModel";
 import userModel, { IUser } from "../../models/user/userModel";
-import vendorModel, { Ivendor } from "../../models/auditorium/vendorModel";
+// import vendorModel, { Ivendor } from "../../models/auditorium/vendorModel";
 import vendorBookingModel, { IVendorBooking } from "../../models/user/vendorBookingModel";
+import vendorModel, { IVendor } from "../../models/vendor/vendorModel";
 
 
 export class AuditoriumRepositories{
@@ -35,7 +36,7 @@ export class AuditoriumRepositories{
 
     }
 
-    async createMakeupArtist(data:any):Promise<Ivendor|null>{
+    async createVendor(data:any):Promise<IVendor|null>{
         return await vendorModel.create(data)
     }
 
@@ -50,6 +51,12 @@ export class AuditoriumRepositories{
 
      async findVendorById(id: string): Promise<IVenue | null> {
     return await vendorModel.findById(id);
+   }
+
+   async getAllExistingVendor(id:string):Promise<IVendor[]|null>{
+
+    return await vendorModel.find({vndrUserId:id})
+
    }
 
     async updateVenue(id: string, data: Partial<IVenue>): Promise<IVenue | null> {
@@ -194,13 +201,13 @@ export class AuditoriumRepositories{
 
     }
 
-    async allVendors():Promise<Ivendor[]|null>{
+    async allVendors():Promise<IVendor[]|null>{
 
         return await vendorModel.find()
 
     }
 
-     async findSingleVendorById(id:string):Promise<Ivendor|null>{
+     async findSingleVendorById(id:string):Promise<IVendor|null>{
 
         return await vendorModel.findOne({_id:id})
 

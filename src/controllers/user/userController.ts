@@ -28,14 +28,14 @@ class UserController{
 
      return
 
-  } catch (error) {
+    } catch (error) {
 
-    console.error(error)
+      console.error(error)
 
-    res.status(500).json({ message: 'Internal server error' })
+      res.status(500).json({ message: 'Internal server error' })
 
-  }
-}
+    }
+    }
 
     async findVenues(req:Request,res:Response){
 
@@ -145,6 +145,75 @@ class UserController{
 
     }
 
+    
+    async addVendor(req:Request,res:Response){
+    
+            console.log('hiiii')
+    
+            try {
+    
+                const data=req.body
+    
+                 if (typeof data.cities === "string") {
+                    data.cities = JSON.parse(data.cities);
+                    }
+                    if (typeof data.timeSlots === "string") {
+                    data.timeSlots = JSON.parse(data.timeSlots);
+                    }
+                    if (typeof data.amenities === "string") {
+                    data.amenities = JSON.parse(data.amenities);
+                    }
+                    if (typeof data.tariff === "string") {
+                    data.tariff = JSON.parse(data.tariff);
+                    }
+    
+                const files = req.files as Express.Multer.File[]
+    
+                const imageUrls = files.map((file) => (file as any).location)
+     
+                const response = await userService.addVendor({ ...data, images: imageUrls });
+    
+                if(!response){
+    
+                    res.status(HttpStatus.BAD_REQUEST).json(response)
+    
+                    return
+    
+                }
+                
+                res.status(HttpStatus.CREATED).json(response)
+    
+            } catch (error) {
+    
+                console.log(error,'error in auditorium controller')
+                
+            }
+    
+        }
+
+     async existingALlVendors(req:Request,res:Response){
+        
+                try {
+        
+                    const vndrUserId = req.query.vndrUserId as string
+        
+        
+                    const response=await userService.existingALlVendors(vndrUserId)
+                       
+                   
+                    if(response){
+        
+                        res.status(HttpStatus.CREATED).json(response)
+        
+                    }
+        
+                    res.status(HttpStatus.BAD_REQUEST).json(response)
+                    
+                } catch (error) {
+                    
+                }
+        
+            }
 
 
     async existingBookings(req:Request,res:Response){
@@ -179,12 +248,9 @@ class UserController{
       try {
 
         const id=req.params.id
-    
-        console.log(id,'l')
          
         const response=await userService.existingVendorBookings(id)
 
-        console.log(response,'joppeeeeee')
 
         if(response){
 

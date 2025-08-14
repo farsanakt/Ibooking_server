@@ -67,6 +67,41 @@ async login(req: Request, res: Response) {
   }
 }
 
+async vendorLogin(req: Request, res: Response) {
+
+  console.log('ethi')
+  try {
+    const data = req.body;
+
+    const response = await authService.vendorLogin(data);
+
+    if (!response?.success) {
+
+       res.status(HttpStatus.BAD_REQUEST).json(response);
+
+       return
+    }
+
+    console.log(response.accessToken,'accees')
+    
+     res.status(HttpStatus.OK).json({
+      success: true,
+      message: response.message,
+      accessToken: response.accessToken,
+      user: response.user,
+    });
+    return
+
+  } catch (error) {
+    console.error('Login error:', error);
+     res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: 'Internal server error',
+    });
+    return
+  }
+}
+
  async vendorRegistration(req: Request, res: Response) {
   try {
     const formData = req.body;

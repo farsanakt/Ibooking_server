@@ -14,4 +14,6 @@ userAuth_route.post('/signin',authController.login)
 
 userAuth_route.post('/vendorregistration',authController.vendorRegistration)
 
+userAuth_route.post('/vendorsignin',authController.vendorLogin)
+
 export default userAuth_route

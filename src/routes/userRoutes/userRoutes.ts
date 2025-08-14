@@ -1,5 +1,6 @@
 import express from 'express'
 import UserController from '../../controllers/user/userController'
+import upload from '../../middleware/upload'
 
 const userController=new UserController()
 const user_route=express.Router()
@@ -28,6 +29,10 @@ user_route.get('/allvendors',userController.allVendors)
 user_route.get('/singlevendor/:id',userController.singleVendor)
 
 user_route.post('/vendorbookings',userController.createVendorBooking)
+
+user_route.post('/addvendor',upload.array('images', 4),userController.addVendor)
+
+user_route.get('/allVendorss',userController.existingALlVendors)
 
 
 

@@ -158,6 +158,67 @@ constructor(){
   }
 }
 
+    async  addVendor(data: any) {
+
+        console.log(data.audiUserId,'ideeee')
+
+        try {
+
+          
+
+          const existingMakeUp=await this.auditoriumRepositories.findMakeUpByName(data.name)
+
+          if (existingMakeUp) {
+
+          return {success:false,message:'This is vendor is already existed'}
+
+          }
+
+          console.log(data,'lp')
+
+          const savedvendor = await this.auditoriumRepositories.createVendor({
+            name: data.name,
+            address: data.address,
+            vndrUserId:data.userId,
+            phone: data.phone,
+            altPhone: data.altPhone,
+            email: data.email,
+            pincode: data.pincode,
+            cities: data.cities,
+            cancellationPolicy: data.cancellationPolicy,
+            stageSize: data.stageSize,
+            totalamount:data.totalAmount,
+            advAmnt:data.advanceAmount,
+            images: data.images,
+            timeSlots: data.timeSlots,
+            vendorType:data.vendorType
+          
+          })
+            
+          return {success:true,message:'venue added succefully..!'}
+
+        } catch (error) {
+
+          throw new Error('Service Error: ' + (error instanceof Error ? error.message : 'Unknown error'))
+
+        }
+      }
+
+       async existingALlVendors(audiUserId:string){
+
+        try {
+
+          const allVenues=await this.auditoriumRepositories.getAllExistingVendor(audiUserId)
+
+          return allVenues
+          
+        } catch (error) {
+          
+        }
+      }
+
+
+
 async createVendorBookings(data:any) {
   try {
     

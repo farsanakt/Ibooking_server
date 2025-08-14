@@ -103,6 +103,55 @@ export class AuthService{
   }
 }
 
+  async vendorLogin(data: any) {
+
+    try {
+
+      console.log('koop')
+      
+      const existingUser = await this.userRepositories.findVendorUserByEmail(data.email);
+
+      console.log(existingUser,'h')
+
+      if (!existingUser) {
+
+        return { success: false, message: 'User not found' }
+
+      }
+
+      if (data.password !== existingUser.password) {
+
+        return { success: false, message: 'Incorrect password' }
+
+      }
+
+      const payload = {
+        id: existingUser._id,
+        role: existingUser.role,
+      };
+
+      
+      const accessToken = generateAccessToken(payload);
+      const refreshToken = generateRefreshToken(payload);
+
+      return {
+        success: true,
+        message: 'Logged in successfully!',
+        accessToken,
+        refreshToken,
+        user: {
+          id: existingUser._id,
+          role: existingUser.role,
+          email: existingUser.email,
+        },
+      };
+
+    } catch (error) {
+      console.log('Error in authService (auditorium side):', error);
+      return { success: false, message: 'Internal server error' };
+    }
+    } 
+
    async vendorRegistration(formData:any){
 
         const {name,vendortype,email,phone,password,confirmPassword}=formData
