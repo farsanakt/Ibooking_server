@@ -24,7 +24,12 @@ const BookingSchema: Schema = new Schema({
   totalAmount: { type: Number, required: true },
   advanceAmount: { type: Number, required: true },
   paidAmount: { type: Number, required: true },
-  balanceAmount: { type: Number, required: true },
+  balanceAmount: { 
+    type: Number, 
+    required: true, 
+    default: 0, 
+    min: 0 // Allow 0 for full payment
+  },
   status: { 
     type: String, 
     enum: ['pending', 'confirmed', 'cancelled', 'completed'], 

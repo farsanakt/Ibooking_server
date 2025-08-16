@@ -222,10 +222,9 @@ constructor(){
 async createVendorBookings(data:any) {
   try {
     
-    if (!data.vendorId || !data.userEmail || !data.vendorName || !data.bookedDate || !data.timeSlot || !data.totalAmount || !data.paidAmount || !data.balanceAmount || !data.address || !data.paymentMethod || !data.paymentType || !data.advanceAmount) {
+    if (!data.vendorId || !data.userEmail || !data.vendorName || !data.bookedDate || !data.timeSlot || !data.totalAmount || !data.paidAmount || !data.address || !data.paymentMethod || !data.paymentType || !data.advanceAmount) {
       return { status: false, message: 'Missing required fields.' };
     }
-
    
     const vendor = await this.auditoriumRepositories.findVendorById(data.vendorId);
     if (!vendor) {
@@ -249,6 +248,8 @@ async createVendorBookings(data:any) {
       timeSlot: data.timeSlot,
       address: data.address,
     });
+
+    console.log(booking,'done')
 
     if (!booking) {
       return { status: false, message: 'Booking creation failed.' };

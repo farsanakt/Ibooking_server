@@ -119,30 +119,25 @@ class UserController{
 
     }
 
-     async createVendorBooking(req:Request,res:Response){
+    async createVendorBooking(req: Request, res: Response) {
 
       try {
+        
+        const data = req.body;
 
-        const data=req.body
+        const response = await userService.createVendorBookings(data);
 
-        console.log('dataaa',data)
-
-        const response=await userService.createVendorBookings(data)
-
-         if (response) {
-
+        if (response) {
           res.status(200).json(response);
-          return
+          return;
         }
 
-        res.status(404).json({ message: 'No matching auditoriums found' });
-
-        return
-        
+        res.status(404).json({ message: 'No matching auditoriums found' })
+        return;
       } catch (error) {
-        
+        console.error("Error in createVendorBooking:", error)
+        res.status(500).json({ status: false, message: 'An unexpected error occurred. Please check server logs.' });
       }
-
     }
 
     
