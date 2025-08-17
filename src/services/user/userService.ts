@@ -4,6 +4,7 @@ import { IAuditoriumUser } from "../../models/auditorium/auditoriumUserModel";
 import { IVenue } from "../../models/auditorium/venueModel";
 import { AuditoriumRepositories } from "../../repositories/implemention/AuditoriumRepositories";
 import { MailService } from '../MailService'// adjust path as needed
+import { bookingConfirmationTemplate } from '../../utils/confirmation'
 
 interface EnrichedVenue {
   images: string;
@@ -91,24 +92,19 @@ constructor(){
     }
 
 
-  async createBookings(data: any) {
 
+async createBookings(data: any) {
   try {
-
-    const m=await this.auditoriumRepositories.updateVenueSlot(data.timeSlot);
+    const m = await this.auditoriumRepositories.updateVenueSlot(data.timeSlot);
 
     const venue = await this.auditoriumRepositories.findVenueById(data.venueId);
 
-    let auditoriumEmail = ''
+    let auditoriumEmail = '';
 
     if (venue) {
-
-      const auditorium = await this.auditoriumRepositories.findAuditoriumById(venue.audiUserId)
-
+      const auditorium = await this.auditoriumRepositories.findAuditoriumById(venue.audiUserId);
       if (auditorium) {
-
-        auditoriumEmail = auditorium.email
-
+        auditoriumEmail = auditorium.email;
       }
     }
 
@@ -117,47 +113,61 @@ constructor(){
       venueName: data.venueName,
       bookeddate: data.bookedDate,
       timeSlot: data.timeSlot,
-      totalAmount: data.totalAmount ,
+      totalAmount: data.totalAmount,
       paidAmount: data.paidAmount || data.balanceAmount,
-      balanceAmount:data.balanceAmount,
-      address:data.address,
+      balanceAmount: data.balanceAmount,
+      address: data.address,
       venueId: data.venueId,
-      auditoriumId:venue?.audiUserId,
+      auditoriumId: venue?.audiUserId,
       paymentStatus: 'pending',
     });
 
-     if (!booking) {
+    if (!booking) {
       return { status: false, message: 'Booking creation failed.' };
     }
 
-
     if (booking) {
+      
+      const userEmailContent = bookingConfirmationTemplate
+        .replace('{{recipient}}', 'User')
+        .replace('{{vendorName}}', data.venueName)
+        .replace('{{bookedDate}}', data.bookedDate)
+        .replace('{{timeSlot}}', data.timeSlot)
+        .replace('{{message}}', 'Your booking is confirmed. Thank you for choosing our service!')
+        .replace('{{header}}', 'Booking Confirmation - Your Slot is Reserved');
 
       
       await this.mailService.sendMail({
         to: data.userEmail,
         subject: 'Booking Confirmation - Your Slot is Reserved',
-        html: `<p>Dear user,</p><p>Your booking for ${data.venueName} on ${data.bookingDate} at ${data.timeSlot} is confirmed.</p><p>Thank you!</p>`
+        html: userEmailContent,
       });
 
-      // Step 2: Send confirmation to auditorium
+     
       if (auditoriumEmail) {
+        const auditoriumEmailContent = bookingConfirmationTemplate
+          .replace('{{recipient}}', 'Auditorium Owner')
+          .replace('{{vendorName}}', data.venueName)
+          .replace('{{bookedDate}}', data.bookedDate)
+          .replace('{{timeSlot}}', data.timeSlot)
+          .replace('{{message}}', 'You have received a new booking. Please prepare accordingly.')
+          .replace('{{header}}', 'New Booking Received');
+
+        
         await this.mailService.sendMail({
           to: auditoriumEmail,
           subject: 'New Booking Received',
-          html: `<p>Dear Auditorium Owner,</p><p>You have received a new booking for ${data.venueName} on ${data.bookingDate} at ${data.timeSlot}.</p><p>Please prepare accordingly.</p>`
+          html: auditoriumEmailContent,
         });
       }
     }
 
-    return {status:true,message:'booking confirmed'}
-
+    return { status: true, message: 'Booking confirmed' };
   } catch (error) {
-    
     console.error("Error in booking creation or email sending:", error);
+    return { status: false, message: 'An error occurred while processing the booking.' };
   }
 }
-
     async  addVendor(data: any) {
 
         console.log(data.audiUserId,'ideeee')
@@ -219,9 +229,10 @@ constructor(){
 
 
 
-async createVendorBookings(data:any) {
+
+
+async createVendorBookings(data: any) {
   try {
-    
     if (!data.vendorId || !data.userEmail || !data.vendorName || !data.bookedDate || !data.timeSlot || !data.totalAmount || !data.paidAmount || !data.address || !data.paymentMethod || !data.paymentType || !data.advanceAmount) {
       return { status: false, message: 'Missing required fields.' };
     }
@@ -231,7 +242,6 @@ async createVendorBookings(data:any) {
       return { status: false, message: 'Vendor not found.' };
     }
 
-   
     const booking = await this.auditoriumRepositories.createVendorBooking({
       userEmail: data.userEmail,
       vendorName: data.vendorName,
@@ -249,25 +259,43 @@ async createVendorBookings(data:any) {
       address: data.address,
     });
 
-    console.log(booking,'done')
+    console.log(booking, 'done');
 
     if (!booking) {
       return { status: false, message: 'Booking creation failed.' };
     }
 
-    
+    // Replace placeholders in the template for user email
+    const userEmailContent = bookingConfirmationTemplate
+      .replace('{{recipient}}', 'User')
+      .replace('{{vendorName}}', data.vendorName)
+      .replace('{{bookedDate}}', data.bookedDate)
+      .replace('{{timeSlot}}', data.timeSlot)
+      .replace('{{message}}', 'Your booking is confirmed. Thank you for choosing our service!')
+      .replace('{{header}}', 'Booking Confirmation - Your Slot is Reserved');
+
+    // Send email to user
     await this.mailService.sendMail({
       to: data.userEmail,
       subject: 'Booking Confirmation - Your Slot is Reserved',
-      html: `<p>Dear user,</p><p>Your booking for ${data.vendorName} on ${data.bookedDate} at ${data.timeSlot} is confirmed.</p><p>Thank you!</p>`
+      html: userEmailContent,
     });
 
-    
+    // Replace placeholders for vendor email
     if (vendor.email) {
+      const vendorEmailContent = bookingConfirmationTemplate
+        .replace('{{recipient}}', 'Vendor')
+        .replace('{{vendorName}}', data.vendorName)
+        .replace('{{bookedDate}}', data.bookedDate)
+        .replace('{{timeSlot}}', data.timeSlot)
+        .replace('{{message}}', 'You have received a new booking. Please prepare accordingly.')
+        .replace('{{header}}', 'New Booking Received');
+
+      // Send email to vendor
       await this.mailService.sendMail({
         to: vendor.email,
         subject: 'New Booking Received',
-        html: `<p>Dear Vendor,</p><p>You have received a new booking for ${data.vendorName} on ${data.bookedDate} at ${data.timeSlot}.</p><p>Please prepare accordingly.</p>`
+        html: vendorEmailContent,
       });
     }
 
