@@ -213,6 +213,37 @@ constructor(){
       }
 
      }
+
+     async verifyPassword(id:string,password:string){
+
+      try {
+
+        const user=await this.auditoriumRepositories.findAudiById(id)
+
+        console.log(user)
+
+        if(!user){
+
+          return {success:false,message:'user not found'}
+
+        }
+
+        if(user.password == password){
+
+
+          return {success:true,message:'Password verified successfully'}
+
+        }else{
+
+          return {success:false,message:'invalid password'}
+
+        }
+        
+      } catch (error) {
+        
+      }
+
+     }
  
      
 

@@ -23,6 +23,8 @@ auditorium_route.post('/userexist',auditoriumController.checkUserExist)
 
 auditorium_route.get('/userDetails',auditoriumController.userDetails)
 
-auditorium_route.get('/findauditorium/:id',auditoriumController.findAuditoriumUser)
+auditorium_route.post('/verify-password/:id',auditoriumController.verifyPassword)
+
+auditorium_route.get('/auditoriumUserdetatils/:id',auditoriumController.findAuditoriumUser)
 
 export default auditorium_route

@@ -248,7 +248,38 @@ class AuditoriumController{
 
             const response=await auditoriumService.findAuditoriumUser(id)
 
-            console.log(response)
+            if(response){
+    
+            res.status(HttpStatus.CREATED).json(response)
+
+            return
+
+    }
+            
+        } catch (error) {
+            
+        }
+
+    }
+
+    async verifyPassword(req:Request,res:Response){
+
+        try {
+
+            const id=req.params.id
+
+            const {password}=req.body
+
+            const response=await auditoriumService.verifyPassword(id,password)
+
+            
+            if(response){
+    
+            res.status(HttpStatus.CREATED).json(response)
+
+            return
+
+          }
             
         } catch (error) {
             
