@@ -282,6 +282,8 @@ class AuditoriumController{
           }
             
         } catch (error) {
+
+            console.log('error')
             
         }
 
