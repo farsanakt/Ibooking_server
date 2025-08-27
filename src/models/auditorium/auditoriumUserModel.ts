@@ -9,7 +9,9 @@ export interface IAuditoriumUser extends Document {
   isBlocked: boolean;
   auditoriumName?: string;
   ownerName?: string;
-  
+  address:string;
+  district:string;
+  panchayat:string;
   phone?: string;
 }
 
@@ -53,7 +55,17 @@ const userSchema: Schema = new Schema({
     type: String
   },
 
+  address:{
 
+    type:String
+
+  },
+  district:{
+    type:String
+  },
+  panchayat:{
+    type:String
+  },
 
   phone: {
     type: String

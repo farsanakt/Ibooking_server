@@ -12,9 +12,9 @@ class AuthController{
     const formData = req.body;
     console.log(formData,'po')
     const response = await authService.userSignup(formData);
-
+     
     console.log(response);
-
+      
     if (!response?.success) {
       console.log('me');
       res.status(HttpStatus.BAD_REQUEST).json(response);

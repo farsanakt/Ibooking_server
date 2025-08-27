@@ -99,7 +99,7 @@ class UserController{
 
         const data=req.body
 
-        
+        console.log(data,'this is the booking data from i getting from the auditorium side')
 
         const response=await userService.createBookings(data)
 

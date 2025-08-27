@@ -12,7 +12,10 @@ class AuditoriumController{
 
         try {
 
+
             const data=req.body
+
+            console.log(data,'ithan ath')
 
              if (typeof data.cities === "string") {
                 data.cities = JSON.parse(data.cities);
