@@ -34,6 +34,8 @@ user_route.post('/addvendor',upload.array('images', 4),userController.addVendor)
 
 user_route.get('/allVendorss',userController.existingALlVendors)
 
+user_route.post('/vendorenquiry',userController.vendorEnquiry)
+
 
 
 

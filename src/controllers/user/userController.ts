@@ -143,7 +143,7 @@ class UserController{
     
     async addVendor(req:Request,res:Response){
     
-            console.log('hiiii')
+            
     
             try {
     
@@ -210,6 +210,18 @@ class UserController{
         
             }
 
+
+      async vendorEnquiry(req:Request,res:Response){
+
+        try {
+
+          const data=req.body
+          
+        } catch (error) {
+          
+        }
+
+      }
 
     async existingBookings(req:Request,res:Response){
 
@@ -292,8 +304,6 @@ class UserController{
 
         const response=await userService.allVendors()
 
-        console.log(response,'joppe')
-
         if(response){
 
           res.status(HttpStatus.CREATED).json(response)
@@ -317,8 +327,6 @@ class UserController{
          const id=req.params.id
 
         const response=await userService.singleVendor(id)
-
-        console.log(response,'joppe')
 
         if(response){
 
