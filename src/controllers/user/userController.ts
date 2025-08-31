@@ -211,17 +211,29 @@ class UserController{
             }
 
 
-      async vendorEnquiry(req:Request,res:Response){
+      // controllers/enquiryController.ts
 
-        try {
 
-          const data=req.body
-          
-        } catch (error) {
-          
-        }
+async vendorEnquiry (req: Request, res: Response): Promise<void>{
+  try {
+    const data = req.body;
+    console.log(data, "📩 Received enquiry data");
 
-      }
+    const enquiry = await userService.createVendorEnquiry(data);
+
+    res.status(201).json({
+      success: true,
+      message: "Enquiry created successfully",
+      data: enquiry,
+    });
+  } catch (error: any) {
+    console.error("❌ Error creating enquiry:", error.message);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
+  }
+};
 
     async existingBookings(req:Request,res:Response){
 

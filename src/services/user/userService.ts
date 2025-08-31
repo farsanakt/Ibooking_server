@@ -5,6 +5,7 @@ import { IVenue } from "../../models/auditorium/venueModel";
 import { AuditoriumRepositories } from "../../repositories/implemention/AuditoriumRepositories";
 import { MailService } from '../MailService'// adjust path as needed
 import { bookingConfirmationTemplate } from '../../utils/confirmation'
+import { IEnquiry } from "../../models/vendor/vendorEnquiry";
 
 interface EnrichedVenue {
   images: string;
@@ -226,6 +227,61 @@ async createBookings(data: any) {
           
         }
       }
+
+
+
+async createVendorEnquiry(data: Partial<IEnquiry>): Promise<any> {
+  try {
+    
+    const enquiry = await this.auditoriumRepositories.createEnquiry(data);
+
+    if (!enquiry) {
+      return { status: false, message: "Enquiry creation failed." };
+    }
+
+   
+    if (data.notification === "email") {
+      
+      const userEmailContent = bookingConfirmationTemplate
+        .replace("{{recipient}}", data.name || "User")
+        .replace("{{vendorName}}", enquiry.vendorId.toString()) // or fetch vendor name separately
+        .replace("{{eventDate}}", enquiry.eventDate.toDateString())
+        .replace("{{eventType}}", enquiry.eventType)
+        .replace("{{message}}", "Your enquiry has been successfully submitted. We will get back to you soon.")
+        .replace("{{header}}", "Enquiry Confirmation");
+
+      await mailService.sendMail({
+        to: data.email!,
+        subject: "Your Enquiry Has Been Submitted",
+        html: userEmailContent,
+      });
+
+      
+      const vendor = await this.auditoriumRepositories.findVendorById(data.vendorId);
+      if (vendor?.email) {
+        const vendorEmailContent = bookingConfirmationTemplate
+          .replace("{{recipient}}", "Vendor")
+          .replace("{{vendorName}}", vendor.name || "Vendor")
+          .replace("{{eventDate}}", enquiry.eventDate.toDateString())
+          .replace("{{eventType}}", enquiry.eventType)
+          .replace("{{message}}", `You have received a new enquiry from ${data.name}.`)
+          .replace("{{header}}", "New Enquiry Received");
+
+        await mailService.sendMail({
+          to: vendor.email,
+          subject: "New Enquiry Received",
+          html: vendorEmailContent,
+        });
+      }
+    }
+
+    return { status: true, message: "Enquiry submitted successfully", data: enquiry };
+  } catch (error: any) {
+    console.error("Error creating enquiry:", error);
+    return { status: false, message: "An error occurred while creating enquiry." };
+  }
+};
+
 
 
 
