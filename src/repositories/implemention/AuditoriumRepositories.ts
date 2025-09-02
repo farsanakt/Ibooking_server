@@ -15,6 +15,10 @@ export class AuditoriumRepositories{
        return await AuditoriumUser.create(data)
     }
 
+      async create(data:any):Promise<IAuditoriumUser|null>{
+       return await AuditoriumUser.create(data)
+    }
+
     async findUserByEmail(email:string):Promise<IAuditoriumUser |null>{
         return await AuditoriumUser.findOne({email:email})
     }
