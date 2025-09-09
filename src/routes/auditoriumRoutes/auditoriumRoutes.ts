@@ -27,4 +27,7 @@ auditorium_route.post('/verify-password/:id',auditoriumController.verifyPassword
 
 auditorium_route.get('/auditoriumUserdetatils/:id',auditoriumController.findAuditoriumUser)
 
+// auditorium_route.post('/submit-details',upload.fields([{ name: 'bridePhoto', maxCount: 1 },{ name: 'brideIdProof', maxCount: 1 },{ name: 'groomPhoto', maxCount: 1 },{ name: 'groomIdProof', maxCount: 1 },]),auditoriumController.submitBrideGroomDetails);
+
+
 export default auditorium_route

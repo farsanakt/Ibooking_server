@@ -16,9 +16,7 @@ export class AuditoriumRepositories{
     }
 
    
-    async createadmin(data:any):Promise<IAuditoriumUser|null>{
-       return await AuditoriumUser.create(data)
-    }
+ 
 
    
 
