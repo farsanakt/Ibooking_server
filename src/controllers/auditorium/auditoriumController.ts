@@ -291,9 +291,59 @@ class AuditoriumController{
         }
 
     }
+    
+    async addBrideGroomDetails(req: Request, res: Response) {
+    
 
+        try {
 
+        const data = req.body;
+       
+        if (typeof data.bride === 'string') {
+            data.bride = JSON.parse(data.bride);
+        }
+        if (typeof data.groom === 'string') {
+            data.groom = JSON.parse(data.groom);
+        }
+
+        const files = req.files as { [fieldname: string]: Express.MulterS3.File[] };
+        const bridePhoto = files['bridePhoto']?.[0]?.location;
+        const brideIdProof = files['brideIdProof']?.[0]?.location;
+        const groomPhoto = files['groomPhoto']?.[0]?.location;
+        const groomIdProof = files['groomIdProof']?.[0]?.location;
+
+        data.bride.photo = bridePhoto;
+        data.bride.idProof = brideIdProof;
+        data.groom.photo = groomPhoto;
+        data.groom.idProof = groomIdProof;
+
+        const response = await auditoriumService.addBrideGroomDetails({ ...data });
+
+        if (!response) {
+
+            res.status(HttpStatus.BAD_REQUEST).json(response)
+
+            return
+
+        }
+
+        res.status(HttpStatus.CREATED).json(response)
+
+        } catch (error) {
+
+        console.log(error, 'error in auditorium controller')
+        
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: 'Failed to save bride/groom details',
+        });
+        }
+    }
 }
+
+
+
+
 
 
 

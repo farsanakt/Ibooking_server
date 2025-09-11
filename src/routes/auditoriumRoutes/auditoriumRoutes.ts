@@ -1,6 +1,7 @@
 import express from 'express'
 import AuditoriumController from '../../controllers/auditorium/auditoriumController'
 import upload from '../../middleware/upload'
+import { uploadBrideGroom } from '../../middleware/uploadBrideGroom'
 
 const auditoriumController=new AuditoriumController()
 
@@ -27,7 +28,7 @@ auditorium_route.post('/verify-password/:id',auditoriumController.verifyPassword
 
 auditorium_route.get('/auditoriumUserdetatils/:id',auditoriumController.findAuditoriumUser)
 
-// auditorium_route.post('/submit-details',upload.fields([{ name: 'bridePhoto', maxCount: 1 },{ name: 'brideIdProof', maxCount: 1 },{ name: 'groomPhoto', maxCount: 1 },{ name: 'groomIdProof', maxCount: 1 },]),auditoriumController.submitBrideGroomDetails);
+auditorium_route.post("/bride-groom-details",uploadBrideGroom,auditoriumController.addBrideGroomDetails)
 
 
 export default auditorium_route

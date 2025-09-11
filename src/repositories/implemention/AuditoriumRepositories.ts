@@ -7,6 +7,7 @@ import userModel, { IUser } from "../../models/user/userModel";
 import vendorBookingModel, { IVendorBooking } from "../../models/user/vendorBookingModel";
 import vendorModel, { IVendor } from "../../models/vendor/vendorModel";
 import Enquiry, { IEnquiry } from "../../models/vendor/vendorEnquiry";
+import BrideGroom from '../../models/auditorium/brideGroomModel'
 
 
 export class AuditoriumRepositories{
@@ -34,6 +35,15 @@ export class AuditoriumRepositories{
 
         return await AuditoriumUser.findOne({ownerName:ownername})
 
+    }
+
+    async createBrideGroom(data: any): Promise<any | null> {
+    return await BrideGroom.create(data);
+    }
+
+  
+    async findBrideGroomByEmail(email: string): Promise<any | null> {
+        return await BrideGroom.findOne({ email });
     }
 
     async createVenue(data:any):Promise<IVenue|null>{

@@ -246,6 +246,50 @@ constructor(){
       }
 
      }
+
+    async addBrideGroomDetails(data: any) {
+
+    
+
+    try {
+      
+      const existingBrideGroom = await this.auditoriumRepositories.findBrideGroomByEmail(data.email)
+
+      if (existingBrideGroom) {
+
+        return { success: false, message: 'Bride and groom details already exist for this email' }
+
+      }
+
+      
+      const mappedData = {
+        email: data.email,
+        bride: {
+          name: data.bride.fullName,
+          age: data.bride.dateOfBirth ||0,
+          address: data.bride.address,
+          photo: data.bride.photo, 
+          idProof: data.bride.idProof,
+        },
+        groom: {
+          name: data.groom.fullName,
+          age: data.groom.dateOfBirth || 0,
+          address: data.groom.address,
+          photo: data.groom.photo, 
+          idProof: data.groom.idProof,
+        },
+      };
+
+      const savedBrideGroom = await this.auditoriumRepositories.createBrideGroom(mappedData);
+
+      return { success: true, message: 'Bride and groom details added successfully..!' };
+    } catch (error) {
+      throw new Error('Service Error: ' + (error instanceof Error ? error.message : 'Unknown error'));
+    }
+  }
+
+  
+     
  
      
 

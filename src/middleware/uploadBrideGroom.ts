@@ -1,4 +1,3 @@
-
 import multer from "multer";
 import multerS3 from "multer-s3";
 import { s3 } from "../utils/s3";
@@ -15,6 +14,16 @@ const upload = multer({
       cb(null, fileName);
     },
   }),
+  fileFilter: (_req, file, cb) => {
+    const allowedTypes = ['image/png', 'image/jpeg'];
+    if (!allowedTypes.includes(file.mimetype)) {
+      return cb(new Error('Only PNG and JPEG files are allowed'));
+    }
+    cb(null, true);
+  },
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  },
 });
 
 export const uploadBrideGroom = upload.fields([
