@@ -25,4 +25,8 @@ export class OfferService {
     return this.offerRepo.findOffersByUser(userId);
   }
 
+  async updateOffer(id: string, data: Partial<IOffer>): Promise<IOffer | null> {
+    return this.offerRepo.updateOffer(id, data);
+  }
+
 }

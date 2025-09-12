@@ -14,6 +14,10 @@ export class OfferRepository {
     return OfferModel.find({ userId }).sort({ createdAt: -1 })
   }
 
+  async updateOffer(id: string, data: Partial<IOffer>): Promise<IOffer | null> {
+    return OfferModel.findByIdAndUpdate(id, data, { new: true });
+  }
+
 }
 
   

@@ -37,5 +37,7 @@ auditorium_route.post('/createoffer',auditoriumController.createOffer)
 
 auditorium_route.get('/fetchoffers/:userId', auditoriumController.getUserOffers)
 
+auditorium_route.put("/offers/:id",auditoriumController.updateOffer);
+
 
 export default auditorium_route

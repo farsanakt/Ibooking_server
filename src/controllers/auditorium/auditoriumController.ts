@@ -389,6 +389,33 @@ class AuditoriumController{
     });
   }
 };
+   
+   async updateOffer (req: Request, res: Response): Promise<void>{
+  try {
+    const { id } = req.params;
+    const data = req.body;
+
+    const updatedOffer = await offerService.updateOffer(id, data);
+
+    if (!updatedOffer) {
+      res.status(404).json({ success: false, message: "Offer not found" });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Offer updated successfully",
+      data: updatedOffer,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to update offer",
+    });
+  }
+};
+
+
 
 }
 
