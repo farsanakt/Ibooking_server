@@ -7,8 +7,8 @@ export interface IUser extends Document {
   role: 'user' | 'auditorium' | 'admin';
   isVerified: boolean;
   isBlocked: boolean;
-  auditoriumName?: string;
-  ownerName?: string;
+  firstName?: string;
+  lastName?: string;
   
   phone?: string;
 }
@@ -45,11 +45,11 @@ const userSchema: Schema = new Schema({
   },
 
   // Auditorium-specific
-  auditoriumName: {
+  firstName: {
     type: String
   },
 
-  ownerName: {
+  lastName: {
     type: String
   },
 

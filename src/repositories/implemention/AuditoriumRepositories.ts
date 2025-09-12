@@ -138,10 +138,6 @@ export class AuditoriumRepositories{
             locations: { $in: [placeRegex] }
             };
 
-            // console.log('Query:', JSON.stringify(query, (key, value) => {
-            // if (value instanceof RegExp) return value.toString();
-            // return value;
-            // }, 2));
 
             const result = await AuditoriumUser.find(query)
        
