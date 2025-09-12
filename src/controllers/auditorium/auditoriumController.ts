@@ -339,6 +339,22 @@ class AuditoriumController{
         });
         }
     }
+
+    // ###################### OFFER ##########################
+
+    async createOffer(req:Request,res:Response){
+
+       try {
+
+        const data=req.body
+
+        console.log(data,'offer data')
+        
+       } catch (error) {
+        
+       }
+
+    }
 }
 
 
