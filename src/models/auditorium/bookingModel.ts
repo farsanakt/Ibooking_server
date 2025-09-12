@@ -12,7 +12,8 @@ export interface IBooking extends Document {
   timeSlot: string;
   paidAmount: string;
   balanceAmount: string;
-  address:string
+  address:string;
+  eventType:string
 }
 
 const BookingSchema: Schema = new Schema({
@@ -27,6 +28,7 @@ const BookingSchema: Schema = new Schema({
   timeSlot: { type: String, required: true },
   paidAmount: { type: String, required: true },
   balanceAmount: { type: String, required: true },
-  address:{type:String,required:true}
+  address:{type:String,required:true},
+  eventType:{type:String,required:true}
 });
 export default mongoose.model<IBooking>('Booking',BookingSchema)

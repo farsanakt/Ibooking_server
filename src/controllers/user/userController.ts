@@ -357,6 +357,31 @@ async vendorEnquiry (req: Request, res: Response): Promise<void>{
     }
 
 
+    async fetchExistingUserBooking(req:Request,res:Response){
+
+      try {
+
+        const email=req.query.email as string
+
+          const response=await userService.fetchExistingBooking(email)
+
+          console.log(response,'kkkkkkoppeeeee')
+
+        if(response){
+
+          res.status(HttpStatus.CREATED).json(response)
+
+          return
+
+        }
+        
+        
+      } catch (error) {
+        
+      }
+
+    }
+
 
 
 }

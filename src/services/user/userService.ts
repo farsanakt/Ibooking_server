@@ -313,6 +313,7 @@ async createVendorBookings(data: any) {
       bookeddate: data.bookedDate,
       timeSlot: data.timeSlot,
       address: data.address,
+      eventType:data.eventType,
     });
 
     console.log(booking, 'done');
@@ -420,6 +421,18 @@ async singleVendor(id:string){
     try {
 
       return await this.auditoriumRepositories.findSingleVendorById(id)
+      
+    } catch (error) {
+      
+    }
+
+  }
+
+  async fetchExistingBooking(email:string){
+    
+    try {
+
+      return await this.auditoriumRepositories.findUserBookingsByEmail(email)
       
     } catch (error) {
       

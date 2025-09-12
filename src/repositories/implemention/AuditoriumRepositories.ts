@@ -224,6 +224,12 @@ export class AuditoriumRepositories{
 
     }
 
+    async findUserBookingsByEmail(email:string):Promise<IBooking[]|null>{
+
+        return await bookingModel.find({userEmail:email})
+
+    }
+
      async findSingleVendorById(id:string):Promise<IVendor|null>{
 
         return await vendorModel.findOne({_id:id})

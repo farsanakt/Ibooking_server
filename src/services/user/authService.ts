@@ -36,9 +36,9 @@ export class AuthService{
 
               const savedDetails = await this.userRepositories.createUser({
 
-                  auditoriumName: firstName,
+                  firstName: firstName,
                   phone:phone,
-                  ownerName:lastName,
+                  lastName:lastName,
                   email: email,
                   password: password,
 
