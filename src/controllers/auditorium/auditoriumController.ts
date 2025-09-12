@@ -1,6 +1,9 @@
 import { Request,Response } from "express"
 import { AuditoriumService } from "../../services/auditorium/auditoriumSerivce"
 import { HttpStatus } from "../../enums/httpStatus"
+import { OfferService } from "../../services/auditorium/offerService";
+
+const offerService = new OfferService();
 
 
 const auditoriumService=new AuditoriumService()
@@ -342,19 +345,28 @@ class AuditoriumController{
 
     // ###################### OFFER ##########################
 
-    async createOffer(req:Request,res:Response){
+   async createOffer (req: Request, res: Response): Promise<void> {
+  try {
+    const data = req.body;
 
-       try {
+    console.log("Offer data:", data);
 
-        const data=req.body
+    const newOffer = await offerService.createOffer(data);
 
-        console.log(data,'offer data')
-        
-       } catch (error) {
-        
-       }
+    res.status(201).json({
+      success: true,
+      message: "Offer created successfully",
+      data: newOffer,
+    });
+  } catch (error: any) {
+    console.error("Error creating offer:", error.message);
 
-    }
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to create offer",
+    });
+  }
+};
 }
 
 

@@ -36,4 +36,6 @@ auditorium_route.post("/bride-groom-details",uploadBrideGroom,auditoriumControll
 auditorium_route.post('/createoffer',auditoriumController.createOffer)
 
 
+
+
 export default auditorium_route
