@@ -9,4 +9,12 @@ export class OfferRepository {
     const offer = new OfferModel(data);
     return offer.save();
   }
+
+   async findOffersByUser(userId: string): Promise<IOffer[]> {
+    return OfferModel.find({ userId }).sort({ createdAt: -1 })
+  }
+
 }
+
+  
+ 

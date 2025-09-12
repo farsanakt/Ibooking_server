@@ -19,4 +19,10 @@ export class OfferService {
   
     return this.offerRepo.createOffer(data);
   }
+
+
+  async getUserOffers(userId: string): Promise<IOffer[]> {
+    return this.offerRepo.findOffersByUser(userId);
+  }
+
 }

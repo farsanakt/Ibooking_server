@@ -367,6 +367,29 @@ class AuditoriumController{
     });
   }
 };
+
+   async getUserOffers(req: Request, res: Response): Promise<void>{
+  try {
+    const { userId } = req.params;
+
+    console.log(userId)
+
+    const offers = await offerService.getUserOffers(userId);
+
+    console.log(offers,'gggoffer')
+
+    res.status(200).json({
+      success: true,
+      data: offers,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to fetch offers",
+    });
+  }
+};
+
 }
 
 
