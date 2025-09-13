@@ -154,7 +154,7 @@ export class AuthService{
 
    async vendorRegistration(formData:any){
 
-        const {name,vendortype,email,phone,password,confirmPassword}=formData
+        const {name,vendortype,email,phone,password,confirmPassword,address}=formData
 
         try {
 
@@ -179,7 +179,8 @@ export class AuthService{
                   vendortype:vendortype,
                   email: email,
                   password: password,
-                  role:'vendor'
+                  role:'vendor',
+                  address:address
 
                 })
 

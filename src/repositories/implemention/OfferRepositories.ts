@@ -18,6 +18,10 @@ export class OfferRepository {
     return OfferModel.findByIdAndUpdate(id, data, { new: true });
   }
 
+  async deleteOffer(id: string): Promise<IOffer | null> {
+    return OfferModel.findByIdAndDelete(id);
+  }
+
 }
 
   

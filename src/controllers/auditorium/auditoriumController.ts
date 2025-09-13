@@ -415,6 +415,30 @@ class AuditoriumController{
   }
 };
 
+async deleteOffer (req: Request, res: Response): Promise<void>{
+  try {
+    const { id } = req.params;
+
+    const deletedOffer = await offerService.deleteOffer(id);
+
+    if (!deletedOffer) {
+      res.status(404).json({ success: false, message: "Offer not found" });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Offer deleted successfully",
+      data: deletedOffer,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to delete offer",
+    });
+  }
+};
+
 
 
 }

@@ -39,5 +39,7 @@ auditorium_route.get('/fetchoffers/:userId', auditoriumController.getUserOffers)
 
 auditorium_route.put("/offers/:id",auditoriumController.updateOffer);
 
+auditorium_route.delete("/offers/:id",auditoriumController .deleteOffer);
+
 
 export default auditorium_route

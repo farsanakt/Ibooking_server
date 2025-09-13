@@ -29,4 +29,8 @@ export class OfferService {
     return this.offerRepo.updateOffer(id, data);
   }
 
+  async deleteOffer(id: string): Promise<IOffer | null> {
+    return this.offerRepo.deleteOffer(id);
+  }
+
 }

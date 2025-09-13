@@ -235,6 +235,31 @@ async vendorEnquiry (req: Request, res: Response): Promise<void>{
   }
 };
 
+   async fetchVendorEnquiry(req:Request,res:Response){
+
+    try {
+
+      const id=req.query.id as string
+
+      
+        const response=await userService.fetchVendorEnquiry(id)
+
+        console.log(response,'p')
+
+        if(response){
+
+          res.status(HttpStatus.CREATED).json(response)
+
+          return
+
+        }
+      
+    } catch (error) {
+      
+    }
+
+   }
+
     async existingBookings(req:Request,res:Response){
 
       try {

@@ -8,6 +8,8 @@ import vendorBookingModel, { IVendorBooking } from "../../models/user/vendorBook
 import vendorModel, { IVendor } from "../../models/vendor/vendorModel";
 import Enquiry, { IEnquiry } from "../../models/vendor/vendorEnquiry";
 import BrideGroom from '../../models/auditorium/brideGroomModel'
+import mongoose from "mongoose";
+import vendorUser, { IVendorUser } from "../../models/vendor/vendorUser";
 
 
 export class AuditoriumRepositories{
@@ -72,6 +74,12 @@ export class AuditoriumRepositories{
 
      async findVendorById(id: string): Promise<IVenue | null> {
     return await vendorModel.findById(id);
+   }
+
+   async findVendorUserById(id:mongoose.Types.ObjectId):Promise<IVendorUser|null>{
+
+    return await vendorUser.findOne({_id:id})
+
    }
 
    async getAllExistingVendor(id:string):Promise<IVendor[]|null>{
@@ -205,6 +213,11 @@ export class AuditoriumRepositories{
     async findBookingsByVenueId(id:string):Promise<IBooking[]|null>{
         return await bookingModel.find({venueId:id})
     }
+
+    async findEnquiryByVendorId(id: string): Promise<IEnquiry[] | null> {
+        console.log(id,'thiseeee')
+  return await Enquiry.find({ vendorId: new mongoose.Types.ObjectId(id) });
+}
 
     async findVendorBookingsByVenueId(id:string):Promise<IVendorBooking[]|null>{
 

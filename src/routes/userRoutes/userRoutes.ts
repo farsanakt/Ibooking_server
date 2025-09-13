@@ -38,6 +38,8 @@ user_route.get('/allVendorss',userController.existingALlVendors)
 
 user_route.post('/vendorenquiry',userController.vendorEnquiry)
 
+user_route.get('/fetchenquiries',userController.fetchVendorEnquiry)
+
 
 
 

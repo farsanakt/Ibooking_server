@@ -9,6 +9,7 @@ export interface IVendorUser extends Document {
   isBlocked: boolean;
   name?: string;
   vendortype?: string;
+  address:string;
   
   phone?: string;
 }
@@ -32,6 +33,11 @@ const vendorSchema: Schema = new Schema({
   password: {
     type: String,
     required: true
+  },
+
+  address:{
+    type:String,
+    required:true
   },
 
   isVerified: {

@@ -232,6 +232,15 @@ async createBookings(data: any) {
 
 async createVendorEnquiry(data: Partial<IEnquiry>): Promise<any> {
   try {
+
+    
+    if (!data.vendorId) {
+  throw new Error("Vendor ID is required to create enquiry.");
+}
+
+const vendor = await this.auditoriumRepositories.findVendorUserById(data.vendorId);
+
+    console.log(vendor,'kope')
     
     const enquiry = await this.auditoriumRepositories.createEnquiry(data);
 
@@ -244,7 +253,7 @@ async createVendorEnquiry(data: Partial<IEnquiry>): Promise<any> {
       
       const userEmailContent = bookingConfirmationTemplate
         .replace("{{recipient}}", data.name || "User")
-        .replace("{{vendorName}}", enquiry.vendorId.toString()) // or fetch vendor name separately
+        .replace("{{vendorName}}", enquiry.vendorId.toString())
         .replace("{{eventDate}}", enquiry.eventDate.toDateString())
         .replace("{{eventType}}", enquiry.eventType)
         .replace("{{message}}", "Your enquiry has been successfully submitted. We will get back to you soon.")
@@ -376,6 +385,23 @@ async createVendorBookings(data: any) {
     }
 
   }
+
+
+    async fetchVendorEnquiry(id:string){
+
+    try {
+
+      const extBkngs=await this.auditoriumRepositories.findEnquiryByVendorId(id)
+
+      return extBkngs
+      
+    } catch (error) {
+      
+    }
+
+  }
+
+
 
     async existingVendorBookings(id:string){
 
