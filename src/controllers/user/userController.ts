@@ -259,6 +259,34 @@ async vendorEnquiry (req: Request, res: Response): Promise<void>{
     }
 
    }
+   
+
+   async currentUserVendorData(req:Request,res:Response){
+
+    try {
+
+      const id=req.query.id as string
+
+      const response=await userService.currentUserData(id)
+
+
+              
+                    if(response){
+        
+                        res.status(HttpStatus.CREATED).json(response)
+        
+                    }
+        
+                    res.status(HttpStatus.BAD_REQUEST).json(response)
+
+
+      
+    } catch (error) {
+      
+    }
+
+   }
+
 
     async existingBookings(req:Request,res:Response){
 

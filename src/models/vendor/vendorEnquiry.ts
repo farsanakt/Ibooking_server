@@ -11,6 +11,7 @@ export interface IEnquiry extends Document {
   notification: "whatsapp" | "sms" | "email";
   createdAt: Date;
   updatedAt: Date;
+  vendorUserId:string;
 }
 
 const enquirySchema = new Schema<IEnquiry>(
@@ -54,6 +55,11 @@ const enquirySchema = new Schema<IEnquiry>(
       enum: ["whatsapp", "sms", "email"],
       default: "email",
     },
+    vendorUserId:{
+
+      type:String,
+      required:true,
+    }
   },
   { timestamps: true }
 );

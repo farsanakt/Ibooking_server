@@ -40,6 +40,8 @@ user_route.post('/vendorenquiry',userController.vendorEnquiry)
 
 user_route.get('/fetchenquiries',userController.fetchVendorEnquiry)
 
+user_route.get('/currentvendorUser',userController.currentUserVendorData)
+
 
 
 

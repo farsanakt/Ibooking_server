@@ -13,7 +13,7 @@ export interface ITimeSlot {
 export interface IVendor extends Document {
   name: string;
   address: string;
-  vndrUserId:string;
+  vendorUserId:string;
   phone: string;
   altPhone?: string;
   email: string;
@@ -25,7 +25,7 @@ export interface IVendor extends Document {
   images: string[];
   timeSlots: ITimeSlot[];
   vendorType:string
- 
+  
 }
 
 
@@ -50,7 +50,7 @@ const vendorSchema: Schema<IVendor> = new Schema(
   {
     name: { type: String, required: true },
     address: { type: String, required: true },
-    vndrUserId:{type:String,required:true},
+    vendorUserId:{type:String,required:true},
     phone: { type: String, required: true },
     altPhone: { type: String },
     email: { type: String, required: true },

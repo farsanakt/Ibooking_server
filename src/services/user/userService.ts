@@ -6,6 +6,7 @@ import { AuditoriumRepositories } from "../../repositories/implemention/Auditori
 import { MailService } from '../MailService'// adjust path as needed
 import { bookingConfirmationTemplate } from '../../utils/confirmation'
 import { IEnquiry } from "../../models/vendor/vendorEnquiry";
+import { Types } from "mongoose";
 
 interface EnrichedVenue {
   images: string;
@@ -228,35 +229,53 @@ async createBookings(data: any) {
         }
       }
 
+      async currentUserData(id:string){
+
+        try {
+
+          const data=await this.auditoriumRepositories.findVenUserById(id)
+    
+          return data
+          
+        } catch (error) {
+          
+        }
+
+      }
+
 
 
 async createVendorEnquiry(data: Partial<IEnquiry>): Promise<any> {
   try {
-
-    
     if (!data.vendorId) {
-  throw new Error("Vendor ID is required to create enquiry.");
-}
+      throw new Error("Vendor ID is required to create enquiry.");
+    }
 
-const vendor = await this.auditoriumRepositories.findVendorUserById(data.vendorId);
+    const vendor = await this.auditoriumRepositories.findVendorUserById(data.vendorId);
+    const vendorUserId = vendor?.vendorUserId;
 
-    console.log(vendor,'kope')
-    
+    console.log(vendor, "kope ide");
+
+    if (vendorUserId) {
+      (data as any).vendorUserId = vendorUserId;
+    }
+
     const enquiry = await this.auditoriumRepositories.createEnquiry(data);
 
     if (!enquiry) {
       return { status: false, message: "Enquiry creation failed." };
     }
 
-   
     if (data.notification === "email") {
-      
       const userEmailContent = bookingConfirmationTemplate
         .replace("{{recipient}}", data.name || "User")
         .replace("{{vendorName}}", enquiry.vendorId.toString())
         .replace("{{eventDate}}", enquiry.eventDate.toDateString())
         .replace("{{eventType}}", enquiry.eventType)
-        .replace("{{message}}", "Your enquiry has been successfully submitted. We will get back to you soon.")
+        .replace(
+          "{{message}}",
+          "Your enquiry has been successfully submitted. We will get back to you soon."
+        )
         .replace("{{header}}", "Enquiry Confirmation");
 
       await mailService.sendMail({
@@ -265,31 +284,35 @@ const vendor = await this.auditoriumRepositories.findVendorUserById(data.vendorI
         html: userEmailContent,
       });
 
-      
-      const vendor = await this.auditoriumRepositories.findVendorById(data.vendorId);
-      if (vendor?.email) {
+      const vendorDetails = await this.auditoriumRepositories.findVendorById(data.vendorId);
+      if (vendorDetails?.email) {
         const vendorEmailContent = bookingConfirmationTemplate
           .replace("{{recipient}}", "Vendor")
-          .replace("{{vendorName}}", vendor.name || "Vendor")
+          .replace("{{vendorName}}", vendorDetails.name || "Vendor")
           .replace("{{eventDate}}", enquiry.eventDate.toDateString())
           .replace("{{eventType}}", enquiry.eventType)
           .replace("{{message}}", `You have received a new enquiry from ${data.name}.`)
           .replace("{{header}}", "New Enquiry Received");
 
         await mailService.sendMail({
-          to: vendor.email,
+          to: vendorDetails.email,
           subject: "New Enquiry Received",
           html: vendorEmailContent,
         });
       }
     }
 
-    return { status: true, message: "Enquiry submitted successfully", data: enquiry };
+    return {
+      status: true,
+      message: "Enquiry submitted successfully",
+      data: enquiry,
+    };
   } catch (error: any) {
     console.error("Error creating enquiry:", error);
     return { status: false, message: "An error occurred while creating enquiry." };
   }
-};
+}
+
 
 
 

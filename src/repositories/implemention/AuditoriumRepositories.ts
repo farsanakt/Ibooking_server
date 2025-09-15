@@ -55,9 +55,11 @@ export class AuditoriumRepositories{
     }
 
      async createEnquiry (enquiryData: Partial<IEnquiry>): Promise<IEnquiry>{
-  const enquiry = new Enquiry(enquiryData);
-  return await enquiry.save();
-};
+     const enquiry = new Enquiry(enquiryData);
+     return await enquiry.save();
+    };
+
+    
 
     async createVendor(data:any):Promise<IVendor|null>{
         return await vendorModel.create(data)
@@ -72,11 +74,17 @@ export class AuditoriumRepositories{
     return await Venue.findById(id);
    }
 
-     async findVendorById(id: string): Promise<IVenue | null> {
+     async findVendorById(id: string): Promise<IVendor | null> {
     return await vendorModel.findById(id);
    }
 
-   async findVendorUserById(id:mongoose.Types.ObjectId):Promise<IVendorUser|null>{
+   async findVendorUserById(id:mongoose.Types.ObjectId):Promise<IVendor|null>{
+
+    return await vendorModel.findOne({_id:id})
+
+   }
+
+   async findVenUserById(id:string):Promise<IVendor|null>{
 
     return await vendorUser.findOne({_id:id})
 
