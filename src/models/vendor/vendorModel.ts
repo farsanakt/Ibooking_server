@@ -20,7 +20,7 @@ export interface IVendor extends Document {
   pincode: string;
   cities: string[];
   cancellationPolicy: string;
-  totalamount:string;
+  startingPrice:string;
   advAmnt:string;
   images: string[];
   timeSlots: ITimeSlot[];
@@ -57,7 +57,7 @@ const vendorSchema: Schema<IVendor> = new Schema(
     pincode: { type: String, required: true },
     cities: { type: [String], required: true },
     cancellationPolicy: { type: String, required: true },
-    totalamount:{type:String,required:true},
+    startingPrice:{type:String,required:true},
     advAmnt:{type:String,required:true},
     images: { type: [String], default: [] },
     timeSlots: { type: [timeSlotSchema], required: true },

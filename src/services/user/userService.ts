@@ -202,7 +202,7 @@ async createBookings(data: any) {
             totalamount:data.totalAmount,
             advAmnt:data.advanceAmount,
             images: data.images,
-            timeSlots: data.timeSlots,
+            startingPrice: data.timeSlots,
             vendorType:data.vendorType
           
           })
