@@ -92,7 +92,7 @@ export class AuditoriumRepositories{
 
    async getAllExistingVendor(id:string):Promise<IVendor[]|null>{
 
-    return await vendorModel.find({vndrUserId:id})
+    return await vendorModel.find({vendorUserId:id})
 
    }
 
@@ -223,8 +223,8 @@ export class AuditoriumRepositories{
     }
 
     async findEnquiryByVendorId(id: string): Promise<IEnquiry[] | null> {
-        console.log(id,'thiseeee')
-  return await Enquiry.find({ vendorId: new mongoose.Types.ObjectId(id) });
+        
+  return await Enquiry.find({ vendorUserId: new mongoose.Types.ObjectId(id) });
 }
 
     async findVendorBookingsByVenueId(id:string):Promise<IVendorBooking[]|null>{

@@ -191,6 +191,8 @@ class UserController{
                 try {
         
                     const vndrUserId = req.query.vndrUserId as string
+
+                    
         
         
                     const response=await userService.existingALlVendors(vndrUserId)

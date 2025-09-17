@@ -101,6 +101,9 @@ async createBookings(data: any) {
 
     const venue = await this.auditoriumRepositories.findVenueById(data.venueId);
 
+    const cancellationPolicy = venue?.cancellationPolicy || '';
+    const termsAndCondition = venue?.decorPolicy || '';
+
     let auditoriumEmail = '';
 
     if (venue) {
@@ -122,6 +125,7 @@ async createBookings(data: any) {
       venueId: data.venueId,
       auditoriumId: venue?.audiUserId,
       paymentStatus: 'pending',
+      eventType: data.eventType,
     });
 
     if (!booking) {
@@ -129,23 +133,27 @@ async createBookings(data: any) {
     }
 
     if (booking) {
-      
+      // Combine cancellation policy and terms & conditions
+      const policySection = `
+        <h3>Cancellation Policy & Terms</h3>
+        <p><strong>Cancellation Policy:</strong> ${cancellationPolicy}</p>
+        <p><strong>Terms & Conditions:</strong> ${termsAndCondition}</p>
+      `;
+
       const userEmailContent = bookingConfirmationTemplate
         .replace('{{recipient}}', 'User')
         .replace('{{vendorName}}', data.venueName)
         .replace('{{bookedDate}}', data.bookedDate)
         .replace('{{timeSlot}}', data.timeSlot)
-        .replace('{{message}}', 'Your booking is confirmed. Thank you for choosing our service!')
+        .replace('{{message}}', `Your booking is confirmed. Thank you for choosing our service! ${policySection}`)
         .replace('{{header}}', 'Booking Confirmation - Your Slot is Reserved');
 
-      
       await this.mailService.sendMail({
         to: data.userEmail,
         subject: 'Booking Confirmation - Your Slot is Reserved',
         html: userEmailContent,
       });
 
-     
       if (auditoriumEmail) {
         const auditoriumEmailContent = bookingConfirmationTemplate
           .replace('{{recipient}}', 'Auditorium Owner')
@@ -155,7 +163,6 @@ async createBookings(data: any) {
           .replace('{{message}}', 'You have received a new booking. Please prepare accordingly.')
           .replace('{{header}}', 'New Booking Received');
 
-        
         await this.mailService.sendMail({
           to: auditoriumEmail,
           subject: 'New Booking Received',
@@ -170,6 +177,7 @@ async createBookings(data: any) {
     return { status: false, message: 'An error occurred while processing the booking.' };
   }
 }
+
     async  addVendor(data: any) {
 
         console.log(data.audiUserId,'ideeee')
@@ -191,7 +199,7 @@ async createBookings(data: any) {
           const savedvendor = await this.auditoriumRepositories.createVendor({
             name: data.name,
             address: data.address,
-            vndrUserId:data.userId,
+            vendorUserId:data.userId,
             phone: data.phone,
             altPhone: data.altPhone,
             email: data.email,
@@ -199,10 +207,10 @@ async createBookings(data: any) {
             cities: data.cities,
             cancellationPolicy: data.cancellationPolicy,
             stageSize: data.stageSize,
-            totalamount:data.totalAmount,
+            startingPrice:data.totalAmount,
             advAmnt:data.advanceAmount,
             images: data.images,
-            startingPrice: data.timeSlots,
+            timeSlots: data.timeSlots,
             vendorType:data.vendorType
           
           })
@@ -413,6 +421,8 @@ async createVendorBookings(data: any) {
     async fetchVendorEnquiry(id:string){
 
     try {
+
+      console.log(id)
 
       const extBkngs=await this.auditoriumRepositories.findEnquiryByVendorId(id)
 
