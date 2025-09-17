@@ -32,6 +32,8 @@ auditorium_route.post("/bride-groom-details",uploadBrideGroom,auditoriumControll
 
 auditorium_route.post('/addstaff',auditoriumController.addStaff)
 
+auditorium_route.get('/allstaff',auditoriumController.allStaff)
+
 
 
 // ###################### OFFER ##########################

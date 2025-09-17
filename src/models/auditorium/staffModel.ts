@@ -7,6 +7,7 @@ export interface IStaff extends Document {
   role: "Admin" | "Staff";
   password: string;
   status: "active" | "inactive";
+  audiUserId:string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -14,6 +15,7 @@ export interface IStaff extends Document {
 const staffSchema: Schema = new Schema<IStaff>(
   {
     name: { type: String, required: true, trim: true },
+    audiUserId:{ type: String, required: true},
     email: { type: String, required: true, unique: true, lowercase: true },
     role: { type: String, enum: ["Admin", "Staff"], default: "Staff" },
     password: { type: String, required: true },

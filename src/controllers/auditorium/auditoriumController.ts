@@ -2,6 +2,9 @@ import { Request,Response } from "express"
 import { AuditoriumService } from "../../services/auditorium/auditoriumSerivce"
 import { HttpStatus } from "../../enums/httpStatus"
 import { OfferService } from "../../services/auditorium/offerService";
+import { StaffService } from "../../services/auditorium/staffService";
+
+const staffService=new StaffService()
 
 const offerService = new OfferService();
 
@@ -348,19 +351,46 @@ class AuditoriumController{
      // ###################### Staff ##########################
 
 
-    async addStaff(req:Request,res:Response){
+  async addStaff(req: Request, res: Response): Promise<void> {
+
+  try {
+    const data = req.body;
+
+    console.log(data, "Incoming Staff Data");
+
+    const staff = await staffService.addStaff(data);
+
+    res.status(201).json({
+      success: true,
+      message: "Staff added successfully",
+      data: staff,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to add staff",
+    });
+  }
+  };
 
 
-      try {
+  async allStaff(req:Request,res:Response){
 
-        console.log(req.body,'opppppp')
-        
-      } catch (error) {
-        
+    try {
+
+      const response=await staffService.getAllStaff()
+
+      if(response){
+
+        res.status(HttpStatus.CREATED).json(response)
+
       }
-
-
+      
+    } catch (error) {
+      
     }
+
+  }
 
     // ###################### OFFER ##########################
 
