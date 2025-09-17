@@ -14,7 +14,8 @@ class AdminService{
       }
 
 
-    async findcount() {
+  async findcount() {
+
   try {
 
     const allUsers = await this.adminRepositories.findAllUser()
@@ -40,7 +41,19 @@ class AdminService{
       message: "Failed to fetch counts",
     };
   }
-}
+  }
+
+  async allAuditoriumList(){
+
+    try {
+
+      return await this.adminRepositories.findAllAuditorium()
+      
+    } catch (error) {
+      
+    }
+
+  }
 
 }
 
