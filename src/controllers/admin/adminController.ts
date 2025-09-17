@@ -1,5 +1,6 @@
 import { Request,Response } from "express"
 import AdminService from "../../services/admin/adminService"
+import { HttpStatus } from "../../enums/httpStatus"
 
 const adminService=new AdminService()
 
@@ -12,6 +13,13 @@ class AdminController{
         try {
 
             const response=await adminService.findcount()
+
+            console.log(response)
+
+            if(response){
+
+                res.status(HttpStatus.CREATED).json(response)
+            }
             
         } catch (error) {
             

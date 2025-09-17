@@ -14,17 +14,33 @@ class AdminService{
       }
 
 
-    async findcount(){
+    async findcount() {
+  try {
 
-        try {
+    const allUsers = await this.adminRepositories.findAllUser()
 
-            
-            
-        } catch (error) {
-            
-        }
+    const allVendors = await this.adminRepositories.findAllVendor()
 
-    }
+    const allAuditorium = await this.adminRepositories.findAllAuditorium()
+
+    const totalUsers = allUsers?.length
+
+    const totalVendors = allVendors?.length
+
+    const totalAuditorium = allAuditorium?.length
+
+    return {status: true, data: { totalUsers, totalVendors,totalAuditorium,  },}
+
+  } catch (error) {
+
+    console.error("Error in findcount:", error)
+    
+    return {
+      status: false,
+      message: "Failed to fetch counts",
+    };
+  }
+}
 
 }
 
