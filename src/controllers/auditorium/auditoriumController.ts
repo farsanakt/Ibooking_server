@@ -343,6 +343,25 @@ class AuditoriumController{
         }
     }
 
+
+
+     // ###################### Staff ##########################
+
+
+    async addStaff(req:Request,res:Response){
+
+
+      try {
+
+        console.log(req.body,'opppppp')
+        
+      } catch (error) {
+        
+      }
+
+
+    }
+
     // ###################### OFFER ##########################
 
    async createOffer (req: Request, res: Response): Promise<void> {

@@ -30,6 +30,8 @@ auditorium_route.get('/auditoriumUserdetatils/:id',auditoriumController.findAudi
 
 auditorium_route.post("/bride-groom-details",uploadBrideGroom,auditoriumController.addBrideGroomDetails)
 
+auditorium_route.post('/addstaff',auditoriumController.addStaff)
+
 
 
 // ###################### OFFER ##########################
