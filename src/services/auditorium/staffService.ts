@@ -36,4 +36,12 @@ export class StaffService {
 
   }
 
+  async updateStaff(id: string, data: Partial<IStaff>): Promise<IStaff | null> {
+    
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 10);
+    }
+    return await this.staffRepo.updateStaff(id, data);
+  }
+
 }

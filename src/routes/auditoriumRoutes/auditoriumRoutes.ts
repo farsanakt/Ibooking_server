@@ -34,6 +34,8 @@ auditorium_route.post('/addstaff',auditoriumController.addStaff)
 
 auditorium_route.get('/allstaff',auditoriumController.allStaff)
 
+auditorium_route.put('/updatestaff/:staffid',auditoriumController.updateStaff)
+
 
 
 // ###################### OFFER ##########################

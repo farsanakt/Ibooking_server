@@ -17,4 +17,8 @@ export class StaffRepository {
 
   }
 
+  async updateStaff(id: string, data: Partial<IStaff>): Promise<IStaff | null> {
+    return await StaffModel.findByIdAndUpdate(id, data, { new: true });
+  }
+
 }

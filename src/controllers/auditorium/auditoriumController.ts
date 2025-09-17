@@ -392,6 +392,37 @@ class AuditoriumController{
 
   }
 
+   
+  async updateStaff (req: Request, res: Response): Promise<void> {
+  try {
+    const { staffid } = req.params
+    const data = req.body;
+
+    console.log(data,staffid)
+
+    const updated = await staffService.updateStaff(staffid, data);
+
+    if (!updated) {
+      res.status(404).json({
+        success: false,
+        message: "Staff not found",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Staff updated successfully",
+      data: updated,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to update staff",
+    });
+  }
+};
+
     // ###################### OFFER ##########################
 
    async createOffer (req: Request, res: Response): Promise<void> {
