@@ -7,6 +7,7 @@ import userAuth_route from './routes/userRoutes/authRoutes'
 import auditoriumAuth_route from './routes/auditoriumRoutes/authRoute'
 import auditorium_route from './routes/auditoriumRoutes/auditoriumRoutes'
 import user_route from './routes/userRoutes/userRoutes'
+import admin_route from './routes/AdminRoutes/adminRoutes'
 
 const app=express()
 dotenv.config()
@@ -56,6 +57,7 @@ app.use('/',auditoriumAuth_route)
 app.use('/',userAuth_route)
 app.use('/',auditorium_route)
 app.use('/',user_route)
+app.use('/',admin_route)
 
 app.listen(PORT,()=>{
     console.log('running')
