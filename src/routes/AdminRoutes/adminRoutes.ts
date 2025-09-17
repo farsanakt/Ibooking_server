@@ -9,4 +9,6 @@ admin_route.get('/findcount',adminController.findcount)
 
 admin_route.get('/allaudilist',adminController.allAuditoriumList)
 
+admin_route.post('/acceptauditorium/:id',adminController.acceptAuditorium)
+
 export default admin_route

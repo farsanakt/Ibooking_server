@@ -41,6 +41,8 @@ export interface IVenue extends Document {
   images: string[];
   timeSlots: ITimeSlot[];
   auditoriumId?: mongoose.Types.ObjectId; // link to the auditorium owner
+  isVerified: boolean;
+  
 }
 
 
@@ -79,6 +81,10 @@ const venueSchema: Schema<IVenue> = new Schema(
     amenities: { type: [String], default: [] },
     foodPolicy: { type: String, required: true },
     decorPolicy: { type: String, required: true },
+    isVerified: {
+    type: Boolean,
+    default: false
+  },
     tariff: {
       wedding: { type: String, required: true },
       reception: { type: String, required: true }

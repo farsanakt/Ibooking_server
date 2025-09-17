@@ -14,7 +14,6 @@ class AdminController{
 
             const response=await adminService.findcount()
 
-            console.log(response)
 
             if(response){
 
@@ -33,8 +32,6 @@ class AdminController{
 
             const response=await adminService.allAuditoriumList()
 
-            console.log(response)
-
             if(response){
 
                 res.status(HttpStatus.CREATED).json(response)
@@ -45,6 +42,36 @@ class AdminController{
         }
 
     }
+
+   async acceptAuditorium(req: Request, res: Response) {
+
+   try {
+    const id = req.params.id;
+
+    const response = await adminService.acceptAuditorium(id);
+
+    if (response.status) {
+
+       res.status(200).json(response)
+
+       return
+
+    } else {
+
+      res.status(404).json(response)
+
+      return
+
+    }
+  } catch (error) {
+
+    console.error("Error in acceptAuditorium controller:", error)
+
+     res.status(500).json({ status: false, message: "Internal server error" })
+
+     return
+  }
+}
 
 }
 
