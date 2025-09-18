@@ -44,4 +44,8 @@ export class StaffService {
     return await this.staffRepo.updateStaff(id, data);
   }
 
+   async deleteStaff(id: string): Promise<IStaff | null> {
+    return await this.staffRepo.deleteStaff(id);
+  }
+
 }

@@ -423,6 +423,34 @@ class AuditoriumController{
   }
 };
 
+  
+async deleteStaff(req: Request, res: Response): Promise<void>  {
+  try {
+    const { id } = req.params;
+
+    const deleted = await staffService.deleteStaff(id);
+
+    if (!deleted) {
+      res.status(404).json({
+        success: false,
+        message: "Staff not found",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Staff deleted successfully",
+      data: deleted,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to delete staff",
+    });
+  }
+};
+
     // ###################### OFFER ##########################
 
    async createOffer (req: Request, res: Response): Promise<void> {
@@ -518,6 +546,26 @@ async deleteOffer (req: Request, res: Response): Promise<void>{
     });
   }
 };
+
+async fetchAllOffer(req:Request,res:Response){
+
+  try {
+
+    const response=await offerService.fetchAllOffer()
+
+    if(response){
+
+      res.status(HttpStatus.CREATED).json(response)
+
+    }
+    
+  } catch (error) {
+    
+  }
+
+}
+
+
 
 
 

@@ -33,4 +33,8 @@ export class OfferService {
     return this.offerRepo.deleteOffer(id);
   }
 
+  async fetchAllOffer(){
+    return this.offerRepo.findAllOffer()
+  }
+
 }

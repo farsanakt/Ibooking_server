@@ -21,4 +21,8 @@ export class StaffRepository {
     return await StaffModel.findByIdAndUpdate(id, data, { new: true });
   }
 
+  async deleteStaff(id: string): Promise<IStaff | null> {
+    return await StaffModel.findByIdAndDelete(id);
+  }
+
 }

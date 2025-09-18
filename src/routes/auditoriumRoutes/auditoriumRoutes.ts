@@ -30,11 +30,15 @@ auditorium_route.get('/auditoriumUserdetatils/:id',auditoriumController.findAudi
 
 auditorium_route.post("/bride-groom-details",uploadBrideGroom,auditoriumController.addBrideGroomDetails)
 
+// ###################### Staff ##########################
+
 auditorium_route.post('/addstaff',auditoriumController.addStaff)
 
 auditorium_route.get('/allstaff',auditoriumController.allStaff)
 
 auditorium_route.put('/updatestaff/:staffid',auditoriumController.updateStaff)
+
+auditorium_route.delete('/deletestaff/:id',auditoriumController.deleteStaff)
 
 
 
@@ -46,6 +50,8 @@ auditorium_route.get('/fetchoffers/:userId', auditoriumController.getUserOffers)
 auditorium_route.put("/offers/:id",auditoriumController.updateOffer);
 
 auditorium_route.delete("/offers/:id",auditoriumController .deleteOffer);
+
+auditorium_route.get('/fetchalloffers',auditoriumController.fetchAllOffer)
 
 
 export default auditorium_route

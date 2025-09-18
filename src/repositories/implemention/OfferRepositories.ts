@@ -22,6 +22,10 @@ export class OfferRepository {
     return OfferModel.findByIdAndDelete(id);
   }
 
+  async findAllOffer():Promise<IOffer[]|null>{
+    return OfferModel.find()
+  }
+
 }
 
   

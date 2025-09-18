@@ -99,6 +99,8 @@ async createBookings(data: any) {
   try {
     const m = await this.auditoriumRepositories.updateVenueSlot(data.timeSlot);
 
+    console.log(data,'the booking data')
+
     const venue = await this.auditoriumRepositories.findVenueById(data.venueId);
 
     const cancellationPolicy = venue?.cancellationPolicy || '';
