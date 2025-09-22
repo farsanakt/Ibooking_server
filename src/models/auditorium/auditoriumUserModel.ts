@@ -12,6 +12,8 @@ export interface IAuditoriumUser extends Document {
   address:string;
   district:string;
   panchayat:string;
+  corporation:string;
+  municipality:string;
   phone?: string;
 }
 
@@ -66,10 +68,16 @@ const userSchema: Schema = new Schema({
   panchayat:{
     type:String
   },
+  corporation:{
+    type:String
+  },
+  municipality:{
+    type:String
+  },
 
   phone: {
     type: String
-  }
+  },
 
 }, {
   timestamps: true

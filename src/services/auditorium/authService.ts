@@ -16,7 +16,7 @@ export class AuthService{
 
     async userSignup(formData:any){
 
-        const {auditoriumName,ownerName,email,phone,password,confirmPassword,district,panchayat,address}=formData
+        const {auditoriumName,ownerName,email,phone,password,confirmPassword,district,panchayat,address,municipality,corporation}=formData
 
         try {
 
@@ -44,7 +44,9 @@ export class AuthService{
                   role:'auditorium',
                   address:address,
                   district:district,
-                  panchayat:panchayat
+                  panchayat:panchayat,
+                  corporation:corporation,
+                  municipality:municipality
 
 
                 })
