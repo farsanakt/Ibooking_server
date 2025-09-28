@@ -32,9 +32,9 @@ export interface IVendor extends Document {
 const timeSlotSchema: Schema = new Schema<ITimeSlot>(
   {
     id: { type: String, required: true },
-    label: { type: String, required: true },
-    startTime: { type: String, required: true },
-    endTime: { type: String, required: true },
+    label: { type: String},
+    startTime: { type: String },
+    endTime: { type: String },
     status: { 
       type: String, 
       required: true, 
@@ -56,11 +56,11 @@ const vendorSchema: Schema<IVendor> = new Schema(
     email: { type: String, required: true },
     pincode: { type: String, required: true },
     cities: { type: [String], required: true },
-    cancellationPolicy: { type: String, required: true },
+    cancellationPolicy: { type: String},
     startingPrice:{type:String,required:true},
     advAmnt:{type:String,required:true},
     images: { type: [String], default: [] },
-    timeSlots: { type: [timeSlotSchema], required: true },
+    timeSlots: { type: [timeSlotSchema]},
     // auditoriumId: { type: mongoose.Schema.Types.ObjectId, ref: 'AuditoriumUser' }
     vendorType:{type:String,required:true}
   },

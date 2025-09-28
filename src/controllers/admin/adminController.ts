@@ -73,6 +73,73 @@ class AdminController{
   }
 }
 
+   async acceptVendor(req: Request, res: Response) {
+
+   try {
+    const id = req.params.id;
+
+    const response = await adminService.acceptVendor(id);
+
+    if (response.status) {
+
+       res.status(200).json(response)
+
+       return
+
+    } else {
+
+      res.status(404).json(response)
+
+      return
+
+    }
+  } catch (error) {
+
+    console.error("Error in acceptAuditorium controller:", error)
+
+     res.status(500).json({ status: false, message: "Internal server error" })
+
+     return
+  }
+}
+
+async allUsers(req:Request,res:Response){
+
+    try {
+
+        const response=await adminService.AllUsers()
+
+        if(response){
+
+            res.status(HttpStatus.CREATED).json(response)
+
+        }
+        
+    } catch (error) {
+        
+    }
+
+}
+
+
+async allvendorusers(req:Request,res:Response){
+
+    try {
+
+        const response=await adminService.allvendorusers()
+
+        if(response){
+
+            res.status(HttpStatus.CREATED).json(response)
+
+        }
+        
+    } catch (error) {
+        
+    }
+
+}
+
 }
 
 export default AdminController

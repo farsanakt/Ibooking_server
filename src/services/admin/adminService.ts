@@ -81,6 +81,45 @@ class AdminService{
   }
 }
 
+  async acceptVendor(id: string) {
+
+  try {
+    const updateAudi = await this.adminRepositories.updateVendor(id)
+
+    console.log(id,'this id')
+
+    // const updateVenue=await this.adminRepositories.updateVenue(id)
+    
+    if (!updateAudi) {
+
+      return { status: false, message: "Auditorium not found or update failed" }
+
+    }
+
+    return { status: true, message: "Auditorium verified successfully", data: updateAudi }
+
+  } catch (error) {
+
+    console.error("Error in acceptAuditorium service:", error)
+
+    return { status: false, message: "Something went wrong while updating auditorium" }
+
+  }
+}
+
+
+ async AllUsers(){
+
+  return await this.adminRepositories.findAllUser()
+
+ }
+
+ async allvendorusers(){
+
+  return await this.adminRepositories.findAllVendor()
+
+ }
+
 
 }
 

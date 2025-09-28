@@ -30,6 +30,12 @@ export class AdminRepository{
 
     }
 
+    async updateVendor(id:string):Promise<IVendorUser|null>{
+
+      return await vendorUser.findByIdAndUpdate({_id:id},{isVerified:true},{new:true})
+
+    }
+
   async updateVenue(id: string): Promise<{ modifiedCount: number }> {
     console.log(id,'po')
   const result = await venueModel.updateMany(

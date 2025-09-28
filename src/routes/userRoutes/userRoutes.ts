@@ -1,6 +1,7 @@
 import express from 'express'
 import UserController from '../../controllers/user/userController'
 import upload from '../../middleware/upload'
+ 
 
 const userController=new UserController()
 const user_route=express.Router()
