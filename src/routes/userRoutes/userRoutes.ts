@@ -48,9 +48,9 @@ user_route.post('/createvoucher',userController.createVoucher)
 
 // user_route.get('/fetchoffers/:userId', userController.getUserVoucher)
 
-// user_route.put("/offers/:id",userController.updateVoucher);
+user_route.put("/updatevoucher/:id",userController.updateVoucher)
 
-// user_route.delete("/offers/:id",userController .deleteVoucher);
+user_route.delete("/delete/:id",userController .deleteVoucher);
 
 user_route.get('/fetchvoucher/:id',userController.fetchAllVoucher)
 

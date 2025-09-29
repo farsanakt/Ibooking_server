@@ -34,6 +34,14 @@ export class AuditoriumRepositories{
            const offer = new VoucherModel(data);
            return offer.save();
          }
+
+          async updateVoucher(id: string, data: Partial<IVoucher>): Promise<IVoucher | null> {
+             return VoucherModel.findByIdAndUpdate(id, data, { new: true });
+           }
+         
+           async deleteVoucher(id: string): Promise<IVoucher | null> {
+             return VoucherModel.findByIdAndDelete(id);
+           }
    
 
     async findUserByEmail(email:string):Promise<IAuditoriumUser |null>{

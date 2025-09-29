@@ -517,7 +517,13 @@ async singleVendor(id:string){
       return this.auditoriumRepositories.createVoucher(data);
     }
 
-
+    async updateVoucher(id: string, data: Partial<IVoucher>): Promise<IVoucher | null> {
+        return this.auditoriumRepositories.updateVoucher(id, data);
+      }
+    
+      async deleteVoucher(id: string): Promise<IVoucher | null> {
+        return this.auditoriumRepositories.deleteVoucher(id);
+      }
 
 
 }

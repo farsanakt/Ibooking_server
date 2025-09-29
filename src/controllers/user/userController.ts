@@ -483,6 +483,56 @@ async vendorEnquiry (req: Request, res: Response): Promise<void>{
     };
 
 
+      async updateVoucher (req: Request, res: Response): Promise<void>{
+      try {
+        const { id } = req.params;
+        const data = req.body;
+    
+        const updatedOffer = await userService.updateVoucher(id, data);
+    
+        if (!updatedOffer) {
+          res.status(404).json({ success: false, message: "Offer not found" });
+          return;
+        }
+    
+        res.status(200).json({
+          success: true,
+          message: "Offer updated successfully",
+          data: updatedOffer,
+        });
+      } catch (error: any) {
+        res.status(400).json({
+          success: false,
+          message: error.message || "Failed to update offer",
+        });
+      }
+    };
+    
+    async deleteVoucher (req: Request, res: Response): Promise<void>{
+      try {
+        const { id } = req.params;
+    
+        const deletedOffer = await userService.deleteVoucher(id);
+    
+        if (!deletedOffer) {
+          res.status(404).json({ success: false, message: "Offer not found" });
+          return;
+        }
+    
+        res.status(200).json({
+          success: true,
+          message: "Offer deleted successfully",
+          data: deletedOffer,
+        });
+      } catch (error: any) {
+        res.status(400).json({
+          success: false,
+          message: error.message || "Failed to delete offer",
+        });
+      }
+    };
+
+
 
 }
 
