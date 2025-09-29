@@ -24,6 +24,16 @@ export class AuditoriumRepositories{
       async findAllVoucher():Promise<IVoucher[]|null>{
          return VoucherModel.find()
        }
+
+
+       async findActiveVoucherByUser(userId: string): Promise<IVoucher | null> {
+           return VoucherModel.findOne({ userId, isActive: true });
+         }
+       
+         async createVoucher(data: Partial<IVoucher>): Promise<IVoucher> {
+           const offer = new VoucherModel(data);
+           return offer.save();
+         }
    
 
     async findUserByEmail(email:string):Promise<IAuditoriumUser |null>{

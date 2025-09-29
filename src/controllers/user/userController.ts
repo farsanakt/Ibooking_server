@@ -459,6 +459,29 @@ async vendorEnquiry (req: Request, res: Response): Promise<void>{
     
     }
 
+       async createVoucher (req: Request, res: Response): Promise<void> {
+      try {
+        const data = req.body;
+    
+        console.log("Offer data:", data);
+    
+        const newOffer = await userService.createVoucher(data);
+    
+        res.status(201).json({
+          success: true,
+          message: "Offer created successfully",
+          data: newOffer,
+        });
+      } catch (error: any) {
+        console.error("Error creating offer:", error.message);
+    
+        res.status(400).json({
+          success: false,
+          message: error.message || "Failed to create offer",
+        });
+      }
+    };
+
 
 
 }

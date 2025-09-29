@@ -7,6 +7,7 @@ import { MailService } from '../MailService'// adjust path as needed
 import { bookingConfirmationTemplate } from '../../utils/confirmation'
 import { IEnquiry } from "../../models/vendor/vendorEnquiry";
 import { Types } from "mongoose";
+import { IVoucher } from "../../models/vendor/voucherModel";
 
 interface EnrichedVenue {
   images: string;
@@ -504,6 +505,17 @@ async singleVendor(id:string){
   async fetchAllVoucher(){
     return this.auditoriumRepositories.findAllVoucher()
   }
+
+  async createVoucher(data: Partial<IVoucher>): Promise<IVoucher> {
+    
+      const existingOffer = await this.auditoriumRepositories.findActiveVoucherByUser(data.userId!);
+      if (existingOffer) {
+        throw new Error("User already has an active offer");
+      }
+  
+    
+      return this.auditoriumRepositories.createVoucher(data);
+    }
 
 
 
