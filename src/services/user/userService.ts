@@ -501,6 +501,11 @@ async singleVendor(id:string){
 
   }
 
+  async fetchAllVoucher(){
+    return this.auditoriumRepositories.findAllVoucher()
+  }
+
+
 
 
 }

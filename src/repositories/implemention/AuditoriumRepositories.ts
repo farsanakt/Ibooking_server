@@ -10,6 +10,7 @@ import Enquiry, { IEnquiry } from "../../models/vendor/vendorEnquiry";
 import BrideGroom from '../../models/auditorium/brideGroomModel'
 import mongoose from "mongoose";
 import vendorUser, { IVendorUser } from "../../models/vendor/vendorUser";
+import { IVoucher, VoucherModel } from "../../models/vendor/voucherModel";
 
 
 export class AuditoriumRepositories{
@@ -20,7 +21,9 @@ export class AuditoriumRepositories{
 
    
  
-
+      async findAllVoucher():Promise<IVoucher[]|null>{
+         return VoucherModel.find()
+       }
    
 
     async findUserByEmail(email:string):Promise<IAuditoriumUser |null>{

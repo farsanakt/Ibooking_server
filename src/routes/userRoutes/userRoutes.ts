@@ -43,6 +43,17 @@ user_route.get('/fetchenquiries',userController.fetchVendorEnquiry)
 
 user_route.get('/currentvendorUser',userController.currentUserVendorData)
 
+// ###################### Voucher ##########################
+// user_route.post('/createoffer',userController.createVoucher
+
+// user_route.get('/fetchoffers/:userId', userController.getUserVoucher)
+
+// user_route.put("/offers/:id",userController.updateVoucher);
+
+// user_route.delete("/offers/:id",userController .deleteVoucher);
+
+user_route.get('/fetchvoucher/:id',userController.fetchAllVoucher)
+
 
 
 

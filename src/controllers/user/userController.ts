@@ -437,6 +437,28 @@ async vendorEnquiry (req: Request, res: Response): Promise<void>{
 
     }
 
+    async fetchAllVoucher(req:Request,res:Response){
+
+      console.log('hiiiiiiiii')
+    
+      try {
+    
+        const response=await userService.fetchAllVoucher()
+
+        console.log(response,'vp')
+    
+        if(response){
+    
+          res.status(HttpStatus.CREATED).json(response)
+    
+        }
+        
+      } catch (error) {
+        
+      }
+    
+    }
+
 
 
 }
