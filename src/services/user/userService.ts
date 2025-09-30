@@ -508,11 +508,19 @@ async singleVendor(id:string){
 
   async createVoucher(data: Partial<IVoucher>): Promise<IVoucher> {
     
-      const existingOffer = await this.auditoriumRepositories.findActiveVoucherByUser(data.userId!);
+      const existingOffer = await this.auditoriumRepositories.findActiveVoucherByUser(data.userId!)
+
+      const auditorium=await this.auditoriumRepositories.findAuditoriumByName(data.audiName as string)
+
+      console.log(auditorium,'thiseee')
+
       if (existingOffer) {
         throw new Error("User already has an active offer");
       }
-  
+       if (!auditorium) {
+    throw new Error("Auditorium not found");
+  }
+     data.auditoriumId = auditorium._id.toString();
     
       return this.auditoriumRepositories.createVoucher(data);
     }

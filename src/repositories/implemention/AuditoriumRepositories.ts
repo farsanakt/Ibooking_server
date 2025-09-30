@@ -29,6 +29,13 @@ export class AuditoriumRepositories{
        async findActiveVoucherByUser(userId: string): Promise<IVoucher | null> {
            return VoucherModel.findOne({ userId, isActive: true });
          }
+
+        
+       async findAuditoriumByName(name:string):Promise<IAuditoriumUser|null>{
+
+        return AuditoriumUser.findOne({auditoriumName:name})
+
+       }  
        
          async createVoucher(data: Partial<IVoucher>): Promise<IVoucher> {
            const offer = new VoucherModel(data);

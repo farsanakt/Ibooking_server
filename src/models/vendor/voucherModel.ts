@@ -8,6 +8,7 @@ export interface IVoucher  extends Document {
   validFrom: Date;
   validTo: Date;
   audiName:string;
+  auditoriumId:string;
   isActive: boolean;
   userId: string; 
 }
@@ -21,6 +22,7 @@ const VoucherSchema = new Schema<IVoucher >(
     validFrom: { type: Date, required: true },
     validTo: { type: Date, required: true },
     audiName:{type:String,required:true},
+    auditoriumId:{type:String,required:true},
     isActive: { type: Boolean, default: true },
     userId: { type: String, required: true },
   },
