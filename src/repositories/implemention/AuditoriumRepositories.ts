@@ -21,7 +21,11 @@ export class AuditoriumRepositories{
 
    
  
-      async findAllVoucher():Promise<IVoucher[]|null>{
+      async findAllVoucher(id:string):Promise<IVoucher[]|null>{
+         return VoucherModel.find({userId:id})
+       }
+
+         async AllVoucher():Promise<IVoucher[]|null>{
          return VoucherModel.find()
        }
 

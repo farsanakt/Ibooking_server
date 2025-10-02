@@ -502,8 +502,12 @@ async singleVendor(id:string){
 
   }
 
-  async fetchAllVoucher(){
-    return this.auditoriumRepositories.findAllVoucher()
+  async fetchAllVoucher(id:string){
+    return this.auditoriumRepositories.findAllVoucher(id)
+  }
+
+   async fetchAllVouchersUser(){
+    return this.auditoriumRepositories.AllVoucher()
   }
 
   async createVoucher(data: Partial<IVoucher>): Promise<IVoucher> {
@@ -514,9 +518,9 @@ async singleVendor(id:string){
 
       console.log(auditorium,'thiseee')
 
-      if (existingOffer) {
-        throw new Error("User already has an active offer");
-      }
+      // if (existingOffer) {
+      //   throw new Error("User already has an active offer");
+      // }
        if (!auditorium) {
     throw new Error("Auditorium not found");
   }

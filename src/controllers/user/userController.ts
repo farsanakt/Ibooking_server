@@ -439,11 +439,33 @@ async vendorEnquiry (req: Request, res: Response): Promise<void>{
 
     async fetchAllVoucher(req:Request,res:Response){
 
+      const { id } = req.params;
+    
+      try {
+    
+        const response=await userService.fetchAllVoucher(id)
+
+        console.log(response,'vp')
+    
+        if(response){
+    
+          res.status(HttpStatus.CREATED).json(response)
+    
+        }
+        
+      } catch (error) {
+        
+      }
+    
+    }
+
+    async fetchAllVouchers(req:Request,res:Response){
+
       console.log('hiiiiiiiii')
     
       try {
     
-        const response=await userService.fetchAllVoucher()
+        const response=await userService.fetchAllVouchersUser()
 
         console.log(response,'vp')
     

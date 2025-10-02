@@ -54,6 +54,8 @@ user_route.delete("/delete/:id",userController .deleteVoucher);
 
 user_route.get('/fetchvoucher/:id',userController.fetchAllVoucher)
 
+user_route.get('/fetchallvouchers',userController.fetchAllVouchers)
+
 
 
 
