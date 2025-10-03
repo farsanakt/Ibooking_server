@@ -2,6 +2,7 @@ import auditoriumUserModel, { IAuditoriumUser } from "../../models/auditorium/au
 import venueModel, { IVenue } from "../../models/auditorium/venueModel";
 import userModel, { IUser } from "../../models/user/userModel";
 import vendorUser, { IVendorUser } from "../../models/vendor/vendorUser";
+import { IVoucher, VoucherModel } from "../../models/vendor/voucherModel";
 
 
 export class AdminRepository{
@@ -9,6 +10,12 @@ export class AdminRepository{
     async findAllAuditorium():Promise<IAuditoriumUser[]|null>{
 
         return await auditoriumUserModel.find()
+
+    }
+
+     async findAllVocuhers():Promise<IVoucher[]|null>{
+
+        return await VoucherModel.find()
 
     }
 
@@ -33,6 +40,18 @@ export class AdminRepository{
     async updateVendor(id:string):Promise<IVendorUser|null>{
 
       return await vendorUser.findByIdAndUpdate({_id:id},{isVerified:true},{new:true})
+
+    }
+
+     async updateVoucher(id:string):Promise<IVoucher|null>{
+
+      return await VoucherModel.findByIdAndUpdate({_id:id},{isVeriffed:true},{new:true})
+
+    }
+
+     async rejectVoucher(id:string):Promise<IVoucher|null>{
+
+      return await VoucherModel.findByIdAndUpdate({_id:id},{isVeriffed:false},{new:true})
 
     }
 

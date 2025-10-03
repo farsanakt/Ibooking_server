@@ -10,6 +10,7 @@ export interface IVoucher extends Document {
   audiName: string;
   auditoriumId: string;
   isActive: boolean;
+  isVeriffed:boolean;
   userId: string;
   termsAndConditions?: string[]; 
 }
@@ -25,6 +26,7 @@ const VoucherSchema = new Schema<IVoucher>(
     audiName: { type: String, required: true },
     auditoriumId: { type: String, required: true },
     isActive: { type: Boolean, default: true },
+    isVeriffed: { type: Boolean, default: false },
     userId: { type: String, required: true },
     termsAndConditions: { type: [String], default: [] },
   },

@@ -24,6 +24,8 @@ class AdminService{
 
     const allAuditorium = await this.adminRepositories.findAllAuditorium()
 
+    const allVouchers=await this.adminRepositories.findAllVocuhers()
+
     const totalUsers = allUsers?.length
 
     const totalVendors = allVendors?.length
@@ -92,11 +94,64 @@ class AdminService{
     
     if (!updateAudi) {
 
-      return { status: false, message: "Auditorium not found or update failed" }
+      return { status: false, message: "auditorium not found or update failed" }
 
     }
 
-    return { status: true, message: "Auditorium verified successfully", data: updateAudi }
+    return { status: true, message: "auditorium verified successfully", data: updateAudi }
+
+  } catch (error) {
+
+    console.error("Error in acceptAuditorium service:", error)
+
+    return { status: false, message: "Something went wrong while updating auditorium" }
+
+  }
+}
+
+ async acceptvoucher(id: string) {
+
+  try {
+    const updateAudi = await this.adminRepositories.updateVoucher(id)
+
+    console.log(id,'this id')
+
+    // const updateVenue=await this.adminRepositories.updateVenue(id)
+    
+    if (!updateAudi) {
+
+      return { status: false, message: "Voucher not found or update failed" }
+
+    }
+
+    return { status: true, message: "Voucher verified successfully", data: updateAudi }
+
+  } catch (error) {
+
+    console.error("Error in acceptAuditorium service:", error)
+
+    return { status: false, message: "Something went wrong while updating Voucher" }
+
+  }
+}
+
+
+ async rejectvoucher(id: string) {
+
+  try {
+    const updateAudi = await this.adminRepositories.rejectVoucher(id)
+
+    console.log(id,'this id')
+
+    // const updateVenue=await this.adminRepositories.updateVenue(id)
+    
+    if (!updateAudi) {
+
+      return { status: false, message: "Voucher not found or update failed" }
+
+    }
+
+    return { status: true, message: "voucher verified successfully", data: updateAudi }
 
   } catch (error) {
 

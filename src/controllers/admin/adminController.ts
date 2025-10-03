@@ -103,6 +103,72 @@ class AdminController{
   }
 }
 
+ async acceptvoucher(req: Request, res: Response) {
+
+    console.log('gooope')
+
+   try {
+    const id = req.params.id;
+
+    console.log(id,'poooereee')
+
+    const response = await adminService.acceptvoucher(id);
+
+    if (response.status) {
+
+       res.status(200).json(response)
+
+       return
+
+    } else {
+
+      res.status(404).json(response)
+
+      return
+
+    }
+  } catch (error) {
+
+    console.error("Error in acceptAuditorium controller:", error)
+
+     res.status(500).json({ status: false, message: "Internal server error" })
+
+     return
+  }
+}
+
+
+ async rejectvoucher(req: Request, res: Response) {
+
+
+   try {
+    const id = req.params.id;
+
+    const response = await adminService.rejectvoucher(id);
+
+    if (response.status) {
+
+       res.status(200).json(response)
+
+       return
+
+    } else {
+
+      res.status(404).json(response)
+
+      return
+
+    }
+  } catch (error) {
+
+    console.error("Error in acceptAuditorium controller:", error)
+
+     res.status(500).json({ status: false, message: "Internal server error" })
+
+     return
+  }
+}
+
 async allUsers(req:Request,res:Response){
 
     try {
