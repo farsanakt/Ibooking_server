@@ -53,6 +53,14 @@ export class AuditoriumRepositories{
            async deleteVoucher(id: string): Promise<IVoucher | null> {
              return VoucherModel.findByIdAndDelete(id);
            }
+
+          async updateVoucherLimit(code: string): Promise<IVoucher | null> {
+            return VoucherModel.findOneAndUpdate(
+                { voucherCode: code, limit: { $gt: 0 } },  
+                { $inc: { limit: -1 } },
+                { new: true }
+            );
+            }
    
 
     async findUserByEmail(email:string):Promise<IAuditoriumUser |null>{

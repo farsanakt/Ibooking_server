@@ -100,7 +100,7 @@ async createBookings(data: any) {
   try {
     const m = await this.auditoriumRepositories.updateVenueSlot(data.timeSlot);
 
-    console.log(data,'the booking data')
+    console.log(data, 'the booking data');
 
     const venue = await this.auditoriumRepositories.findVenueById(data.venueId);
 
@@ -112,7 +112,7 @@ async createBookings(data: any) {
     if (venue) {
       const auditorium = await this.auditoriumRepositories.findAuditoriumById(venue.audiUserId);
       if (auditorium) {
-        auditoriumEmail = auditorium.email;
+        auditoriumEmail = auditorium.email ;
       }
     }
 
@@ -129,26 +129,61 @@ async createBookings(data: any) {
       auditoriumId: venue?.audiUserId,
       paymentStatus: 'pending',
       eventType: data.eventType,
+      // voucherCode: data.voucherCode || null,
     });
+
+
 
     if (!booking) {
       return { status: false, message: 'Booking creation failed.' };
     }
 
     if (booking) {
-      // Combine cancellation policy and terms & conditions
+      
       const policySection = `
         <h3>Cancellation Policy & Terms</h3>
         <p><strong>Cancellation Policy:</strong> ${cancellationPolicy}</p>
         <p><strong>Terms & Conditions:</strong> ${termsAndCondition}</p>
       `;
 
+      
+      let voucherSection = '';
+     if (data.voucherCode && data.voucherCode.trim() !== '') {
+  const updatedVoucher = await this.auditoriumRepositories.updateVoucherLimit(data.voucherCode);
+
+  if (updatedVoucher) {
+    const expiryDate = new Date(updatedVoucher.validTo).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
+
+    voucherSection = `
+      <h3>Voucher Details</h3>
+      <p>🎉 Congratulations! You received a voucher for this booking.</p>
+      <p><strong>Voucher Code:</strong> ${updatedVoucher.voucherCode}</p>
+      <p><strong>Discount:</strong> ${updatedVoucher.discountType === 'flat' 
+        ? `₹${updatedVoucher.discountValue}` 
+        : `${updatedVoucher.discountValue}%`} off</p>
+      <p><strong>Valid Until:</strong> ${expiryDate}</p>
+      <p><strong>Terms & Conditions:</strong></p>
+      <ul>
+        ${updatedVoucher?.termsAndConditions.map((t: string) => `<li>${t}</li>`).join('')}
+      </ul>
+    `;
+  }
+}
+
+
+      // User email
       const userEmailContent = bookingConfirmationTemplate
         .replace('{{recipient}}', 'User')
         .replace('{{vendorName}}', data.venueName)
         .replace('{{bookedDate}}', data.bookedDate)
         .replace('{{timeSlot}}', data.timeSlot)
-        .replace('{{message}}', `Your booking is confirmed. Thank you for choosing our service! ${policySection}`)
+        .replace('{{message}}',
+          `Your booking is confirmed. Thank you for choosing our service! ${policySection} ${voucherSection}`
+        )
         .replace('{{header}}', 'Booking Confirmation - Your Slot is Reserved');
 
       await this.mailService.sendMail({
@@ -157,6 +192,7 @@ async createBookings(data: any) {
         html: userEmailContent,
       });
 
+      // Auditorium email
       if (auditoriumEmail) {
         const auditoriumEmailContent = bookingConfirmationTemplate
           .replace('{{recipient}}', 'Auditorium Owner')
@@ -180,6 +216,7 @@ async createBookings(data: any) {
     return { status: false, message: 'An error occurred while processing the booking.' };
   }
 }
+
 
     async  addVendor(data: any) {
 
