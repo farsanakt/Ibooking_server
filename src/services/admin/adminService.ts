@@ -24,7 +24,7 @@ class AdminService{
 
     const allAuditorium = await this.adminRepositories.findAllAuditorium()
 
-    const allVouchers=await this.adminRepositories.findAllVocuhers()
+    const totalVouchers=await this.adminRepositories.findAllVocuhers()
 
     const totalUsers = allUsers?.length
 
@@ -32,7 +32,7 @@ class AdminService{
 
     const totalAuditorium = allAuditorium?.length
 
-    return {status: true, data: { totalUsers, totalVendors,totalAuditorium,  },}
+    return {status: true, data: { totalUsers, totalVendors,totalAuditorium,totalVouchers  },}
 
   } catch (error) {
 
