@@ -13,8 +13,6 @@ constructor(){
 
       async  addVenue(data: any) {
 
-        console.log(data.audiUserId,'ideeee')
-
         try {
 
           const existingVenue = await this.auditoriumRepositories.findVenueByName(data.name);
@@ -26,8 +24,6 @@ constructor(){
           return {success:false,message:'This is venue is already existed'}
 
           }
-
-          console.log(data.totalamount,'lp')
 
           const savedVenue = await this.auditoriumRepositories.createVenue({
             name: data.name,
@@ -78,36 +74,50 @@ constructor(){
         }
       }
 
-      async updateVenues(data:any,id:string){
+     
+      async updateVenue(venueId: string, data: any) {
+        try {
+          
+          const existingVenue = await this.auditoriumRepositories.findVenueById(venueId);
 
-      try {
-        
-        const existingVenue=await this.auditoriumRepositories.findVenueById(id)
+          if (!existingVenue) {
+            return { success: false, message: "Venue not found" };
+          }
 
-        if(!existingVenue){
+          await this.auditoriumRepositories.updateVenue(venueId, {
+            name: data.name,
+            address: data.address,
+            audiUserId: data.audiUserId,
+            phone: data.phone,
+            altPhone: data.altPhone,
+            email: data.email,
+            pincode: data.pincode,
+            cities: data.cities,
+            acType: data.acType,
+            seatingCapacity: data.seatingCapacity,
+            diningCapacity: data.diningCapacity,
+            parkingSlots: data.parkingSlots,
+            changingRooms: data.changingRooms,
+            amenities: data.amenities,
+            foodPolicy: data.foodPolicy,
+            decorPolicy: data.decorPolicy,
+            tariff: data.tariff,
+            cancellationPolicy: data.cancellationPolicy,
+            stageSize: data.stageSize,
+            totalamount: data.totalamount,
+            advAmnt: data.advAmnt,
+            images: data.images,
+            timeSlots: data.timeSlots,
+            // events: data.events,
+          });
 
-          return {success:false,message:'Something went Wrong'}
-
+          return { success: true, message: "Venue updated successfully!" };
+        } catch (error) {
+          console.error("Error in updateVenue service:", error);
+          throw new Error("Service Error: " + (error instanceof Error ? error.message : "Unknown error"));
         }
-
-       const updatedVenue = await this.auditoriumRepositories.updateVenue(id, { ...data });
-
-       console.log(updatedVenue,'th')
-
-       if (!updatedVenue) {
-
-        return { success: false, message: 'Failed to update venue' }
-
       }
 
-      return { success: true, message: 'Venue updated successfully', venue: updatedVenue };
-
-        
-      } catch (error) {
-        
-      }
-
-      }
 
       async deleteVenue(id: string): Promise<{ status: boolean; message: string }> {
 
@@ -141,8 +151,6 @@ constructor(){
         const auditoriumName=auditorium?.auditoriumName
 
         const events=await this.auditoriumRepositories.findEventsById(id)
-
-        console.log(events,'events')
 
         return {events,auditoriumName}
         
@@ -221,8 +229,6 @@ constructor(){
       try {
 
         const user=await this.auditoriumRepositories.findAudiById(id)
-
-        console.log(user)
 
         if(!user){
 

@@ -12,7 +12,8 @@ auditorium_route.post('/addvenue', upload.array('images', 4),auditoriumControlle
 
 auditorium_route.get('/allvenues',auditoriumController.allVEnues)
 
-auditorium_route.put('/updatevenues',auditoriumController.updateVenues)
+auditorium_route.put('/updatevenues/:id', upload.array('images', 4), auditoriumController.updateVenue)
+
 
 auditorium_route.delete('/deletevenue/:id',auditoriumController.deleteVenue)
 

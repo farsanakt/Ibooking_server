@@ -14,14 +14,10 @@ class AuditoriumController{
 
     async addVenue(req:Request,res:Response){
 
-        console.log('hiiii')
-
         try {
 
 
             const data=req.body
-
-            console.log(data,'ithan ath')
 
              if (typeof data.cities === "string") {
                 data.cities = JSON.parse(data.cities);
@@ -66,13 +62,8 @@ class AuditoriumController{
 
             const audiUserId = req.query.audiUserId as string
 
-            console.log(audiUserId,'koooooo')
-
             const response=await auditoriumService.allVenues(audiUserId)
-
-            console.log('ithan',response)
                
-           
             if(response){
 
                 res.status(HttpStatus.CREATED).json(response)
@@ -87,31 +78,52 @@ class AuditoriumController{
 
     }
 
-    async updateVenues(req:Request,res:Response){
+  
+  async updateVenue(req: Request, res: Response) {
 
-        try {
+  try {
 
-            const {data,id}=req.body
+    const venueId = req.params.id
 
-            const response=await auditoriumService.updateVenues(id,data)
+    let data = req.body
 
-            if(!response){
+    if (typeof data.cities === "string") data.cities = JSON.parse(data.cities);
+    if (typeof data.timeSlots === "string") data.timeSlots = JSON.parse(data.timeSlots);
+    if (typeof data.amenities === "string") data.amenities = JSON.parse(data.amenities);
+    if (typeof data.tariff === "string") data.tariff = JSON.parse(data.tariff);
+    if (typeof data.events === "string") data.events = JSON.parse(data.events);
 
-                res.status(HttpStatus.BAD_REQUEST).json(response)
+    const files = req.files as Express.Multer.File[];
+    const newImageUrls = files.map((file) => (file as any).location);
 
-                return
-
-            }
-
-            res.status(HttpStatus.CREATED).json(response)
-            
-        } catch (error) {
-
-            console.log('something went wrong in updateVenue contoller')
-            
-        }
-
+    let existingImages: string[] = [];
+    if (data.existingImages) {
+      if (Array.isArray(data.existingImages)) {
+        existingImages = data.existingImages;
+      } else if (typeof data.existingImages === "string") {
+        existingImages = [data.existingImages];
+      }
     }
+
+    const mergedImages = [...existingImages, ...newImageUrls];
+
+    if (Array.isArray(data.audiUserId)) {
+      data.audiUserId = data.audiUserId[0];
+    }
+
+    const response = await auditoriumService.updateVenue(venueId, { ...data, images: mergedImages });
+
+    if (!response.success) {
+       res.status(400).json(response);
+       return
+    }
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error("Error in updateVenue controller:", error);
+    res.status(500).json({ success: false, message: "Internal server error while updating venue" });
+  }
+}
 
 
     async deleteVenue(req: Request, res: Response) {
@@ -164,7 +176,7 @@ class AuditoriumController{
             }
 
             res.status(HttpStatus.BAD_REQUEST).json(response)
-            console.log()
+           
         } catch (error) {
             
         }
@@ -186,7 +198,7 @@ class AuditoriumController{
             }
 
             res.status(HttpStatus.BAD_REQUEST).json(response)
-            console.log()
+           
         } catch (error) {
             
         }
@@ -220,10 +232,7 @@ class AuditoriumController{
 
   try {
 
-    console.log('meeeeeeee')
     const  email = req.query.email as string
-
-    console.log(email,'meee')
 
     const response = await auditoriumService.userDetails(email);
     
@@ -252,8 +261,6 @@ class AuditoriumController{
 
         try {
             const id=req.params.id
-
-            console.log(id,'usere')
 
             const response=await auditoriumService.findAuditoriumUser(id)
 
@@ -356,8 +363,6 @@ class AuditoriumController{
   try {
     const data = req.body;
 
-    console.log(data, "Incoming Staff Data");
-
     const staff = await staffService.addStaff(data);
 
     res.status(201).json({
@@ -394,11 +399,10 @@ class AuditoriumController{
 
    
   async updateStaff (req: Request, res: Response): Promise<void> {
+
   try {
     const { staffid } = req.params
     const data = req.body;
-
-    console.log(data,staffid)
 
     const updated = await staffService.updateStaff(staffid, data);
 
@@ -457,8 +461,6 @@ async deleteStaff(req: Request, res: Response): Promise<void>  {
   try {
     const data = req.body;
 
-    console.log("Offer data:", data);
-
     const newOffer = await offerService.createOffer(data);
 
     res.status(201).json({
@@ -480,11 +482,7 @@ async deleteStaff(req: Request, res: Response): Promise<void>  {
   try {
     const { userId } = req.params;
 
-    console.log(userId)
-
     const offers = await offerService.getUserOffers(userId);
-
-    console.log(offers,'gggoffer')
 
     res.status(200).json({
       success: true,
