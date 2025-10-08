@@ -210,7 +210,15 @@ async allvendorusers(req:Request,res:Response){
 
 async addAdminStaff(req:Request,res:Response){
 
-  
+  const data=req.body
+
+  console.log('data staff',data)
+
+  try {
+    
+  } catch (error) {
+    
+  }
 
 }
 
