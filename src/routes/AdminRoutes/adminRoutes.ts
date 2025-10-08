@@ -21,4 +21,8 @@ admin_route.get('/allusers',adminController.allUsers)
 
 admin_route.get('/allvendorusers',adminController.allvendorusers)
 
+
+// ################### Staff #####################
+admin_route.post('/addadminstaff',adminController.addAdminStaff)
+
 export default admin_route

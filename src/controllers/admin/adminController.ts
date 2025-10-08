@@ -206,6 +206,17 @@ async allvendorusers(req:Request,res:Response){
 
 }
 
+// ################ adminStaff ###############
+
+async addAdminStaff(req:Request,res:Response){
+
+  
+
+}
+
+
+
+
 }
 
 export default AdminController
