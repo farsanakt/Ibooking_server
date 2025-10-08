@@ -182,14 +182,46 @@ class AdminService{
  //###################  staff ################
 
  async addAdminStaff(data: IAdminStaff) {
-    
     const existing = await this.adminRepositories.findByEmail(data.email);
-
     if (existing) {
-      throw new Error("Email already registered");
+      return { success: false, message: "Email already registered" };
     }
 
-    return await this.adminRepositories.createAdminStaff(data);
+    const newStaff = {
+      staffid: data.id,
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      role: data.role,
+      isActive: data.isActive,
+    };
+
+    console.log(newStaff,'new stafff')
+
+    const createdStaff = await this.adminRepositories.createAdminStaff(newStaff);
+    return { success: true, message: "Admin staff added successfully", data: createdStaff };
+  }
+
+
+  async fetchAllAdminStaff(){
+
+    return await this.adminRepositories.allAdminStaff()
+
+  }
+async updateAdminStaff(id: string, data: Partial<IAdminStaff>) {
+    const staff = await this.adminRepositories.findStaffByStaffId(id);
+
+    if (!staff) {
+      return { success: false, message: "Staff not found" };
+    }
+
+    const updatedStaff = await this.adminRepositories.updateAdminStaff(id, data);
+
+    if (!updatedStaff) {
+      return { success: false, message: "Failed to update admin staff" };
+    }
+
+    return { success: true, message: "Updated successfully", data: updatedStaff };
   }
 
 

@@ -69,13 +69,29 @@ export class AdminRepository{
   
     //###################  staff ################
 
-    async createAdminStaff(data: IAdminStaff): Promise<IAdminStaff> {
+     async createAdminStaff(data: Partial<IAdminStaff>): Promise<IAdminStaff> {
     const newStaff = new AdminStaffModel(data);
     return await newStaff.save();
-    }
+  }
 
     async findByEmail(email: string): Promise<IAdminStaff | null> {
       return await AdminStaffModel.findOne({ email });
+    }
+
+    async allAdminStaff():Promise<IAdminStaff[]|null>{
+
+      return await AdminStaffModel.find()
+
+    }
+
+    async findStaffByStaffId(id:string):Promise<IAdminStaff|null>{
+
+      return await AdminStaffModel.findOne({staffid:id})
+
+    }
+
+    async updateAdminStaff(id: string, data: Partial<IAdminStaff>): Promise<IAdminStaff | null> {
+    return await AdminStaffModel.findOneAndUpdate({ id }, data, { new: true });
     }
 
 

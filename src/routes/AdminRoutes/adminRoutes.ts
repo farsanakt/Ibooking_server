@@ -25,4 +25,7 @@ admin_route.get('/allvendorusers',adminController.allvendorusers)
 // ################### Staff #####################
 admin_route.post('/addadminstaff',adminController.addAdminStaff)
 
+admin_route.get('/fetchadminstaff',adminController.fetchAllAdminStaff)
+
+admin_route.put('/updateadminstaff/:id',adminController.updateAdminStaff)
 export default admin_route

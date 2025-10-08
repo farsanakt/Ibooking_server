@@ -1,7 +1,7 @@
 import { Schema, model, Document } from "mongoose";
 
 export interface IAdminStaff extends Document {
-  id: string;
+  staffid: string;
   name: string;
   email: string;
   password: string;
@@ -11,7 +11,7 @@ export interface IAdminStaff extends Document {
 
 const adminStaffSchema = new Schema<IAdminStaff>(
   {
-    id: { type: String, required: true, unique: true },
+    staffid: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },

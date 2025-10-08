@@ -214,18 +214,62 @@ async addAdminStaff(req: Request, res: Response): Promise<void> {
 
     try {
       const newStaff = await adminService.addAdminStaff(data);
-      res.status(201).json({
-        success: true,
-        message: "Admin staff added successfully",
-        data: newStaff,
-      });
+
+      if (!newStaff.success) {
+        res.status(HttpStatus.BAD_REQUEST).json(newStaff);
+        return;
+      }
+
+      res.status(HttpStatus.CREATED).json(newStaff);
     } catch (error: any) {
-      res.status(400).json({
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         success: false,
         message: error.message || "Failed to add admin staff",
       });
     }
   }
+  
+  async fetchAllAdminStaff(req:Request,res:Response){
+
+    try {
+
+      const response=await adminService.fetchAllAdminStaff()
+
+      if(response){
+
+        res.status(HttpStatus.CREATED).json(response)
+
+      }
+      
+    } catch (error) {
+      
+    }
+
+  }
+
+
+  async updateAdminStaff(req: Request, res: Response): Promise<void> {
+    const id = req.params.id
+    const updateData = req.body;
+    console.log("id:", id);
+
+    try {
+      const updatedStaff = await adminService.updateAdminStaff(id, updateData);
+
+      if (!updatedStaff.success) {
+        res.status(HttpStatus.BAD_REQUEST).json(updatedStaff);
+        return;
+      }
+
+      res.status(HttpStatus.OK).json(updatedStaff);
+    } catch (error: any) {
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: error.message || "Failed to update admin staff",
+      });
+    }
+  }
+
 }
 
 
