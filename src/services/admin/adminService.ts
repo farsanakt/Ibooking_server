@@ -1,3 +1,4 @@
+import { IAdminStaff } from "../../models/admin/adminStaffModel";
 import { AdminRepository } from "../../repositories/implemention/AdminRepository";
 
 class AdminService{
@@ -176,6 +177,20 @@ class AdminService{
   return await this.adminRepositories.findAllVendor()
 
  }
+
+
+ //###################  staff ################
+
+ async addAdminStaff(data: IAdminStaff) {
+    
+    const existing = await this.adminRepositories.findByEmail(data.email);
+
+    if (existing) {
+      throw new Error("Email already registered");
+    }
+
+    return await this.adminRepositories.createAdminStaff(data);
+  }
 
 
 }

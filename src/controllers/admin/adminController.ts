@@ -208,23 +208,29 @@ async allvendorusers(req:Request,res:Response){
 
 // ################ adminStaff ###############
 
-async addAdminStaff(req:Request,res:Response){
+async addAdminStaff(req: Request, res: Response): Promise<void> {
+    const data = req.body;
+    console.log("data staff", data);
 
-  const data=req.body
-
-  console.log('data staff',data)
-
-  try {
-    
-  } catch (error) {
-    
+    try {
+      const newStaff = await adminService.addAdminStaff(data);
+      res.status(201).json({
+        success: true,
+        message: "Admin staff added successfully",
+        data: newStaff,
+      });
+    } catch (error: any) {
+      res.status(400).json({
+        success: false,
+        message: error.message || "Failed to add admin staff",
+      });
+    }
   }
-
 }
 
 
 
 
-}
+
 
 export default AdminController
