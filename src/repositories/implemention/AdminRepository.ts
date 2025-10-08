@@ -1,3 +1,4 @@
+import { AdminStaffModel, IAdminStaff } from "../../models/admin/adminStaffModel";
 import auditoriumUserModel, { IAuditoriumUser } from "../../models/auditorium/auditoriumUserModel";
 import venueModel, { IVenue } from "../../models/auditorium/venueModel";
 import userModel, { IUser } from "../../models/user/userModel";
@@ -55,15 +56,27 @@ export class AdminRepository{
 
     }
 
-  async updateVenue(id: string): Promise<{ modifiedCount: number }> {
-    console.log(id,'po')
-  const result = await venueModel.updateMany(
-    { audiUserId: id },       
-    { $set: { isVerified: true } } 
-  );
+    async updateVenue(id: string): Promise<{ modifiedCount: number }> {
+    
+    const result = await venueModel.updateMany(
+      { audiUserId: id },       
+      { $set: { isVerified: true } } 
+    );
+    
+    return { modifiedCount: result.modifiedCount };
 
-  return { modifiedCount: result.modifiedCount };
-}
+     }
+  
+    //###################  staff ################
+
+    async createAdminStaff(data: IAdminStaff): Promise<IAdminStaff> {
+    const newStaff = new AdminStaffModel(data);
+    return await newStaff.save();
+    }
+
+    async findByEmail(email: string): Promise<IAdminStaff | null> {
+      return await AdminStaffModel.findOne({ email });
+    }
 
 
 }
