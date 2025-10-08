@@ -28,4 +28,8 @@ admin_route.post('/addadminstaff',adminController.addAdminStaff)
 admin_route.get('/fetchadminstaff',adminController.fetchAllAdminStaff)
 
 admin_route.put('/updateadminstaff/:id',adminController.updateAdminStaff)
+
+admin_route.delete('/deleteadminstaff/:id', adminController.deleteAdminStaff);
+
+
 export default admin_route

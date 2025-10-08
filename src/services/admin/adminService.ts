@@ -182,13 +182,15 @@ class AdminService{
  //###################  staff ################
 
  async addAdminStaff(data: IAdminStaff) {
+
+  console.log('hope')
     const existing = await this.adminRepositories.findByEmail(data.email);
     if (existing) {
       return { success: false, message: "Email already registered" };
     }
 
     const newStaff = {
-      staffid: data.id,
+      staffid: data.staffid,
       name: data.name,
       email: data.email,
       password: data.password,
@@ -215,13 +217,34 @@ async updateAdminStaff(id: string, data: Partial<IAdminStaff>) {
       return { success: false, message: "Staff not found" };
     }
 
-    const updatedStaff = await this.adminRepositories.updateAdminStaff(id, data);
+    const newStaff = {
+      staffid: data.staffid,
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      role: data.role,
+      isActive: data.isActive,
+    };
+
+    const updatedStaff = await this.adminRepositories.updateAdminStaff(id, newStaff);
 
     if (!updatedStaff) {
       return { success: false, message: "Failed to update admin staff" };
     }
 
     return { success: true, message: "Updated successfully", data: updatedStaff };
+  }
+
+   async deleteAdminStaff(staffid: string) {
+    const staff = await this.adminRepositories.findStaffByStaffId(staffid);
+
+    if (!staff) {
+      return { success: false, message: "Staff not found" };
+    }
+
+    await this.adminRepositories.deleteAdminStaff(staffid);
+
+    return { success: true, message: "Staff deleted successfully" };
   }
 
 

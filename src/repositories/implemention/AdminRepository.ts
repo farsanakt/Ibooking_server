@@ -91,7 +91,12 @@ export class AdminRepository{
     }
 
     async updateAdminStaff(id: string, data: Partial<IAdminStaff>): Promise<IAdminStaff | null> {
-    return await AdminStaffModel.findOneAndUpdate({ id }, data, { new: true });
+    return await AdminStaffModel.findOneAndUpdate({ staffid:id }, data, { new: true });
+    }
+
+    
+    async deleteAdminStaff(staffid: string) {
+      return await AdminStaffModel.findOneAndDelete({ staffid });
     }
 
 

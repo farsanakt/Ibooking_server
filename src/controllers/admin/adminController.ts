@@ -270,6 +270,28 @@ async addAdminStaff(req: Request, res: Response): Promise<void> {
     }
   }
 
+
+   async deleteAdminStaff(req: Request, res: Response): Promise<void> {
+    const id = req.params.id;
+    console.log("Deleting staff with ID:", id);
+
+    try {
+      const result = await adminService.deleteAdminStaff(id);
+
+      if (!result.success) {
+        res.status(HttpStatus.BAD_REQUEST).json(result);
+        return;
+      }
+
+      res.status(HttpStatus.OK).json(result);
+    } catch (error: any) {
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: error.message || "Failed to delete admin staff",
+      });
+    }
+  }
+
 }
 
 
