@@ -178,6 +178,12 @@ class AdminService{
 
  }
 
+  async allAuditoriumBookings(){
+
+  return await this.adminRepositories.findAllAuditoriumBookings()
+
+ }
+
 
  //###################  staff ################
 

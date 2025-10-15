@@ -206,6 +206,25 @@ async allvendorusers(req:Request,res:Response){
 
 }
 
+async allAuditoriumBookings(req:Request,res:Response){
+
+    try {
+
+        const response=await adminService.allAuditoriumBookings()
+
+        if(response){
+
+            res.status(HttpStatus.CREATED).json(response)
+
+        }
+        
+    } catch (error) {
+        
+    }
+
+}
+
+
 // ################ adminStaff ###############
 
 async addAdminStaff(req: Request, res: Response): Promise<void> {
