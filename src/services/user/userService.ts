@@ -520,6 +520,8 @@ async singleVendor(id:string){
     try {
 
       return await this.auditoriumRepositories.findSingleVendorById(id)
+
+      
       
     } catch (error) {
       

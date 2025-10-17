@@ -40,8 +40,10 @@ export interface IVenue extends Document {
   advAmnt:string;
   images: string[];
   timeSlots: ITimeSlot[];
-  auditoriumId?: mongoose.Types.ObjectId; // link to the auditorium owner
+  auditoriumId?: mongoose.Types.ObjectId
   isVerified: boolean;
+  guestroom:string
+  youtubeLink?: string; 
   
 }
 
@@ -75,12 +77,14 @@ const venueSchema: Schema<IVenue> = new Schema(
     cities: { type: [String], required: true },
     acType: { type: String, enum: ['AC', 'Non-AC', 'Both'], required: true },
     seatingCapacity: { type: String, required: true },
+    guestroom:{ type: String, required: true },
     diningCapacity: { type: String, required: true },
     parkingSlots: { type: String, required: true },
     changingRooms: { type: String, required: true },
     amenities: { type: [String], default: [] },
     foodPolicy: { type: String, required: true },
     decorPolicy: { type: String, required: true },
+     youtubeLink: { type: String },
     isVerified: {
     type: Boolean,
     default: false

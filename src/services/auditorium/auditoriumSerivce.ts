@@ -15,6 +15,8 @@ constructor(){
 
         try {
 
+
+          console.log('this is the new venue data',data)
           const existingVenue = await this.auditoriumRepositories.findVenueByName(data.name);
 
           // const existingMakeUp=await this.auditoriumRepositories.findMakeUpByName(data.name)
@@ -49,6 +51,8 @@ constructor(){
             advAmnt:data.advAmnt,
             images: data.images,
             timeSlots: data.timeSlots,
+            guestroom:data.guestRooms,
+            youtubeLink:data.youtubeLink,
           
           })
             

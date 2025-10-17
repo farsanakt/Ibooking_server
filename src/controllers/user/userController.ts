@@ -393,7 +393,11 @@ async vendorEnquiry (req: Request, res: Response): Promise<void>{
 
          const id=req.params.id
 
+         console.log(id,'my')
+
         const response=await userService.singleVendor(id)
+
+        console.log(response,'resseeeeeeee')
 
         if(response){
 

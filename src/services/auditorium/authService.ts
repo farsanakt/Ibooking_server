@@ -14,55 +14,57 @@ export class AuthService{
 
   }
 
-    async userSignup(formData:any){
+    async userSignup(formData: any) {
+  const {
+    auditoriumName,
+    ownerName,
+    email,
+    phone,
+    password,
+    confirmPassword,
+    district,
+    panchayat,
+    address,
+    municipality,
+    corporation,
+    events,
+    locations
+  } = formData;
 
-        const {auditoriumName,ownerName,email,phone,password,confirmPassword,district,panchayat,address,municipality,corporation}=formData
-
-        try {
-
-          if(password!==confirmPassword){
-
-            return {success:false,message:'password and confirm password are not match'}
-
-          }
-
-          const existingUser=await this.auditoriumRepositories.findUserByOwnerName(ownerName)
-
-          if(existingUser){
-
-            return {success:false,message:'Username already existed'}
-
-          }else{
-
-              const savedDetails = await this.auditoriumRepositories.createUser({
-
-                  auditoriumName: auditoriumName,
-                  phone:phone,
-                  ownerName:ownerName,
-                  email: email,
-                  password: password,
-                  role:'auditorium',
-                  address:address,
-                  district:district,
-                  panchayat:panchayat,
-                  corporation:corporation,
-                  municipality:municipality
-
-
-                })
-
-                 return {success:true,message:'registered succefully..!'}
-
-          }
-
-                
-        } catch (error) {
-
-          console.log('error in authservice')
-            
-        }
-
+  try {
+    if (password !== confirmPassword) {
+      return { success: false, message: 'Password and confirm password do not match' };
     }
+
+    const existingUser = await this.auditoriumRepositories.findUserByOwnerName(ownerName);
+
+    if (existingUser) {
+      return { success: false, message: 'Username already exists' };
+    } else {
+      const savedDetails = await this.auditoriumRepositories.createUser({
+        auditoriumName,
+        phone,
+        ownerName,
+        email,
+        password,
+        role: 'auditorium',
+        address,
+        district,
+        panchayat,
+        corporation,
+        municipality,
+        events,      
+        locations    
+      });
+
+      return { success: true, message: 'Registered successfully..!' };
+    }
+  } catch (error) {
+    console.log('Error in authService:', error);
+    return { success: false, message: 'Server error' };
+  }
+}
+
 
    async login(data: any) {
   try {
