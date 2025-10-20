@@ -5,6 +5,7 @@ export interface IAuditoriumUser extends Document {
   password: string;
   role: 'user' | 'auditorium' | 'admin';
   isVerified: boolean;
+  isOtp:boolean;
   isBlocked: boolean;
   auditoriumName?: string;
   ownerName?: string;
@@ -39,6 +40,11 @@ const userSchema: Schema = new Schema(
       type: Boolean,
       default: false
     },
+     isOtp: {
+      type: Boolean,
+      default: false
+    },
+
     isBlocked: {
       type: Boolean,
       default: false

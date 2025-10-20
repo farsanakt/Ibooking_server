@@ -10,13 +10,12 @@ class AuthController{
   async signup(req: Request, res: Response) {
   try {
     const formData = req.body;
-    console.log(formData,'pooooooooooooooooookooooooooooo')
+    
     const response = await authService.userSignup(formData);
-     
-    console.log(response);
+
       
     if (!response?.success) {
-      console.log('me');
+      
       res.status(HttpStatus.BAD_REQUEST).json(response);
     } else {
       res.status(HttpStatus.CREATED).json({ message: 'Registered successfully!!' });
@@ -34,7 +33,7 @@ class AuthController{
 
 async login(req: Request, res: Response) {
 
-  console.log('ethi')
+  
   try {
     const data = req.body;
 
@@ -47,7 +46,6 @@ async login(req: Request, res: Response) {
        return
     }
 
-    console.log(response.accessToken,'accees')
     
      res.status(HttpStatus.OK).json({
       success: true,
@@ -69,11 +67,8 @@ async login(req: Request, res: Response) {
 
  async forgetPass(req:Request,res:Response){
 
-  console.log('hi forget pass')
-
-  
   const data=req.body
-  console.log(data.email)
+  
 
     try {
 
@@ -105,8 +100,6 @@ async login(req: Request, res: Response) {
     try {
 
       const data = req.body;
-
-      console.log(data,'this is the verify data')
 
       const response = await authService.verifyUserOtp(data);
 

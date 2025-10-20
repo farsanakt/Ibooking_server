@@ -31,7 +31,7 @@ export class AuthService{
   }
 
 
-    async userSignup(formData: any) {
+async userSignup(formData: any) {
   const {
     auditoriumName,
     ownerName,
@@ -45,42 +45,84 @@ export class AuthService{
     municipality,
     corporation,
     events,
-    locations
+    locations,
   } = formData;
 
   try {
     if (password !== confirmPassword) {
-      return { success: false, message: 'Password and confirm password do not match' };
+      return { success: false, message: "Password and confirm password do not match" };
     }
+
 
     const existingUser = await this.auditoriumRepositories.findUserByOwnerName(ownerName);
+    
 
     if (existingUser) {
-      return { success: false, message: 'Username already exists' };
-    } else {
-      const savedDetails = await this.auditoriumRepositories.createUser({
-        auditoriumName,
-        phone,
-        ownerName,
-        email,
-        password,
-        role: 'auditorium',
-        address,
-        district,
-        panchayat,
-        corporation,
-        municipality,
-        events,      
-        locations    
-      });
+      if (!existingUser.isOtp) {
+        
 
-      return { success: true, message: 'Registered successfully..!' };
+        const getOtp = await this.otpRepositories.findOtpByEmail(email);
+
+        if (getOtp) {
+          const currentTime = new Date().getTime();
+          const expirationTime = new Date(getOtp.createdAt).getTime() + 5 * 60 * 1000;
+
+          if (currentTime < expirationTime) {
+            return { success: false, message: "OTP is still valid. Please verify using the same OTP." };
+          } else {
+            const newOtp = generateOtp();
+            await this.otpRepositories.updateOtpByEmail(email, newOtp);
+            await mailService.sendOtpEmail(email, newOtp);
+            return { success: false, message: "OTP expired. A new OTP has been sent to your email." };
+          }
+        } else {
+          const newOtp = generateOtp();
+          await this.otpRepositories.create({ email, otp: newOtp } as unknown as IOtp);
+          await mailService.sendOtpEmail(email, newOtp);
+          return { success: false, message: "No OTP found. A new OTP has been sent to your email." };
+        }
+      } else {
+        return { success: false, message: "Username already exists" };
+      }
     }
+
+    
+
+    const savedDetails = await this.auditoriumRepositories.createUser({
+      auditoriumName,
+      phone,
+      ownerName,
+      email,
+      password,
+      role: "auditorium",
+      address,
+      district,
+      panchayat,
+      corporation,
+      municipality,
+      events,
+      locations,
+    });
+
+   
+    const newOtp = generateOtp();
+    
+
+    await this.otpRepositories.create({
+      email,
+      otp: newOtp,
+    } as unknown as IOtp);
+
+    await mailService.sendOtpEmail(email, newOtp);
+
+    return { success: true, message: "Registered successfully..! Please verify your email with OTP." };
+
   } catch (error) {
-    console.log('Error in authService:', error);
-    return { success: false, message: 'Server error' };
+    console.error("❌ Error in userSignup:", error);
+    return { success: false, message: "Server error" };
   }
 }
+
 
 
    async login(data: any) {

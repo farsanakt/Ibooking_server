@@ -73,9 +73,9 @@ export class AuditoriumRepositories{
         return await auditoriumUserModel.findOneAndUpdate({email},update,{new:true})
     }
 
-    async verifyUser(email: string, isVerified: boolean): Promise<IUser | null> {
+    async verifyUser(email: string, isOtp: boolean): Promise<IUser | null> {
        
-        await auditoriumUserModel.updateOne({ email }, { isVerified });
+        await auditoriumUserModel.updateOne({ email }, { isOtp });
         return await auditoriumUserModel.findOne({ email });
     }
     
