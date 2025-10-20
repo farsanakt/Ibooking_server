@@ -11,6 +11,7 @@ import BrideGroom from '../../models/auditorium/brideGroomModel'
 import mongoose from "mongoose";
 import vendorUser, { IVendorUser } from "../../models/vendor/vendorUser";
 import { IVoucher, VoucherModel } from "../../models/vendor/voucherModel";
+import auditoriumUserModel from "../../models/auditorium/auditoriumUserModel";
 
 
 export class AuditoriumRepositories{
@@ -65,6 +66,17 @@ export class AuditoriumRepositories{
 
     async findUserByEmail(email:string):Promise<IAuditoriumUser |null>{
         return await AuditoriumUser.findOne({email:email})
+    }
+
+     async UpdatePassword(email:string,field:string,value:any) :Promise<IUser | null>{
+        const update={$set:{[field]:value}}
+        return await auditoriumUserModel.findOneAndUpdate({email},update,{new:true})
+    }
+
+    async verifyUser(email: string, isVerified: boolean): Promise<IUser | null> {
+       
+        await auditoriumUserModel.updateOne({ email }, { isVerified });
+        return await auditoriumUserModel.findOne({ email });
     }
     
     async findUser(email:string):Promise<IUser |null>{

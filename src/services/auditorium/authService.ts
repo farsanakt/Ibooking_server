@@ -1,18 +1,35 @@
+import { IOtp } from "../../models/auditorium/otpModel";
 import { AuditoriumRepositories } from "../../repositories/implemention/AuditoriumRepositories"
+import { OtpRepository } from "../../repositories/implemention/OtpRepositories";
 import { generateAccessToken, generateRefreshToken } from "../../utils/jwt";
+import { MailService } from "../MailService";
+
+const mailService = new MailService();
+
+  export const generateOtp = () => {
+
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  return otp;
+
+};
 
 export class AuthService{
 
       private auditoriumRepositories: AuditoriumRepositories;
+
+       private otpRepositories: OtpRepository;
 
   
 
   constructor() {
 
     this.auditoriumRepositories = new AuditoriumRepositories();
+    this.otpRepositories = new OtpRepository();
     
 
   }
+
 
     async userSignup(formData: any) {
   const {
@@ -68,8 +85,6 @@ export class AuthService{
 
    async login(data: any) {
   try {
-
-    console.log('koop')
     
     const existingUser = await this.auditoriumRepositories.findUserByEmail(data.email);
 
@@ -111,5 +126,112 @@ export class AuthService{
     return { success: false, message: 'Internal server error' };
   }
 }
+
+
+async forgetPass(forgetPass:{email:string}){
+
+    const email=forgetPass.email
+
+   
+
+    try {
+
+      const existing=await this.auditoriumRepositories.findUserByEmail(email)
+
+      if(!existing){
+
+        return {success:false,message:'Please enter a valid email'}
+
+      }
+
+      const otp=generateOtp()
+
+      await this.otpRepositories.create({email,otp} as IOtp)
+
+      await mailService.sendOtpEmail(email,otp)
+
+      return {success:true,message:'Otp sended to registered mail'}
+      
+    } catch (error) {
+
+      return {success:false,message:'failed to send otp '}
+      
+    }
+
+  }
+
+
+  
+  async verifyUserOtp(otpdata: {email: string;otp: string;}): Promise<{ success: boolean; message: string }> {
+
+   
+
+    const { email, otp } = otpdata;
+
+
+    const validUser = await this.auditoriumRepositories.findUserByEmail(email);
+
+
+    if (!validUser) {
+
+      return { success: false, message: "this email is not registered" };
+
+    }
+
+    const currentOtp = await this.otpRepositories.findOtpByEmail(email);
+
+    
+
+    if (!currentOtp?.otp) return { success: false, message: "resend the otp" };
+
+    if (currentOtp.otp == otp) {
+
+      await this.auditoriumRepositories.verifyUser(email, true);
+
+      await this.otpRepositories.deleteOtpByEmail(email);
+
+      return { success: true, message: "otp verification completed" };
+
+    } else {
+
+      console.log("wrong")
+
+      return { success: false, message: "please enter valid otp" }
+
+    }
+
+  }
+
+   async resetPass(resetPass:{pass:string,email:string}):Promise<{success:boolean,message:string}>{
+
+    const newPass=resetPass.pass
+
+    const email=resetPass.email
+
+    try {
+
+      const existingUser=await this.auditoriumRepositories.findUserByEmail(email)
+
+      // const hashedPassword=await bcrypt.hash(newPass,10)
+
+      const changedPass=await this.auditoriumRepositories.UpdatePassword(email,'password',newPass)
+
+      if (!changedPass) {
+
+        return { success: false, message: "failed to update the password" }
+
+    }
+
+    return { success: true, message: "password successfully changed" }
+
+      
+    } catch (error) {
+
+     return {success:false,message:'Something went wrong'}
+      
+    }
+
+  }
+
 
 }

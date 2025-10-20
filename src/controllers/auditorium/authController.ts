@@ -67,6 +67,108 @@ async login(req: Request, res: Response) {
   }
 }
 
+ async forgetPass(req:Request,res:Response){
+
+  console.log('hi forget pass')
+
+  
+  const data=req.body
+  console.log(data.email)
+
+    try {
+
+      const response=await authService.forgetPass(data)
+
+      if (!response.success) {
+
+        res.status(HttpStatus.BAD_REQUEST).json(response);
+
+      } else {
+
+        res.status(HttpStatus.CREATED) .json({response});
+         
+      }
+
+
+      
+    } catch (error) {
+
+      console.log(error)
+      
+    }
+
+  }
+
+
+  async verifyOtp(req: Request, res: Response) {
+
+    try {
+
+      const data = req.body;
+
+      console.log(data,'this is the verify data')
+
+      const response = await authService.verifyUserOtp(data);
+
+      if (typeof response === "string") {
+
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: response });
+          
+        return
+
+      } else if (response?.success) {
+
+        res.status(HttpStatus.CREATED).json({ message: response });
+
+        return
+
+      }else{
+
+          res.status(HttpStatus.BAD_REQUEST) .json(response);
+    
+          return
+
+      }
+
+
+    } catch (error: any) {
+
+      console.log("error in otpverify of authcontroller");
+
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: "otp verification failed" });
+
+      return;
+
+    }
+
+  }
+
+  async resetPass(req:Request,res:Response){
+
+    try {
+
+      console.log('reached in reset password controller')
+
+      const response=await authService.resetPass(req.body)
+
+      if (!response.success) {
+
+        res.status(HttpStatus.BAD_REQUEST).json(response);
+
+      } else {
+
+        res.status(HttpStatus.CREATED) .json({response});
+         
+      }
+      
+    } catch (error) {
+
+      console.log(error)
+      
+    }
+
+  }
+
 
 // async refreshToken (req: Request, res: Response)  {
 

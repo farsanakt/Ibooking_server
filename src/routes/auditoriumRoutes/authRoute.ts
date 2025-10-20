@@ -9,6 +9,13 @@ auditoriumAuth_route.post('/signup',authController.signup)
 
 auditoriumAuth_route.post('/login',authController.login)
 
+
+auditoriumAuth_route.post('/pass',authController.forgetPass)
+
+auditoriumAuth_route.post('/verifyforgetpassotp',authController.verifyOtp)
+
+auditoriumAuth_route.post('/resetpass',authController.resetPass)
+
 // auditoriumAuth_route.post('/refresh-token', authController.refreshToken);
 
 
