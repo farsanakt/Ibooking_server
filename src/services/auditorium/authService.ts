@@ -54,7 +54,9 @@ async userSignup(formData: any) {
     }
 
 
-    const existingUser = await this.auditoriumRepositories.findUserByOwnerName(ownerName);
+    const existingUser = await this.auditoriumRepositories.findUserByEmail(email);
+
+    console.log(existingUser)
     
 
     if (existingUser) {
@@ -82,7 +84,7 @@ async userSignup(formData: any) {
           return { success: false, message: "No OTP found. A new OTP has been sent to your email." };
         }
       } else {
-        return { success: false, message: "Username already exists" };
+        return { success: false, message: "email already registered" };
       }
     }
 
