@@ -35,6 +35,7 @@ export class AuthService{
   }
 
    async userRegistration(formData: any) {
+
     console.log('userRegistration called with:', formData)
     const { firstName, lastName, email, phone, password, confirmPassword } = formData
 
@@ -43,12 +44,15 @@ export class AuthService{
         return { success: false, message: 'Password and confirm password do not match' }
       }
 
+      console.log('jopp')
+
       const existingUser = await this.userRepositories.findUserByEmail(email)
       console.log('Existing user:', existingUser)
 
       if (existingUser) {
         if (!existingUser.isVerified) {
           const getOtp = await  this.otpRepositories.findOtpByEmail(email)
+          console.log(getOtp,'otp')
           if (getOtp) {
             const currentTime = new Date().getTime()
             const expirationTime = new Date(getOtp.createdAt).getTime() + 5 * 60 * 1000
@@ -61,6 +65,7 @@ export class AuthService{
               return { success: true, message: 'OTP expired. A new OTP has been sent to your email.' }
             }
           } else {
+            console.log('else condition')
             const newOtp = generateOtp()
             await this.otpRepositories.create({ email, otp: newOtp } as unknown as IOtp)
             await mailService.sendOtpEmail(email, newOtp)
@@ -80,6 +85,7 @@ export class AuthService{
       })
 
       const newOtp = generateOtp()
+      console.log(newOtp,'otpeeee')
       await this.otpRepositories.create({ email, otp: newOtp } as unknown as IOtp)
       await mailService.sendOtpEmail(email, newOtp)
       return { success: true, message: 'Registered successfully. OTP sent to your email.' }
