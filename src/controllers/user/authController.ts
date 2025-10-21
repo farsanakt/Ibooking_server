@@ -67,6 +67,54 @@ async login(req: Request, res: Response) {
   }
 }
 
+
+async verifyUserOtp(req: Request, res: Response) {
+
+  console.log('hiiiiii')
+
+    try {
+
+      const data = req.body;
+
+      console.log(data,'da')
+
+      const response = await authService.verifyUserOtp(data);
+
+      console.log(response,'it')
+
+      if (typeof response === "string") {
+
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: response });
+          
+        return
+
+      } else if (response?.success) {
+
+        res.status(HttpStatus.CREATED).json({ message: response });
+
+        return
+
+      }else{
+
+          res.status(HttpStatus.BAD_REQUEST) .json(response);
+    
+          return
+
+      }
+
+
+    } catch (error: any) {
+
+      console.log("error in otpverify of authcontroller");
+
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: "otp verification failed" });
+
+      return;
+
+    }
+
+  }
+
 async vendorLogin(req: Request, res: Response) {
 
   console.log('ethi')

@@ -1,3 +1,4 @@
+import userModel from "../../models/user/userModel";
 import User,{ IUser } from "../../models/user/userModel";
 import vendorUser, { IVendorUser } from "../../models/vendor/vendorUser";
 
@@ -16,6 +17,12 @@ export class UserRepositories{
         return await vendorUser.findOne({email:email})
 
     }
+
+    async verifyUser(email: string, isVerified: boolean): Promise<IUser | null> {
+           
+            await userModel.updateOne({ email }, { isVerified });
+            return await userModel.findOne({ email });
+        }
 
     async findUserByOwnerName(ownername:string):Promise<IUser| null>{
 

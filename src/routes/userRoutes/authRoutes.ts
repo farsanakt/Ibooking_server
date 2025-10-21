@@ -11,6 +11,8 @@ userAuth_route.post('/registration',authController.userRegistration)
 
 userAuth_route.post('/signin',authController.login)
 
+userAuth_route.post('/verifyuserotp',authController.verifyUserOtp)
+
 
 userAuth_route.post('/vendorregistration',authController.vendorRegistration)
 
