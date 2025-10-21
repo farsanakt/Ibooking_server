@@ -177,6 +177,81 @@ async verifyUserOtp(otpdata: {email: string;otp: string;}): Promise<{ success: b
 
   }
 
+
+  async forgetPass(forgetPass:{email:string}){
+  
+      const email=forgetPass.email
+
+      console.log(email)
+  
+     
+  
+      try {
+  
+        const existing=await this.userRepositories.findUserByEmail(email)
+
+        console.log(existing,'chaa')
+  
+        if(!existing){
+  
+          return {success:false,message:'Please enter a valid email'}
+  
+        }
+  
+        const otp=generateOtp()
+  
+        await this.otpRepositories.create({email,otp} as IOtp)
+  
+        await mailService.sendOtpEmail(email,otp)
+  
+        return {success:true,message:'Otp sended to registered mail'}
+        
+      } catch (error) {
+  
+        return {success:false,message:'failed to send otp '}
+        
+      }
+  
+    }
+
+
+    async resetPass(resetPass:{pass:string,email:string}):Promise<{success:boolean,message:string}>{
+
+    const newPass=resetPass.pass
+
+    const email=resetPass.email
+
+    try {
+
+      const existingUser=await this.userRepositories.findUserByEmail(email)
+
+      console.log(existingUser,'then')
+
+      console.log(newPass,'email')
+
+      // const hashedPassword=await bcrypt.hash(newPass,10)
+
+      const changedPass=await this.userRepositories.UpdatePassword(email,'password',newPass)
+
+      console.log(changedPass,'po')
+
+      if (!changedPass) {
+
+        return { success: false, message: "failed to update the password" }
+
+    }
+
+    return { success: true, message: "password successfully changed" }
+
+      
+    } catch (error) {
+
+     return {success:false,message:'Something went wrong'}
+      
+    }
+
+  }
+
   async vendorLogin(data: any) {
 
     try {

@@ -13,6 +13,10 @@ userAuth_route.post('/signin',authController.login)
 
 userAuth_route.post('/verifyuserotp',authController.verifyUserOtp)
 
+userAuth_route.post('/userforgetpass',authController.forgetPass)
+
+userAuth_route.post('/userresetpass',authController.resetUserPass)
+
 
 userAuth_route.post('/vendorregistration',authController.vendorRegistration)
 

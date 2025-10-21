@@ -18,6 +18,11 @@ export class UserRepositories{
 
     }
 
+      async UpdatePassword(email:string,field:string,value:any) :Promise<IUser | null>{
+            const update={$set:{[field]:value}}
+            return await userModel.findOneAndUpdate({email},update,{new:true})
+        }
+
     async verifyUser(email: string, isVerified: boolean): Promise<IUser | null> {
            
             await userModel.updateOne({ email }, { isVerified });
