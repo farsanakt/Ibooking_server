@@ -311,6 +311,22 @@ async addAdminStaff(req: Request, res: Response): Promise<void> {
     }
   }
 
+  async createSubcriptionPlane(req:Request,res:Response){
+
+    console.log('ivde ethittoo')
+
+    const data=req.body
+
+    console.log(data,'dataaaaaaa')
+
+    try {
+      
+    } catch (error) {
+      
+    }
+
+  }
+
 }
 
 

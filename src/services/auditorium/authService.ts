@@ -59,7 +59,7 @@ async userSignup(formData: any) {
     console.log(existingUser)
     
 
-    if (existingUser) {
+    if (existingUser  ) {
       if (!existingUser.isOtp) {
         
 
