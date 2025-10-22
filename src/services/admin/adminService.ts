@@ -1,4 +1,5 @@
 import { IAdminStaff } from "../../models/admin/adminStaffModel";
+import { ISubscription } from "../../models/admin/subscriptionModel";
 import { AdminRepository } from "../../repositories/implemention/AdminRepository";
 
 class AdminService{
@@ -65,8 +66,6 @@ class AdminService{
   try {
     const updateAudi = await this.adminRepositories.updateAuditorium(id)
 
-    console.log(id,'this id')
-
     const updateVenue=await this.adminRepositories.updateVenue(id)
     
     if (!updateAudi) {
@@ -91,7 +90,7 @@ class AdminService{
   try {
     const updateAudi = await this.adminRepositories.updateVendor(id)
 
-    console.log(id,'this id')
+    
 
     // const updateVenue=await this.adminRepositories.updateVenue(id)
     
@@ -117,7 +116,7 @@ class AdminService{
   try {
     const updateAudi = await this.adminRepositories.updateVoucher(id)
 
-    console.log(id,'this id')
+    
 
     // const updateVenue=await this.adminRepositories.updateVenue(id)
     
@@ -144,7 +143,7 @@ class AdminService{
   try {
     const updateAudi = await this.adminRepositories.rejectVoucher(id)
 
-    console.log(id,'this id')
+    
 
     // const updateVenue=await this.adminRepositories.updateVenue(id)
     
@@ -189,7 +188,7 @@ class AdminService{
 
  async addAdminStaff(data: IAdminStaff) {
 
-  console.log('hope')
+ 
     const existing = await this.adminRepositories.findByEmail(data.email);
     if (existing) {
       return { success: false, message: "Email already registered" };
@@ -204,7 +203,7 @@ class AdminService{
       isActive: data.isActive,
     };
 
-    console.log(newStaff,'new stafff')
+   
 
     const createdStaff = await this.adminRepositories.createAdminStaff(newStaff);
     return { success: true, message: "Admin staff added successfully", data: createdStaff };
@@ -251,6 +250,53 @@ async updateAdminStaff(id: string, data: Partial<IAdminStaff>) {
     await this.adminRepositories.deleteAdminStaff(staffid);
 
     return { success: true, message: "Staff deleted successfully" };
+  }
+
+
+  //################## SUBSCRIPTION ###################
+
+  async createSubscription(data: Partial<ISubscription>): Promise<ISubscription> {
+    const existingPlans = await this.adminRepositories.findAll();
+    if (
+      existingPlans.some(
+        (plan) => plan.planName.toLowerCase() === data.planName?.toLowerCase()
+      )
+    ) {
+      throw new Error("A plan with this name already exists.");
+    }
+
+    return await this.adminRepositories.createSubscription(data);
+  }
+
+  async getAllSubscriptions(): Promise<ISubscription[]> {
+    return await this.adminRepositories.findAll();
+  }
+
+  
+  async getSubscriptionById(id: string): Promise<ISubscription | null> {
+    return await this.adminRepositories.findById(id);
+  }
+
+  
+  async updateSubscription(
+    id: string,
+    data: Partial<ISubscription>
+  ): Promise<ISubscription | null> {
+    const existingPlan = await this.adminRepositories.findById(id);
+    if (!existingPlan) {
+      throw new Error("Subscription plan not found.");
+    }
+      
+    return await this.adminRepositories.updateSubscription(id, data);
+  }
+
+  
+  async deleteSubscription(id: string): Promise<void> {
+    const plan = await this.adminRepositories.findById(id);
+    if (!plan) {
+      throw new Error("Subscription plan not found.");
+    }
+    await this.adminRepositories.deleteById(id);
   }
 
 

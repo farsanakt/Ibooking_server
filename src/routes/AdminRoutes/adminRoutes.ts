@@ -38,5 +38,12 @@ admin_route.delete('/deleteadminstaff/:id', adminController.deleteAdminStaff);
 
 admin_route.post('/createsubplans',adminController.createSubcriptionPlane)
 
+admin_route.get("/allsubplans",adminController. getAllSubscriptions)
+
+admin_route.put("/updatesubplans/:id", adminController.updateSubscription)
+
+admin_route.delete("/deletesubplans/:id", adminController.deleteSubscription)
+
+
 
 export default admin_route

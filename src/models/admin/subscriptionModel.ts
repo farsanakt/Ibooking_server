@@ -26,7 +26,7 @@ const subscriptionSchema = new Schema<ISubscription>(
     features: { type: [String], required: true },
     userType: { 
       type: String, 
-      enum: ["vendorside", "userside", "both"], 
+      enum: ["vendorside", "auditoriumside", "both"], 
       required: true 
     },
   },

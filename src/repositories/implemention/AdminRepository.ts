@@ -1,4 +1,5 @@
 import { AdminStaffModel, IAdminStaff } from "../../models/admin/adminStaffModel";
+import SubscriptionModel, { ISubscription } from "../../models/admin/subscriptionModel";
 import auditoriumUserModel, { IAuditoriumUser } from "../../models/auditorium/auditoriumUserModel";
 import bookingModel, { IBooking } from "../../models/auditorium/bookingModel";
 import venueModel, { IVenue } from "../../models/auditorium/venueModel";
@@ -105,6 +106,41 @@ export class AdminRepository{
     async deleteAdminStaff(staffid: string) {
       return await AdminStaffModel.findOneAndDelete({ staffid });
     }
+
+
+    //###################  Subscription ################
+
+
+  async createSubscription(data: Partial<ISubscription>): Promise<ISubscription> {
+    const subscription = new SubscriptionModel(data);
+    return await subscription.save();
+  }
+
+  
+  async findAll(): Promise<ISubscription[]> {
+    return await SubscriptionModel.find().sort({ createdAt: -1 });
+  }
+
+ 
+  async findById(id: string): Promise<ISubscription | null> {
+    return await SubscriptionModel.findById(id);
+  }
+
+  
+  async updateSubscription(
+    id: string,
+    data: Partial<ISubscription>
+  ): Promise<ISubscription | null> {
+    return await SubscriptionModel.findByIdAndUpdate(id, data, {
+      new: true, 
+      runValidators: true, 
+    });
+  }
+
+  
+  async deleteById(id: string): Promise<void> {
+    await SubscriptionModel.findByIdAndDelete(id);
+  }
 
 
 }

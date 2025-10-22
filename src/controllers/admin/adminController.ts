@@ -105,12 +105,12 @@ class AdminController{
 
  async acceptvoucher(req: Request, res: Response) {
 
-    console.log('gooope')
+   
 
    try {
     const id = req.params.id;
 
-    console.log(id,'poooereee')
+    
 
     const response = await adminService.acceptvoucher(id);
 
@@ -229,7 +229,7 @@ async allAuditoriumBookings(req:Request,res:Response){
 
 async addAdminStaff(req: Request, res: Response): Promise<void> {
     const data = req.body;
-    console.log("data staff", data);
+    
 
     try {
       const newStaff = await adminService.addAdminStaff(data);
@@ -270,7 +270,7 @@ async addAdminStaff(req: Request, res: Response): Promise<void> {
   async updateAdminStaff(req: Request, res: Response): Promise<void> {
     const id = req.params.id
     const updateData = req.body;
-    console.log("id:", id);
+    
 
     try {
       const updatedStaff = await adminService.updateAdminStaff(id, updateData);
@@ -292,7 +292,7 @@ async addAdminStaff(req: Request, res: Response): Promise<void> {
 
    async deleteAdminStaff(req: Request, res: Response): Promise<void> {
     const id = req.params.id;
-    console.log("Deleting staff with ID:", id);
+    
 
     try {
       const result = await adminService.deleteAdminStaff(id);
@@ -311,22 +311,62 @@ async addAdminStaff(req: Request, res: Response): Promise<void> {
     }
   }
 
-  async createSubcriptionPlane(req:Request,res:Response){
 
-    console.log('ivde ethittoo')
+  // #######################  SUBSCRIPTION #################
 
-    const data=req.body
 
-    console.log(data,'dataaaaaaa')
-
-    try {
-      
-    } catch (error) {
-      
-    }
-
+ async createSubcriptionPlane(req: Request, res: Response){
+  try {
+    const subscription = await adminService.createSubscription(req.body);
+    res.status(201).json({
+      success: true,
+      message: "Subscription plan created successfully",
+      data: subscription,
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
   }
+};
 
+
+ async  getAllSubscriptions(req: Request, res: Response){
+  try {
+    const subscriptions = await adminService.getAllSubscriptions();
+    res.status(200).json({ success: true, data: subscriptions });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
+ async  updateSubscription (req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    
+    const updated = await adminService.updateSubscription(id, req.body);
+    res.status(200).json({
+      success: true,
+      message: "Subscription plan updated successfully",
+      data: updated,
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
+ async  deleteSubscription (req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    await adminService.deleteSubscription(id);
+    res.status(200).json({
+      success: true,
+      message: "Subscription plan deleted successfully",
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 }
 
 
@@ -334,4 +374,4 @@ async addAdminStaff(req: Request, res: Response): Promise<void> {
 
 
 
-export default AdminController
+ export default AdminController
