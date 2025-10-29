@@ -178,6 +178,21 @@ export class AuditoriumRepositories{
 
     }
 
+     async updateFieldById(id: string, updates: Record<string, any>) {
+    try {
+      const updatedUser = await AuditoriumUser.findByIdAndUpdate(
+        id,
+        { $set: updates },
+        { new: true } // return updated document
+      );
+
+      return updatedUser;
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw error;
+    }
+  }
+
     async findEventsById(id:string):Promise<IBooking[]|null>{
 
         return await Booking.find({auditoriumId:id,status:'pending'})

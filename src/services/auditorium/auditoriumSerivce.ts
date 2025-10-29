@@ -292,6 +292,27 @@ constructor(){
 
      }
 
+  
+
+async updateFeildAudiUser(id: string, updates: Record<string, any>) {
+  try {
+    const user = await this.auditoriumRepositories.findAudiById(id);
+
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
+
+    const updatedUser = await this.auditoriumRepositories.updateFieldById(id, updates);
+
+    return { success: true, message: 'User updated successfully', data: updatedUser };
+
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: 'Update failed', error };
+  }
+}
+
+
 
     async addBrideGroomDetails(data: any) {
 

@@ -305,14 +305,15 @@ class AuditoriumController{
 
     }
 
-    async updateAudiUserEmail(req:Request,res:Response){
-
-      const {email}=req.body
+    async updateFeildAudiUser(req:Request,res:Response){
 
       const id=req.params.id
 
-      
-      const response=await auditoriumService.updateEmail(id,email)
+      const updates=req.body
+
+      try {
+
+        const response=await auditoriumService.updateFeildAudiUser(id,updates)
 
             
             if(response){
@@ -322,9 +323,31 @@ class AuditoriumController{
             return
 
           }
+        
+      } catch (error) {
+        
+      }
 
+    }
+
+    async updateAudiUserEmail(req:Request,res:Response){
+
+      const {email}=req.body
+
+      const id=req.params.id
 
       try {
+
+        const response=await auditoriumService.updateEmail(id,email)
+
+            
+            if(response){
+    
+            res.status(HttpStatus.CREATED).json(response)
+
+            return
+
+          }
         
       } catch (error) {
         
