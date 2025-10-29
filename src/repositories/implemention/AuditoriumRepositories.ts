@@ -172,6 +172,12 @@ export class AuditoriumRepositories{
         return audi
     }
 
+    async updateAudiUserEmail(id:string,email:string){
+
+        return await AuditoriumUser.findOneAndUpdate({_id:id},{$set:{email:email}},{new:true})
+
+    }
+
     async findEventsById(id:string):Promise<IBooking[]|null>{
 
         return await Booking.find({auditoriumId:id,status:'pending'})

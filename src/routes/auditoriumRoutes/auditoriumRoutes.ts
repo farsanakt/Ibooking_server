@@ -27,6 +27,8 @@ auditorium_route.get('/userDetails',auditoriumController.userDetails)
 
 auditorium_route.post('/verify-password/:id',auditoriumController.verifyPassword)
 
+auditorium_route.put('/updateemail/:id',auditoriumController.updateAudiUserEmail)
+
 auditorium_route.get('/auditoriumUserdetatils/:id',auditoriumController.findAuditoriumUser)
 
 auditorium_route.post("/bride-groom-details",uploadBrideGroom,auditoriumController.addBrideGroomDetails)

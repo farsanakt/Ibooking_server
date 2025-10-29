@@ -230,6 +230,8 @@ constructor(){
 
      async verifyPassword(id:string,password:string){
 
+      console.log('hiiileoope')
+
       try {
 
         const user=await this.auditoriumRepositories.findAudiById(id)
@@ -257,9 +259,41 @@ constructor(){
 
      }
 
-    async addBrideGroomDetails(data: any) {
 
-    
+
+     async updateEmail(id:string,email:string){
+
+      try {
+
+         const user=await this.auditoriumRepositories.findAudiById(id)
+
+        if(!user){
+
+          return {success:false,message:'user not found'}
+
+        }
+
+        const updateuser=await this.auditoriumRepositories.updateAudiUserEmail(id,email)
+
+        if(updateuser){
+
+
+          return {success:true,message:'email updated successfully'}
+
+        }else{
+
+          return {success:false,message:'something went wrong'}
+
+        }
+        
+      } catch (error) {
+        
+      }
+
+     }
+
+
+    async addBrideGroomDetails(data: any) {
 
     try {
       

@@ -304,6 +304,33 @@ class AuditoriumController{
         }
 
     }
+
+    async updateAudiUserEmail(req:Request,res:Response){
+
+      const {email}=req.body
+
+      const id=req.params.id
+
+      
+      const response=await auditoriumService.updateEmail(id,email)
+
+            
+            if(response){
+    
+            res.status(HttpStatus.CREATED).json(response)
+
+            return
+
+          }
+
+
+      try {
+        
+      } catch (error) {
+        
+      }
+
+    }
     
     async addBrideGroomDetails(req: Request, res: Response) {
     
