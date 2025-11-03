@@ -367,7 +367,44 @@ async addAdminStaff(req: Request, res: Response): Promise<void> {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+
+async adminLogin(req: Request, res: Response) {
+    try {
+      const data = req.body;
+
+      console.log('njn',data)
+
+      const response = await adminService.adminLogin(data);
+
+      if (!response?.success) {
+        res.status(HttpStatus.BAD_REQUEST).json(response);
+        return;
+      }
+
+      res.status(HttpStatus.OK).json({
+        success: true,
+        message: response.message,
+        accessToken: response.accessToken,
+        user: response.user,
+      });
+      return;
+
+    } catch (error) {
+      console.error("Admin login error:", error);
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: "Internal server error",
+      });
+      return;
+    }
+  }
+
 }
+
+
+
 
 
 

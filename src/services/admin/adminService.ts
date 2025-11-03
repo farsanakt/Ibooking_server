@@ -1,6 +1,16 @@
-import { IAdminStaff } from "../../models/admin/adminStaffModel";
+import * as bcrypt from "bcryptjs";
+
+import { AdminStaffModel, IAdminStaff } from "../../models/admin/adminStaffModel";
 import { ISubscription } from "../../models/admin/subscriptionModel";
 import { AdminRepository } from "../../repositories/implemention/AdminRepository";
+import { generateAccessToken, generateRefreshToken } from "../../utils/jwt";
+
+
+const DEFAULT_ADMIN = {
+  email: process.env.DEFAULT_ADMIN_EMAIL ,
+  password: process.env.DEFAULT_ADMIN_PASSWORD ,
+  role: "admin",
+};
 
 class AdminService{
 
@@ -298,6 +308,73 @@ async updateAdminStaff(id: string, data: Partial<IAdminStaff>) {
     }
     await this.adminRepositories.deleteById(id);
   }
+
+
+  async adminLogin(data: any) {
+    try {
+      const { loginMode, email, password, staffid } = data;
+
+    
+      if (loginMode === "admin") {
+        if (email === DEFAULT_ADMIN.email && password === DEFAULT_ADMIN.password) {
+          const payload = {
+            id: "default_admin",
+            role: "admin",
+            email: DEFAULT_ADMIN.email,
+          };
+
+          const accessToken = generateAccessToken(payload);
+          const refreshToken = generateRefreshToken(payload);
+
+          return {
+            success: true,
+            message: "Admin logged in successfully!",
+            accessToken,
+            refreshToken,
+            user: payload,
+          };
+        } else {
+          return { success: false, message: "Invalid admin credentials" };
+        }
+      }
+
+      const existingStaff = await AdminStaffModel.findOne({ staffid, email });
+
+      if (!existingStaff) {
+        return { success: false, message: "Staff not found" };
+      }
+
+      if (password !==existingStaff.password) {
+        return { success: false, message: "Incorrect password" };
+      }
+
+      if (!existingStaff.isActive) {
+        return { success: false, message: "Your account is inactive. Please contact admin." };
+      }
+
+      const payload = {
+        id: existingStaff._id,
+        staffid: existingStaff.staffid,
+        role: existingStaff.role,
+        email: existingStaff.email,
+      };
+
+      const accessToken = generateAccessToken(payload);
+      const refreshToken = generateRefreshToken(payload);
+
+      return {
+        success: true,
+        message: "Staff logged in successfully!",
+        accessToken,
+        refreshToken,
+        user: payload,
+      };
+    } catch (error) {
+      console.error("Error in adminService.adminLogin:", error);
+      return { success: false, message: "Internal server error" };
+    }
+  }
+
 
 
 }

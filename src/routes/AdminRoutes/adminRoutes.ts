@@ -45,5 +45,10 @@ admin_route.put("/updatesubplans/:id", adminController.updateSubscription)
 admin_route.delete("/deletesubplans/:id", adminController.deleteSubscription)
 
 
+// ##################### ADMIN LOGIN######################
+admin_route.post('/adminstafflogin', adminController.adminLogin);
+
+
+
 
 export default admin_route
