@@ -1,3 +1,4 @@
+import { AdminItem, IAdminItem } from "../../models/admin/adminItem";
 import { AdminStaffModel, IAdminStaff } from "../../models/admin/adminStaffModel";
 import SubscriptionModel, { ISubscription } from "../../models/admin/subscriptionModel";
 import auditoriumUserModel, { IAuditoriumUser } from "../../models/auditorium/auditoriumUserModel";
@@ -140,6 +141,69 @@ export class AdminRepository{
   
   async deleteById(id: string): Promise<void> {
     await SubscriptionModel.findByIdAndDelete(id);
+  }
+
+
+  //################## ITEMS ########################
+   async getAdminItem(): Promise<IAdminItem | null> {
+    return await AdminItem.findOne();
+  }
+
+  async createAdminItem(): Promise<IAdminItem> {
+    const newItem = new AdminItem();
+    return await newItem.save();
+  }
+
+  async addItem(type: string, name: string): Promise<IAdminItem> {
+    let adminItem = await this.getAdminItem();
+
+    
+    if (!adminItem) {
+      adminItem = await this.createAdminItem();
+    }
+
+    // @ts-ignore - dynamic key access
+    const itemsArray = adminItem[type];
+    if (!itemsArray) throw new Error("Invalid type");
+
+   
+    const alreadyExists = itemsArray.includes(name);
+    if (alreadyExists) {
+      return adminItem;
+    }
+    itemsArray.push(name);
+    await adminItem.save();
+
+    return adminItem;
+  }
+
+    async getAllItems(): Promise<IAdminItem | null> {
+    const adminItem = await this.getAdminItem();
+    return adminItem;
+  }
+
+   async updateItem(type: string, oldName: string, newName: string): Promise<IAdminItem> {
+    let adminItem = await this.getAdminItem();
+    if (!adminItem) throw new Error("Admin item document not found");
+
+    // @ts-ignore
+    const itemsArray = adminItem[type];
+    if (!itemsArray) throw new Error("Invalid type");
+
+    const index = itemsArray.indexOf(oldName);
+    if (index === -1) throw new Error(`${oldName} not found in ${type}`);
+
+   
+    if (itemsArray.includes(newName)) throw new Error(`${newName} already exists in ${type}`);
+
+    itemsArray[index] = newName;
+    await adminItem.save();
+
+    return adminItem;
+  }
+
+   async saveAdminItem(adminItem: IAdminItem): Promise<IAdminItem> {
+    return await adminItem.save();
   }
 
 

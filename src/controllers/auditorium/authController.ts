@@ -37,7 +37,9 @@ async login(req: Request, res: Response) {
   try {
     const data = req.body;
 
+    
     const response = await authService.login(data);
+    console.log('njn ivde und',response)
 
     if (!response?.success) {
 

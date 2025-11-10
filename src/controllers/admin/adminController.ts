@@ -401,6 +401,99 @@ async adminLogin(req: Request, res: Response) {
     }
   }
 
+
+
+async addItems(req: Request, res: Response) {
+    try {
+      const { type, data } = req.body
+
+      console.log("Received:", type, data);
+
+      const result = await adminService.addItem(type, data);
+
+      res.status(200).json({
+        success: true,
+        message: `${data} added successfully to ${type}`,
+        data: result,
+      });
+    } catch (error: any) {
+      res.status(400).json({
+        success: false,
+        message: error.message || "Something went wrong",
+      });
+    }
+  }
+
+
+  async getAllAdminItems(req: Request, res: Response) {
+    try {
+      const result = await adminService.getAllItems();
+
+      res.status(200).json({
+        success: true,
+        message: "Admin items fetched successfully",
+        items: result, 
+      });
+    } catch (error: any) {
+      res.status(400).json({
+        success: false,
+        message: error.message || "Failed to fetch admin items",
+      });
+    }
+  }
+
+   async updateAdminItem(req: Request, res: Response) {
+    try {
+      const { type } = req.params;
+      const { oldName, newName } = req.body;
+
+      console.log(type,oldName,newName,'oooook')
+
+      const result = await adminService.updateItem(type, oldName, newName);
+
+      res.status(200).json({
+        success: true,
+        message: `${oldName} updated to ${newName} in ${type}`,
+        data: result,
+      });
+    } catch (error: any) {
+      res.status(400).json({
+        success: false,
+        message: error.message || "Failed to update item",
+      });
+    }
+  }
+
+  async deleteItem(req: Request, res: Response) {
+    try {
+      const { type, itemName } = req.body;
+
+      if (!type || !itemName) {
+         res.status(400).json({
+          success: false,
+          message: "Type and itemName are required",
+        });
+        return
+      }
+
+      const updated = await adminService.deleteItem(type, itemName);
+
+       res.status(200).json({
+        success: true,
+        message: `${itemName} deleted successfully from ${type}`,
+        data: updated,
+      });
+      return
+    } catch (error: any) {
+      console.error("Error deleting item:", error);
+       res.status(500).json({
+        success: false,
+        message: error.message || "Internal Server Error",
+      });
+      return
+    }
+  }
+
 }
 
 

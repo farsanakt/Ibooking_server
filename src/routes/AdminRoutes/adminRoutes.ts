@@ -50,5 +50,16 @@ admin_route.post('/adminstafflogin', adminController.adminLogin);
 
 
 
+// ##################### ADMIN ITEMS######################
+
+admin_route.post('/addadminitem',adminController.addItems)
+
+admin_route.get("/getalladminitems", adminController.getAllAdminItems);
+
+admin_route.put("/updateadminitem/:type", adminController.updateAdminItem);
+
+admin_route.delete("/deleteitem", adminController.deleteItem);
+
+
 
 export default admin_route

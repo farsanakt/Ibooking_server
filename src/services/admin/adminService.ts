@@ -376,6 +376,59 @@ async updateAdminStaff(id: string, data: Partial<IAdminStaff>) {
   }
 
 
+    async addItem(type: string, name: string) {
+    const validTypes = ["events", "locations", "amenities"];
+    if (!validTypes.includes(type)) {
+      throw new Error("Invalid item type");
+    }
+
+    const result = await this.adminRepositories.addItem(type, name);
+    return result;
+  }
+
+
+    async getAllItems() {
+    let data = await this.adminRepositories.getAllItems();
+    if (!data) {
+      
+      data = await this.adminRepositories.createAdminItem();
+    }
+    return data;
+  }
+
+  async updateItem(type: string, oldName: string, newName: string) {
+    const validTypes = ["events", "locations", "amenities"];
+    if (!validTypes.includes(type)) throw new Error("Invalid item type");
+    return await this.adminRepositories.updateItem(type, oldName, newName);
+  }
+
+  async deleteItem(type: string, itemName: string) {
+    const adminItem = await this.adminRepositories.getAdminItem();
+
+    // Ensure valid type
+    if (!Array.isArray(adminItem[type as keyof typeof adminItem])) {
+      throw new Error(`Invalid type: ${type}`);
+    }
+
+    const typeArray = adminItem[type as keyof typeof adminItem] as string[];
+
+    // Check if item exists
+    const itemIndex = typeArray.findIndex(
+      (item) => item.toLowerCase() === itemName.toLowerCase()
+    );
+
+    if (itemIndex === -1) {
+      throw new Error(`${itemName} not found in ${type}`);
+    }
+
+    // Remove item from array
+    typeArray.splice(itemIndex, 1);
+
+    const updatedItem = await this.adminRepositories.saveAdminItem(adminItem);
+    return updatedItem;
+  }
+
+
 
 }
 
