@@ -10,6 +10,8 @@ class AuthController{
   async signup(req: Request, res: Response) {
   try {
     const formData = req.body;
+
+    console.log(formData,'oppppprrr')
     
     const response = await authService.userSignup(formData);
 

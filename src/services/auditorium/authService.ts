@@ -81,7 +81,7 @@ async userSignup(formData: any) {
           const newOtp = generateOtp();
           await this.otpRepositories.create({ email, otp: newOtp } as unknown as IOtp);
           await mailService.sendOtpEmail(email, newOtp);
-          return { success: false, message: "No OTP found. A new OTP has been sent to your email." };
+          return { success: true, message: "No OTP found. A new OTP has been sent to your email." };
         }
       } else {
         return { success: false, message: "email already registered" };
