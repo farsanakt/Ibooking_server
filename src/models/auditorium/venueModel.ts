@@ -1,6 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-// TimeSlot Interface
 export interface ITimeSlot {
   id: string;
   label: string;
@@ -9,13 +8,13 @@ export interface ITimeSlot {
   status:string
 }
 
-// Tariff Interface
+
 export interface ITariff {
   wedding: string;
   reception: string;
 }
 
-// Venue Interface
+
 export interface IVenue extends Document {
   name: string;
   address: string;
@@ -24,13 +23,15 @@ export interface IVenue extends Document {
   altPhone?: string;
   email: string;
   pincode: string;
-  cities: string[];
+  locations: string[];
+  events:string[];
   acType: 'AC' | 'Non-AC' | 'Both';
   seatingCapacity: string;
   diningCapacity: string;
   parkingSlots: string;
   changingRooms: string;
   amenities: string[];
+  termsAndConditions:string[];
   foodPolicy: string;
   decorPolicy: string;
   tariff: ITariff;
@@ -57,7 +58,7 @@ const timeSlotSchema: Schema = new Schema<ITimeSlot>(
     status: { 
       type: String, 
       required: true, 
-      enum: ['pending', 'booked', 'unavailable'], // Optional: restrict to specific values
+      enum: ['pending', 'booked', 'unavailable'],
       default: 'pending' 
     }
   },
@@ -74,7 +75,8 @@ const venueSchema: Schema<IVenue> = new Schema(
     altPhone: { type: String },
     email: { type: String, required: true },
     pincode: { type: String, required: true },
-    cities: { type: [String], required: true },
+    locations: { type: [String], required: true },
+    events: { type: [String], required: true },
     acType: { type: String, enum: ['AC', 'Non-AC', 'Both'], required: true },
     seatingCapacity: { type: String, required: true },
     guestroom:{ type: String, required: true },
@@ -82,6 +84,7 @@ const venueSchema: Schema<IVenue> = new Schema(
     parkingSlots: { type: String, required: true },
     changingRooms: { type: String, required: true },
     amenities: { type: [String], default: [] },
+    termsAndConditions: { type: [String], default: [] },
     foodPolicy: { type: String, required: true },
     decorPolicy: { type: String, required: true },
      youtubeLink: { type: String },

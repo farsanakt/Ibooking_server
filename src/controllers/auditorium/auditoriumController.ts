@@ -19,8 +19,8 @@ class AuditoriumController{
 
             const data=req.body
 
-             if (typeof data.cities === "string") {
-                data.cities = JSON.parse(data.cities);
+             if (typeof data.locations === "string") {
+                data.locations = JSON.parse(data.locations);
                 }
                 if (typeof data.timeSlots === "string") {
                 data.timeSlots = JSON.parse(data.timeSlots);
@@ -31,6 +31,10 @@ class AuditoriumController{
                 if (typeof data.tariff === "string") {
                 data.tariff = JSON.parse(data.tariff);
                 }
+
+                // if (typeof data.termsAndConditions === "string") {
+                // data.termsAndConditions = JSON.parse(data.termsAndConditions);
+                // }
 
             const files = req.files as Express.Multer.File[]
 
@@ -87,11 +91,12 @@ class AuditoriumController{
 
     let data = req.body
 
-    if (typeof data.cities === "string") data.cities = JSON.parse(data.cities);
-    if (typeof data.timeSlots === "string") data.timeSlots = JSON.parse(data.timeSlots);
-    if (typeof data.amenities === "string") data.amenities = JSON.parse(data.amenities);
-    if (typeof data.tariff === "string") data.tariff = JSON.parse(data.tariff);
-    if (typeof data.events === "string") data.events = JSON.parse(data.events);
+    
+if (data.locations && typeof data.locations === "string") data.locations = JSON.parse(data.locations);
+if (data.timeSlots && typeof data.timeSlots === "string") data.timeSlots = JSON.parse(data.timeSlots);
+if (data.amenities && typeof data.amenities === "string") data.amenities = JSON.parse(data.amenities);
+if (data.tariff && typeof data.tariff === "string") data.tariff = JSON.parse(data.tariff);
+if (data.events && typeof data.events === "string") data.events = JSON.parse(data.events);
 
     const files = req.files as Express.Multer.File[];
     const newImageUrls = files.map((file) => (file as any).location);
@@ -261,6 +266,8 @@ class AuditoriumController{
 
         try {
             const id=req.params.id
+
+            console.log('limme')
 
             const response=await auditoriumService.findAuditoriumUser(id)
 

@@ -18,7 +18,7 @@ export class AuthService{
 
       private auditoriumRepositories: AuditoriumRepositories;
 
-       private otpRepositories: OtpRepository;
+      private otpRepositories: OtpRepository;
 
   
 
@@ -276,6 +276,8 @@ async forgetPass(forgetPass:{email:string}){
     }
 
   }
+
+
 
 
 }

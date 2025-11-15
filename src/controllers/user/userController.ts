@@ -71,7 +71,11 @@ class UserController{
         
         const id=req.params.id
 
+        console.log(id,'lopee')
+
         const response=await userService.findVenueDetails(id)
+
+        console.log(response)
 
         if (response) {
 

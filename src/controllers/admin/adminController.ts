@@ -404,6 +404,7 @@ async adminLogin(req: Request, res: Response) {
 
 
 async addItems(req: Request, res: Response) {
+  console.log('njn ubde')
     try {
       const { type, data } = req.body
 

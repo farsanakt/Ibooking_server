@@ -11,59 +11,67 @@ constructor(){
 
 }
 
-      async  addVenue(data: any) {
+     async addVenue(data: any) {
+  try {
 
-        try {
+    console.log('this is the new venue data', data);
 
+    
+    const existingVenue = await this.auditoriumRepositories.findVenueByName(data.name);
+    if (existingVenue) {
+      return { success: false, message: 'This venue already exists' };
+    }
 
-          console.log('this is the new venue data',data)
-          const existingVenue = await this.auditoriumRepositories.findVenueByName(data.name);
+    
+    const auditorium = await this.auditoriumRepositories.findAudiById(data.audiUserId);
 
-          // const existingMakeUp=await this.auditoriumRepositories.findMakeUpByName(data.name)
+    
+    let venueVerified = false;
+    if (auditorium && auditorium.isVerified === true) {
+      venueVerified = true;
+    }
 
-          if (existingVenue) {
+   
+    const savedVenue = await this.auditoriumRepositories.createVenue({
+      name: data.name,
+      address: data.address,
+      audiUserId: data.audiUserId,
+      phone: data.phone,
+      altPhone: data.altPhone,
+      email: data.email,
+      pincode: data.pincode,
+      locations: data.locations,
+      acType: data.acType,
+      seatingCapacity: data.seatingCapacity,
+      diningCapacity: data.diningCapacity,
+      parkingSlots: data.parkingSlots,
+      changingRooms: data.changingRooms,
+      amenities: data.amenities,
+      foodPolicy: data.foodPolicy,
+      decorPolicy: data.decorPolicy,
+      tariff: data.tariff,
+      termsAndConditions:data.termsAndConditions,
+      cancellationPolicy: data.cancellationPolicy,
+      stageSize: data.stageSize,
+      totalamount: data.totalamount,
+      advAmnt: data.advAmnt,
+      images: data.images,
+      timeSlots: data.timeSlots,
+      guestroom: data.guestRooms,
+      youtubeLink: data.youtubeLink,
+      events:data.events,
+      isVerified: venueVerified,   
+    });
 
-          return {success:false,message:'This is venue is already existed'}
+    return { success: true, message: 'Venue added successfully!' };
 
-          }
+  } catch (error) {
 
-          const savedVenue = await this.auditoriumRepositories.createVenue({
-            name: data.name,
-            address: data.address,
-            audiUserId:data.audiUserId,
-            phone: data.phone,
-            altPhone: data.altPhone,
-            email: data.email,
-            pincode: data.pincode,
-            cities: data.cities,
-            acType: data.acType,
-            seatingCapacity: data.seatingCapacity,
-            diningCapacity: data.diningCapacity,
-            parkingSlots: data.parkingSlots,
-            changingRooms: data.changingRooms,
-            amenities: data.amenities,
-            foodPolicy: data.foodPolicy,
-            decorPolicy: data.decorPolicy,
-            tariff: data.tariff,
-            cancellationPolicy: data.cancellationPolicy,
-            stageSize: data.stageSize,
-            totalamount:data.totalamount,
-            advAmnt:data.advAmnt,
-            images: data.images,
-            timeSlots: data.timeSlots,
-            guestroom:data.guestRooms,
-            youtubeLink:data.youtubeLink,
-          
-          })
-            
-          return {success:true,message:'venue added succefully..!'}
+    throw new Error('Service Error: ' + (error instanceof Error ? error.message : 'Unknown error'));
 
-        } catch (error) {
+  }
+}
 
-          throw new Error('Service Error: ' + (error instanceof Error ? error.message : 'Unknown error'))
-
-        }
-      }
 
       async allVenues(audiUserId:string){
 
@@ -96,7 +104,7 @@ constructor(){
             altPhone: data.altPhone,
             email: data.email,
             pincode: data.pincode,
-            cities: data.cities,
+            locations: data.locations,
             acType: data.acType,
             seatingCapacity: data.seatingCapacity,
             diningCapacity: data.diningCapacity,
@@ -106,6 +114,8 @@ constructor(){
             foodPolicy: data.foodPolicy,
             decorPolicy: data.decorPolicy,
             tariff: data.tariff,
+            events:data.events,
+            termsAndConditions:data.termsAndConditions,
             cancellationPolicy: data.cancellationPolicy,
             stageSize: data.stageSize,
             totalamount: data.totalamount,

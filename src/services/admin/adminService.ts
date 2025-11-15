@@ -377,7 +377,7 @@ async updateAdminStaff(id: string, data: Partial<IAdminStaff>) {
 
 
     async addItem(type: string, name: string) {
-    const validTypes = ["events", "locations", "amenities"];
+    const validTypes = ["events", "locations", "amenities","vendorTypes"];
     if (!validTypes.includes(type)) {
       throw new Error("Invalid item type");
     }
@@ -397,7 +397,7 @@ async updateAdminStaff(id: string, data: Partial<IAdminStaff>) {
   }
 
   async updateItem(type: string, oldName: string, newName: string) {
-    const validTypes = ["events", "locations", "amenities"];
+    const validTypes = ["events", "locations", "amenities","vendorTypes"];
     if (!validTypes.includes(type)) throw new Error("Invalid item type");
     return await this.adminRepositories.updateItem(type, oldName, newName);
   }
