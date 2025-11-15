@@ -19,6 +19,15 @@ class AuditoriumController{
 
             const data=req.body
 
+            if (typeof data.events === "string") {
+  data.events = JSON.parse(data.events);
+}
+
+if (Array.isArray(data.events) && typeof data.events[0] === "string" && data.events.length === 1) {
+
+  data.events = JSON.parse(data.events[0]);
+}
+
              if (typeof data.locations === "string") {
                 data.locations = JSON.parse(data.locations);
                 }

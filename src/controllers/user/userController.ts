@@ -75,7 +75,7 @@ class UserController{
 
         const response=await userService.findVenueDetails(id)
 
-        console.log(response)
+        console.log(response,'opppppp')
 
         if (response) {
 
