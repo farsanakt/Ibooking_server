@@ -1,4 +1,3 @@
-
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IStaff extends Document {
@@ -7,7 +6,8 @@ export interface IStaff extends Document {
   role: "Admin" | "Staff";
   password: string;
   status: "active" | "inactive";
-  audiUserId:string;
+  audiUserId: string; 
+  staffId: string;        
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,10 +15,17 @@ export interface IStaff extends Document {
 const staffSchema: Schema = new Schema<IStaff>(
   {
     name: { type: String, required: true, trim: true },
-    audiUserId:{ type: String, required: true},
+
+    audiUserId: { type: String, required: true }, 
+
+    staffId: { type: String, required: true, unique: true },
+
     email: { type: String, required: true, unique: true, lowercase: true },
+
     role: { type: String, enum: ["Admin", "Staff"], default: "Staff" },
+
     password: { type: String, required: true },
+
     status: { type: String, enum: ["active", "inactive"], default: "active" },
   },
   { timestamps: true }
