@@ -1,4 +1,7 @@
+
+import bcrypt from "bcryptjs";
 import { IOtp } from "../../models/auditorium/otpModel";
+import { StaffModel } from "../../models/auditorium/staffModel";
 import { AuditoriumRepositories } from "../../repositories/implemention/AuditoriumRepositories"
 import { OtpRepository } from "../../repositories/implemention/OtpRepositories";
 import { generateAccessToken, generateRefreshToken } from "../../utils/jwt";
@@ -127,35 +130,81 @@ async userSignup(formData: any) {
 
 
 
-   async login(data: any) {
+async login(data: any) {
   try {
+    const { email, password, loginMode, staffid } = data;
+
+  
+    if (loginMode === "staff") {
+
+      
+      const staff = await StaffModel.findOne({ 
+        email: email, 
+        staffId: staffid 
+      });
+
+      if (!staff) {
+        return { success: false, message: "Staff user not found" };
+      }
+
     
-    const existingUser = await this.auditoriumRepositories.findUserByEmail(data.email);
+      const isMatch = await bcrypt.compare(password, staff.password);
 
-    if (!existingUser) {
+      if (!isMatch) {
+        return { success: false, message: "Incorrect password" };
+      }
 
-      return { success: false, message: 'User not found' }
+      
+      const payload = {
+        id: staff.audiUserId,
+        role: staff.role,
+        staffId: staff.staffId,
+        staffid: staff._id
+      };
 
+      const accessToken = generateAccessToken(payload);
+      const refreshToken = generateRefreshToken(payload);
+
+      // 4. Return staff login data
+      return {
+        success: true,
+        message: "Staff login successful",
+        accessToken,
+        refreshToken,
+        user: {
+          id: staff._id,
+          role: staff.role,
+          email: staff.email,
+          staffId: staff.staffId,
+          audiUserId: staff.audiUserId,
+        },
+      };
     }
 
-    if (data.password !== existingUser.password) {
+    // ======================================================
+    //  NORMAL USER LOGIN (AUDITORIUM ADMIN)
+    // ======================================================
+    const existingUser = await this.auditoriumRepositories.findUserByEmail(email);
 
-      return { success: false, message: 'Incorrect password' }
+    if (!existingUser) {
+      return { success: false, message: "User not found" };
+    }
 
+    if (password !== existingUser.password) {
+      return { success: false, message: "Incorrect password" };
     }
 
     const payload = {
       id: existingUser._id,
-      role: existingUser.role,
+      role: existingUser.role
     };
 
-    
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
     return {
       success: true,
-      message: 'Logged in successfully!',
+      message: "Logged in successfully!",
       accessToken,
       refreshToken,
       user: {
@@ -166,10 +215,11 @@ async userSignup(formData: any) {
     };
 
   } catch (error) {
-    console.log('Error in authService (auditorium side):', error);
-    return { success: false, message: 'Internal server error' };
+    console.log("Error in authService (auditorium side):", error);
+    return { success: false, message: "Internal server error" };
   }
 }
+
 
 
 async forgetPass(forgetPass:{email:string}){
