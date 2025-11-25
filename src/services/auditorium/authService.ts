@@ -172,11 +172,11 @@ async login(data: any) {
         accessToken,
         refreshToken,
         user: {
-          id: staff._id,
+           id: staff.audiUserId,
           role: staff.role,
           email: staff.email,
           staffId: staff.staffId,
-          audiUserId: staff.audiUserId,
+          staffid: staff._id
         },
       };
     }

@@ -40,11 +40,11 @@ export class StaffService {
     return this.staffRepo.createStaff(data);
   }
 
-  async getAllStaff(){
+  async getAllStaff(id:string){
 
     try {
 
-        return await this.staffRepo.findAllStaff()
+        return await this.staffRepo.findAllStaff(id)
         
     } catch (error) {
         

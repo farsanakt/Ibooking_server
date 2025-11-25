@@ -449,7 +449,9 @@ if (data.events && typeof data.events === "string") data.events = JSON.parse(dat
 
     try {
 
-      const response=await staffService.getAllStaff()
+      const id=req.params.id
+
+      const response=await staffService.getAllStaff(id)
 
       if(response){
 

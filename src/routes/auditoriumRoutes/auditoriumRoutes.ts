@@ -14,7 +14,6 @@ auditorium_route.get('/allvenues',auditoriumController.allVEnues)
 
 auditorium_route.put('/updatevenues/:id', upload.array('images', 4), auditoriumController.updateVenue)
 
-
 auditorium_route.delete('/deletevenue/:id',auditoriumController.deleteVenue)
 
 auditorium_route.get('/upcomigevents/:id',auditoriumController.getUpcomingEvents)
@@ -39,7 +38,7 @@ auditorium_route.post("/bride-groom-details",uploadBrideGroom,auditoriumControll
 
 auditorium_route.post('/addstaff',auditoriumController.addStaff)
 
-auditorium_route.get('/allstaff',auditoriumController.allStaff)
+auditorium_route.get('/allstaff/:id',auditoriumController.allStaff)
 
 auditorium_route.put('/updatestaff/:staffid',auditoriumController.updateStaff)
 

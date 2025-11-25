@@ -129,6 +129,7 @@ async createBookings(data: any) {
       auditoriumId: venue?.audiUserId,
       paymentStatus: 'pending',
       eventType: data.eventType,
+      userReferenceId:data.userReferenceId,
       // voucherCode: data.voucherCode || null,
     });
 

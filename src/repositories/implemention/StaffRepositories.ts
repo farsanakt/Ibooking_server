@@ -11,9 +11,9 @@ export class StaffRepository {
     return await StaffModel.findOne({ email });
   }
 
-  async findAllStaff():Promise<IStaff[]|null>{
+  async findAllStaff(id:string):Promise<IStaff[]|null>{
     
-    return await StaffModel.find()
+    return await StaffModel.find({audiUserId:id})
 
   }
 
