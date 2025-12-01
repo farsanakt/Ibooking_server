@@ -31,6 +31,6 @@ const BookingSchema: Schema = new Schema({
   balanceAmount: { type: String, required: true },
   address:{type:String,required:true},
   eventType:{type:String},
-  userReferenceId:{type:String,required:true}
+  userReferenceId:{type:String}
 });
 export default mongoose.model<IBooking>('Booking',BookingSchema)
