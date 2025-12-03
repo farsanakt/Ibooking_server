@@ -206,6 +206,29 @@ async allvendorusers(req:Request,res:Response){
 
 }
 
+async allEnquires(req:Request,res:Response){
+  console.log('njn ivde und')
+
+    try {
+
+        const response=await adminService.allEnquires()
+
+        console.log(response,'leeeeeeee')
+
+        if(response){
+
+            res.status(HttpStatus.CREATED).json(response)
+
+            return
+
+        }
+        
+    } catch (error) {
+        
+    }
+
+}
+
 async allAuditoriumBookings(req:Request,res:Response){
 
     try {

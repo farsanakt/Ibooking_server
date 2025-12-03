@@ -21,6 +21,8 @@ admin_route.get('/allusers',adminController.allUsers)
 
 admin_route.get('/allvendorusers',adminController.allvendorusers)
 
+admin_route.get('/allenquires',adminController.allEnquires)
+
 admin_route.get('/allauditoriumbokkings',adminController.allAuditoriumBookings)
 
 

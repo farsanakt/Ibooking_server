@@ -5,6 +5,7 @@ import auditoriumUserModel, { IAuditoriumUser } from "../../models/auditorium/au
 import bookingModel, { IBooking } from "../../models/auditorium/bookingModel";
 import venueModel, { IVenue } from "../../models/auditorium/venueModel";
 import userModel, { IUser } from "../../models/user/userModel";
+import Enquiry, { IEnquiry } from "../../models/vendor/vendorEnquiry";
 import vendorUser, { IVendorUser } from "../../models/vendor/vendorUser";
 import { IVoucher, VoucherModel } from "../../models/vendor/voucherModel";
 
@@ -28,6 +29,13 @@ export class AdminRepository{
         return await vendorUser.find()
 
     }
+
+    async allEnquires():Promise<IEnquiry[]|null>{
+
+        return await Enquiry.find()
+
+    }
+
 
     async findAllAuditoriumBookings():Promise<IBooking[]|null>{
 

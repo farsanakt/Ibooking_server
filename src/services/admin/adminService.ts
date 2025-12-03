@@ -187,6 +187,12 @@ class AdminService{
 
  }
 
+ async allEnquires(){
+
+  return await this.adminRepositories.allEnquires()
+
+ }
+
   async allAuditoriumBookings(){
 
   return await this.adminRepositories.findAllAuditoriumBookings()
