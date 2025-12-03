@@ -200,6 +200,7 @@ class AdminService{
 
  
     const existing = await this.adminRepositories.findByEmail(data.email);
+    console.log(existing,'eixt')
     if (existing) {
       return { success: false, message: "Email already registered" };
     }
@@ -215,7 +216,8 @@ class AdminService{
 
    
 
-    const createdStaff = await this.adminRepositories.createAdminStaff(newStaff);
+    const createdStaff = await this.adminRepositories.createAdminStaff(newStaff)
+    console.log(createdStaff,'jope')
     return { success: true, message: "Admin staff added successfully", data: createdStaff };
   }
 
@@ -319,7 +321,7 @@ async updateAdminStaff(id: string, data: Partial<IAdminStaff>) {
         if (email === DEFAULT_ADMIN.email && password === DEFAULT_ADMIN.password) {
           const payload = {
             id: "default_admin",
-            role: "admin",
+            role: "superadmin",
             email: DEFAULT_ADMIN.email,
           };
 

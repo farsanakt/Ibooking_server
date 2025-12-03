@@ -229,10 +229,13 @@ async allAuditoriumBookings(req:Request,res:Response){
 
 async addAdminStaff(req: Request, res: Response): Promise<void> {
     const data = req.body;
-    
-
+ 
+    console.log(data,'jop')
+ 
     try {
       const newStaff = await adminService.addAdminStaff(data);
+
+      console.log(newStaff,'kopee')
 
       if (!newStaff.success) {
         res.status(HttpStatus.BAD_REQUEST).json(newStaff);
