@@ -3,6 +3,7 @@ import { AdminStaffModel, IAdminStaff } from "../../models/admin/adminStaffModel
 import SubscriptionModel, { ISubscription } from "../../models/admin/subscriptionModel";
 import auditoriumUserModel, { IAuditoriumUser } from "../../models/auditorium/auditoriumUserModel";
 import bookingModel, { IBooking } from "../../models/auditorium/bookingModel";
+import { StaffModel } from "../../models/auditorium/staffModel";
 import venueModel, { IVenue } from "../../models/auditorium/venueModel";
 import userModel, { IUser } from "../../models/user/userModel";
 import Enquiry, { IEnquiry } from "../../models/vendor/vendorEnquiry";
@@ -49,17 +50,28 @@ export class AdminRepository{
 
     }
 
-    async updateAuditorium(id:string):Promise<IAuditoriumUser|null>{
+   async updateAuditorium(id: string, updateData: any) {
+  return await auditoriumUserModel.findByIdAndUpdate(
+    id,
+    { $set: updateData },
+    { new: true }
+  );
+}
 
-        return await auditoriumUserModel.findByIdAndUpdate({_id:id},{isVerified:true},{new:true})
 
-    }
+  async findStaffByUserId(userId: string) {
+  return await AdminStaffModel.findOne({_id: userId });
+}
 
-    async updateVendor(id:string):Promise<IVendorUser|null>{
 
-      return await vendorUser.findByIdAndUpdate({_id:id},{isVerified:true},{new:true})
+   async updateVendor(id: string, updateData: any) {
+  return await vendorUser.findByIdAndUpdate(
+    id,
+    { $set: updateData },
+    { new: true }
+  );
+}
 
-    }
 
      async updateVoucher(id:string):Promise<IVoucher|null>{
 

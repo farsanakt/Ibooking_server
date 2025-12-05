@@ -17,6 +17,7 @@ export interface IAuditoriumUser extends Document {
   phone?: string;
   events?: string[];
   locations?: string[];
+  acceptedBy:string
 }
 
 const userSchema: Schema = new Schema(
@@ -43,6 +44,10 @@ const userSchema: Schema = new Schema(
      isOtp: {
       type: Boolean,
       default: false
+    },
+    acceptedBy:{
+      type:String,
+      default:''
     },
 
     isBlocked: {

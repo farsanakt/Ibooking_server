@@ -11,6 +11,8 @@ admin_route.get('/allaudilist',adminController.allAuditoriumList)
 
 admin_route.post('/acceptauditorium/:id',adminController.acceptAuditorium)
 
+admin_route.post('/rejectauditorium/:id',adminController.rejectauditorium)
+
 admin_route.post('/acceptvendor/:id',adminController.acceptVendor)
 
 admin_route.post('/acceptvoucher/:id',adminController.acceptvoucher)

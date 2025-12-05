@@ -7,6 +7,8 @@ export interface IAdminStaff extends Document {
   password: string;
   role: string;
   isActive: boolean;
+  isLogged: boolean;
+  lastLogin: Date;
 }
 
 const adminStaffSchema = new Schema<IAdminStaff>(
@@ -15,8 +17,14 @@ const adminStaffSchema = new Schema<IAdminStaff>(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: { type: String, required: true, enum: ["admin", "staff", "superadmin","vendormanager","venuemanager"] },
-    isActive: { type: Boolean, default: true },
+    role: {
+      type: String,
+      required: true,
+      enum: ["admin", "staff", "superadmin", "vendormanager", "venuemanager"],
+    },
+    isActive: { type: Boolean, default: false },
+    isLogged: { type: Boolean, default: false },
+    lastLogin: { type: Date },
   },
   { timestamps: true }
 );

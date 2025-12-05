@@ -48,7 +48,47 @@ class AdminController{
    try {
     const id = req.params.id;
 
-    const response = await adminService.acceptAuditorium(id);
+    const {userId}=req.body
+    console.log(userId,'koooop')
+
+    const response = await adminService.acceptAuditorium(id,userId);
+
+    console.log(response)
+
+    if (response.status) {
+
+       res.status(200).json(response)
+
+       return
+
+    } else {
+
+      res.status(404).json(response)
+
+      return
+
+    }
+  } catch (error) {
+
+    console.error("Error in acceptAuditorium controller:", error)
+
+     res.status(500).json({ status: false, message: "Internal server error" })
+
+     return
+  }
+}
+
+  async rejectauditorium(req: Request, res: Response) {
+
+   try {
+    const id = req.params.id;
+
+    const {userId}=req.body
+    console.log(userId,'koooop')
+
+    const response = await adminService.acceptAuditorium(id,userId);
+
+    console.log(response)
 
     if (response.status) {
 
@@ -78,7 +118,9 @@ class AdminController{
    try {
     const id = req.params.id;
 
-    const response = await adminService.acceptVendor(id);
+    const {userId}=req.body
+
+    const response = await adminService.acceptVendor(id,userId);
 
     if (response.status) {
 
@@ -522,13 +564,6 @@ async addItems(req: Request, res: Response) {
   }
 
 }
-
-
-
-
-
-
-
 
 
  export default AdminController

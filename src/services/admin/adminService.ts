@@ -71,55 +71,103 @@ class AdminService{
 
   }
 
-  async acceptAuditorium(id: string) {
-
+async acceptAuditorium(id: string, userId: string) {
   try {
-    const updateAudi = await this.adminRepositories.updateAuditorium(id)
-
-    const updateVenue=await this.adminRepositories.updateVenue(id)
     
-    if (!updateAudi) {
+    let acceptedBy: string;
 
-      return { status: false, message: "Auditorium not found or update failed" }
+    if (userId === "default_admin") {
+      acceptedBy = "default_admin"
+    } else {
+      
+      const staff = await this.adminRepositories.findStaffByUserId(userId);
 
+      console.log(userId,'ikkke')
+
+      if (!staff) {
+        return { status: false, message: "Staff not found" };
+      }
+
+      acceptedBy = staff.staffid
     }
 
-    return { status: true, message: "Auditorium verified successfully", data: updateAudi }
+    
+    const updatedAudi = await this.adminRepositories.updateAuditorium(id, {
+      acceptedBy,
+      isVerified: true,
+    });
+
+    if (!updatedAudi) {
+      return {
+        status: false,
+        message: "Auditorium not found or update failed",
+      };
+    }
+
+   
+    await this.adminRepositories.updateVenue(id);
+
+    return {
+      status: true,
+      message: "Auditorium verified successfully",
+      data: updatedAudi,
+    };
 
   } catch (error) {
+    console.error("Error in acceptAuditorium service:", error);
 
-    console.error("Error in acceptAuditorium service:", error)
-
-    return { status: false, message: "Something went wrong while updating auditorium" }
-
+    return {
+      status: false,
+      message: "Something went wrong while updating auditorium",
+    };
   }
 }
 
-  async acceptVendor(id: string) {
 
+async acceptVendor(id: string, userId: string) {
   try {
-    const updateAudi = await this.adminRepositories.updateVendor(id)
-
     
+    let acceptedBy: string;
 
-    // const updateVenue=await this.adminRepositories.updateVenue(id)
-    
-    if (!updateAudi) {
+    if (userId === "default_admin") {
+      acceptedBy = "default_admin";
+    } else {
+     
+      const staff = await this.adminRepositories.findStaffByUserId(userId);
 
-      return { status: false, message: "auditorium not found or update failed" }
+      if (!staff) {
+        return { status: false, message: "Staff not found" };
+      }
 
+      acceptedBy = staff.staffid;
     }
 
-    return { status: true, message: "auditorium verified successfully", data: updateAudi }
+    
+    const updatedVendor = await this.adminRepositories.updateVendor(id, {
+      acceptedBy,
+      isVerified: true,
+    });
+
+    if (!updatedVendor) {
+      return { status: false, message: "Vendor not found or update failed" };
+    }
+
+    return {
+      status: true,
+      message: "Vendor verified successfully",
+      data: updatedVendor,
+    };
 
   } catch (error) {
+    console.error("Error in acceptVendor service:", error);
 
-    console.error("Error in acceptAuditorium service:", error)
-
-    return { status: false, message: "Something went wrong while updating auditorium" }
-
+    return {
+      status: false,
+      message: "Something went wrong while verifying vendor",
+    };
   }
 }
+
 
  async acceptvoucher(id: string) {
 
@@ -128,7 +176,7 @@ class AdminService{
 
     
 
-    // const updateVenue=await this.adminRepositories.updateVenue(id)
+ 
     
     if (!updateAudi) {
 
@@ -155,7 +203,7 @@ class AdminService{
 
     
 
-    // const updateVenue=await this.adminRepositories.updateVenue(id)
+    
     
     if (!updateAudi) {
 
@@ -318,70 +366,80 @@ async updateAdminStaff(id: string, data: Partial<IAdminStaff>) {
   }
 
 
-  async adminLogin(data: any) {
-    try {
-      const { loginMode, email, password, staffid } = data;
+ async adminLogin(data: any) {
+  try {
+    const { loginMode, email, password, staffid } = data;
 
-    
-      if (loginMode === "admin") {
-        if (email === DEFAULT_ADMIN.email && password === DEFAULT_ADMIN.password) {
-          const payload = {
-            id: "default_admin",
-            role: "superadmin",
-            email: DEFAULT_ADMIN.email,
-          };
+    // --- Super Admin Login ---
+    if (loginMode === "admin") {
+      if (email === DEFAULT_ADMIN.email && password === DEFAULT_ADMIN.password) {
+        const payload = {
+          id: "default_admin",
+          role: "superadmin",
+          email: DEFAULT_ADMIN.email,
+        };
 
-          const accessToken = generateAccessToken(payload);
-          const refreshToken = generateRefreshToken(payload);
+        const accessToken = generateAccessToken(payload);
+        const refreshToken = generateRefreshToken(payload);
 
-          return {
-            success: true,
-            message: "Admin logged in successfully!",
-            accessToken,
-            refreshToken,
-            user: payload,
-          };
-        } else {
-          return { success: false, message: "Invalid admin credentials" };
-        }
+        return {
+          success: true,
+          message: "Admin logged in successfully!",
+          accessToken,
+          refreshToken,
+          user: payload,
+        };
+      } else {
+        return { success: false, message: "Invalid admin credentials" };
       }
-
-      const existingStaff = await AdminStaffModel.findOne({ staffid, email });
-
-      if (!existingStaff) {
-        return { success: false, message: "Staff not found" };
-      }
-
-      if (password !==existingStaff.password) {
-        return { success: false, message: "Incorrect password" };
-      }
-
-      if (!existingStaff.isActive) {
-        return { success: false, message: "Your account is inactive. Please contact admin." };
-      }
-
-      const payload = {
-        id: existingStaff._id,
-        staffid: existingStaff.staffid,
-        role: existingStaff.role,
-        email: existingStaff.email,
-      };
-
-      const accessToken = generateAccessToken(payload);
-      const refreshToken = generateRefreshToken(payload);
-
-      return {
-        success: true,
-        message: "Staff logged in successfully!",
-        accessToken,
-        refreshToken,
-        user: payload,
-      };
-    } catch (error) {
-      console.error("Error in adminService.adminLogin:", error);
-      return { success: false, message: "Internal server error" };
     }
+
+    // --- Staff Login ---
+    const existingStaff = await AdminStaffModel.findOne({ staffid, email });
+
+    if (!existingStaff) {
+      return { success: false, message: "Staff not found" };
+    }
+
+    if (password !== existingStaff.password) {
+      return { success: false, message: "Incorrect password" };
+    }
+
+    if (!existingStaff.isActive) {
+      return {
+        success: false,
+        message: "Your account is inactive. Please contact admin.",
+      };
+    }
+
+    // --- UPDATE isLogged & lastLogin ---
+    existingStaff.isLogged = true;
+    existingStaff.lastLogin = new Date();
+    await existingStaff.save();
+
+    const payload = {
+      id: existingStaff._id,
+      staffid: existingStaff.staffid,
+      role: existingStaff.role,
+      email: existingStaff.email,
+    };
+
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
+
+    return {
+      success: true,
+      message: "Staff logged in successfully!",
+      accessToken,
+      refreshToken,
+      user: payload,
+    };
+  } catch (error) {
+    console.error("Error in adminService.adminLogin:", error);
+    return { success: false, message: "Internal server error" };
   }
+}
+
 
 
     async addItem(type: string, name: string) {
@@ -413,14 +471,13 @@ async updateAdminStaff(id: string, data: Partial<IAdminStaff>) {
   async deleteItem(type: string, itemName: string) {
     const adminItem = await this.adminRepositories.getAdminItem();
 
-    // Ensure valid type
+   
     if (!Array.isArray(adminItem[type as keyof typeof adminItem])) {
       throw new Error(`Invalid type: ${type}`);
     }
 
     const typeArray = adminItem[type as keyof typeof adminItem] as string[];
 
-    // Check if item exists
     const itemIndex = typeArray.findIndex(
       (item) => item.toLowerCase() === itemName.toLowerCase()
     );
@@ -429,7 +486,7 @@ async updateAdminStaff(id: string, data: Partial<IAdminStaff>) {
       throw new Error(`${itemName} not found in ${type}`);
     }
 
-    // Remove item from array
+   
     typeArray.splice(itemIndex, 1);
 
     const updatedItem = await this.adminRepositories.saveAdminItem(adminItem);

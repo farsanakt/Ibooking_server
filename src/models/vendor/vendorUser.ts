@@ -10,7 +10,7 @@ export interface IVendorUser extends Document {
   name?: string;
   vendortype?: string;
   address:string;
-  
+  acceptedBy:string
   phone?: string;
 }
 
@@ -28,6 +28,10 @@ const vendorSchema: Schema = new Schema({
     type: String,
     required: true,
     unique: true
+  },
+  acceptedBy:{
+    type:String,
+    default:''
   },
 
   password: {
