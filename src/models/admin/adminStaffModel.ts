@@ -9,6 +9,7 @@ export interface IAdminStaff extends Document {
   isActive: boolean;
   isLogged: boolean;
   lastLogin: Date;
+  lastLogout:Date;
 }
 
 const adminStaffSchema = new Schema<IAdminStaff>(
@@ -25,6 +26,7 @@ const adminStaffSchema = new Schema<IAdminStaff>(
     isActive: { type: Boolean, default: false },
     isLogged: { type: Boolean, default: false },
     lastLogin: { type: Date },
+    lastLogout:{type:Date},
   },
   { timestamps: true }
 );

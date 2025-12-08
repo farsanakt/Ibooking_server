@@ -441,6 +441,46 @@ async updateAdminStaff(id: string, data: Partial<IAdminStaff>) {
 }
 
 
+async adminLogout(id: string) {
+  try {
+    // --- SUPER ADMIN LOGOUT ---
+    if (id === "default_admin") {
+      return {
+        success: true,
+        message: "Admin logged out successfully!",
+      };
+    }
+
+    // --- STAFF LOGOUT ---
+    const staff = await AdminStaffModel.findById(id);
+
+    if (!staff) {
+      return {
+        success: false,
+        message: "Staff not found",
+      };
+    }
+
+    // update login status
+    staff.isLogged = false;
+    staff.lastLogout = new Date(); // store logout time
+    await staff.save();
+
+    return {
+      success: true,
+      message: "Staff logged out successfully!",
+    };
+  } catch (error) {
+    console.error("Error in adminService.adminLogout:", error);
+    return {
+      success: false,
+      message: "Internal server error",
+    };
+  }
+}
+
+
+
 
     async addItem(type: string, name: string) {
     const validTypes = ["events", "locations", "amenities","vendorTypes"];

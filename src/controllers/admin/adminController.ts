@@ -469,6 +469,21 @@ async adminLogin(req: Request, res: Response) {
     }
   }
 
+  async logout(req:Request,res:Response){
+
+    try {
+
+      const id=req.params.id
+
+      
+      const response = await adminService.adminLogout(id);
+      
+    } catch (error) {
+      
+    }
+
+  }
+
 
 
 async addItems(req: Request, res: Response) {

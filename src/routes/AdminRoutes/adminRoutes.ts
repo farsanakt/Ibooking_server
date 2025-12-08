@@ -52,6 +52,8 @@ admin_route.delete("/deletesubplans/:id", adminController.deleteSubscription)
 // ##################### ADMIN LOGIN######################
 admin_route.post('/adminstafflogin', adminController.adminLogin);
 
+admin_route.post('/adminlogout/:id',adminController.logout)
+
 
 
 // ##################### ADMIN ITEMS######################
