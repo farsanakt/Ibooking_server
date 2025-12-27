@@ -10,64 +10,52 @@ const offerService = new OfferService();
 
 
 const auditoriumService=new AuditoriumService()
+
+const safeJsonParse = (value: any) => {
+  if (typeof value !== "string") return value;
+
+  try {
+    return JSON.parse(value);
+  } catch {
+    return value;
+  }
+};
+
 class AuditoriumController{
 
-    async addVenue(req:Request,res:Response){
+    async addVenue(req: Request, res: Response) {
+  try {
+    const data = req.body;
 
-        try {
+    console.log(data, "data");
 
+    data.events = safeJsonParse(data.events);
+    data.locations = safeJsonParse(data.locations);
+    data.timeSlots = safeJsonParse(data.timeSlots);
+    data.amenities = safeJsonParse(data.amenities);
+    data.tariff = safeJsonParse(data.tariff);
 
-            const data=req.body
+    const files = req.files as Express.Multer.File[];
+    const imageUrls = files?.map(file => (file as any).location) || [];
 
-            if (typeof data.events === "string") {
-  data.events = JSON.parse(data.events);
-}
+    const response = await auditoriumService.addVenue({
+      ...data,
+      images: imageUrls,
+    });
 
-if (Array.isArray(data.events) && typeof data.events[0] === "string" && data.events.length === 1) {
-
-  data.events = JSON.parse(data.events[0]);
-}
-
-             if (typeof data.locations === "string") {
-                data.locations = JSON.parse(data.locations);
-                }
-                if (typeof data.timeSlots === "string") {
-                data.timeSlots = JSON.parse(data.timeSlots);
-                }
-                if (typeof data.amenities === "string") {
-                data.amenities = JSON.parse(data.amenities);
-                }
-                if (typeof data.tariff === "string") {
-                data.tariff = JSON.parse(data.tariff);
-                }
-
-                // if (typeof data.termsAndConditions === "string") {
-                // data.termsAndConditions = JSON.parse(data.termsAndConditions);
-                // }
-
-            const files = req.files as Express.Multer.File[]
-
-            const imageUrls = files.map((file) => (file as any).location)
- 
-            const response = await auditoriumService.addVenue({ ...data, images: imageUrls });
-
-            if(!response){
-
-                res.status(HttpStatus.BAD_REQUEST).json(response)
-
-                return
-
-            }
-            
-            res.status(HttpStatus.CREATED).json(response)
-
-        } catch (error) {
-
-            console.log(error,'error in auditorium controller')
-            
-        }
-
+    if (!response) {
+       res.status(HttpStatus.BAD_REQUEST).json(response);
+       return
     }
+
+    res.status(HttpStatus.CREATED).json(response);
+
+  } catch (error) {
+    console.log(error, "error in auditorium controller");
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 
     async allVEnues(req:Request,res:Response){
 
