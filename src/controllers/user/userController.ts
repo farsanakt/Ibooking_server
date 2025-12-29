@@ -1,6 +1,7 @@
 import { Request,Response } from "express";
 import { UserService } from "../../services/user/userService";
 import { HttpStatus } from "../../enums/httpStatus";
+import userSubscriptionService from "../../services/user/userSubscription"
 
 const userService=new UserService()
 
@@ -292,6 +293,57 @@ async vendorEnquiry (req: Request, res: Response): Promise<void>{
     }
 
    }
+
+    async createSubscription(req: Request, res: Response) {
+    try {
+      const subscriptionData = req.body
+
+      const result =
+        await userSubscriptionService.createUserSubscription(
+          subscriptionData
+        )
+
+       res.status(201).json({
+        success: true,
+        message: "Subscription created successfully",
+        data: result,
+      })
+      return
+    } catch (error: any) {
+      console.error("Subscription Error:", error)
+
+       res.status(400).json({
+        success: false,
+        message: error.message || "Failed to create subscription",
+      })
+      return
+    }
+  }
+
+
+ async fetchUserSubscription(req: Request, res: Response) {
+    try {
+      const subscriptions =
+        await userSubscriptionService.getAllUserSubscriptions()
+
+       res.status(200).json({
+        success: true,
+        message: "User subscriptions fetched successfully",
+        data: subscriptions,
+      })
+      return
+
+    } catch (error) {
+      console.error("Fetch Subscription Error:", error)
+
+       res.status(500).json({
+        success: false,
+        message: "Failed to fetch user subscriptions",
+      })
+      return
+
+    }
+  }
 
 
     async existingBookings(req:Request,res:Response){

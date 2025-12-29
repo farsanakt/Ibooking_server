@@ -43,6 +43,10 @@ user_route.get('/fetchenquiries',userController.fetchVendorEnquiry)
 
 user_route.get('/currentvendorUser',userController.currentUserVendorData)
 
+user_route.post('/takesubscription',userController.createSubscription)
+
+user_route.get('/fetchallexistingusersub',userController.fetchUserSubscription)
+
 // ###################### Voucher ##########################
 user_route.post('/createvoucher',userController.createVoucher)
 
