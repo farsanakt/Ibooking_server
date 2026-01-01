@@ -8,6 +8,10 @@ import auditoriumAuth_route from './routes/auditoriumRoutes/authRoute'
 import auditorium_route from './routes/auditoriumRoutes/auditoriumRoutes'
 import user_route from './routes/userRoutes/userRoutes'
 import admin_route from './routes/AdminRoutes/adminRoutes'
+import "./cron/subscriptionReminder"
+import "./cron/bookingReminder"
+
+
 
 const app=express()
 dotenv.config()
