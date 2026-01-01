@@ -1,6 +1,7 @@
 import cron from "node-cron"
 import Subscription from "../models/user/userSubscriptionModel"
 import { sendMail } from "../utils/sendMail"
+import { classicEmailTemplate } from "../utils/emailTemplates"
 
 
 cron.schedule("0 9 * * *", async () => {
@@ -22,28 +23,30 @@ cron.schedule("0 9 * * *", async () => {
         diffInMs / (1000 * 60 * 60 * 24)
       )
 
+     
       if (diffInDays === 1 || diffInDays === 2) {
         await sendMail(
           sub.user.email,
           "⏰ Subscription Expiry Reminder",
-          `
-Hello,
+          classicEmailTemplate({
+            title: "Subscription Expiry Reminder",
+            message: `
+              <p>We would like to remind you that your subscription plan 
+              <strong>${sub.subscription.planName}</strong> is nearing its expiry.</p>
 
-Your subscription plan "${sub.subscription.planName}" will expire on 
-${endDate.toDateString()}.
+              <p><strong>Expiry Date:</strong> ${endDate.toDateString()}</p>
 
-Please renew your plan to avoid service interruption.
-
-Thank you,
-iBookingVenue Team
-          `
+              <p>Please renew your subscription to avoid any interruption in services.</p>
+            `,
+            footerNote: "This is an automated reminder. Please do not reply to this email.",
+          })
         )
 
         reminderCount++
       }
     }
 
-    console.log(`✅ ${reminderCount} reminder emails sent`)
+    console.log(`✅ ${reminderCount} subscription reminder emails sent`)
   } catch (error) {
     console.error("❌ Error in subscription reminder job:", error)
   }
