@@ -57,6 +57,9 @@ class AuditoriumController{
 }
 
 
+
+
+
     async allVEnues(req:Request,res:Response){
 
         try {
