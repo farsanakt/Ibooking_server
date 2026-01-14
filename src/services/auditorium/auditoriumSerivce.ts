@@ -11,66 +11,61 @@ constructor(){
 
 }
 
-     async addVenue(data: any) {
-  try {
+ async addVenue(data: any) {
+    try {
+      console.log("this is the new venue data", data)
 
-    console.log('this is the new venue data', data);
+      const existingVenue = await this.auditoriumRepositories.findVenueByName(data.name)
+      if (existingVenue) {
+        return { success: false, message: "This venue already exists" }
+      }
 
-    
-    const existingVenue = await this.auditoriumRepositories.findVenueByName(data.name);
-    if (existingVenue) {
-      return { success: false, message: 'This venue already exists' };
+      const auditorium = await this.auditoriumRepositories.findAudiById(data.audiUserId)
+
+      let venueVerified = false
+      if (auditorium && auditorium.isVerified === true) {
+        venueVerified = true
+      }
+
+      const savedVenue = await this.auditoriumRepositories.createVenue({
+        name: data.name,
+        address: data.address,
+        audiUserId: data.audiUserId,
+        phone: data.phone,
+        altPhone: data.altPhone,
+        email: data.email,
+        pincode: data.pincode,
+        district: data.district, 
+        locations: data.locations,
+        acType: data.acType,
+        seatingCapacity: data.seatingCapacity,
+        diningCapacity: data.diningCapacity,
+        parkingSlots: data.parkingSlots,
+        changingRooms: data.changingRooms,
+        amenities: data.amenities,
+        foodPolicy: data.foodPolicy,
+        decorPolicy: data.decorPolicy,
+        tariff: data.tariff,
+        termsAndConditions: data.termsAndConditions,
+        cancellationPolicy: data.cancellationPolicy,
+        stageSize: data.stageSize,
+        acAdvanceAmount: data.acAdvanceAmount,
+        acCompleteAmount: data.acCompleteAmount,
+        nonAcAdvanceAmount: data.nonAcAdvanceAmount,
+        nonAcCompleteAmount: data.nonAcCompleteAmount,
+        images: data.images,
+        timeSlots: data.timeSlots,
+        guestroom: data.guestRooms,
+        youtubeLink: data.youtubeLink,
+        events: data.events,
+        isVerified: venueVerified,
+      })
+
+      return { success: true, message: "Venue added successfully!" }
+    } catch (error) {
+      throw new Error("Service Error: " + (error instanceof Error ? error.message : "Unknown error"))
     }
-
-    
-    const auditorium = await this.auditoriumRepositories.findAudiById(data.audiUserId);
-
-    
-    let venueVerified = false;
-    if (auditorium && auditorium.isVerified === true) {
-      venueVerified = true;
-    }
-
-   
-    const savedVenue = await this.auditoriumRepositories.createVenue({
-      name: data.name,
-      address: data.address,
-      audiUserId: data.audiUserId,
-      phone: data.phone,
-      altPhone: data.altPhone,
-      email: data.email,
-      pincode: data.pincode,
-      locations: data.locations,
-      acType: data.acType,
-      seatingCapacity: data.seatingCapacity,
-      diningCapacity: data.diningCapacity,
-      parkingSlots: data.parkingSlots,
-      changingRooms: data.changingRooms,
-      amenities: data.amenities,
-      foodPolicy: data.foodPolicy,
-      decorPolicy: data.decorPolicy,
-      tariff: data.tariff,
-      termsAndConditions:data.termsAndConditions,
-      cancellationPolicy: data.cancellationPolicy,
-      stageSize: data.stageSize,
-      totalamount: data.totalamount,
-      advAmnt: data.advAmnt,
-      images: data.images,
-      timeSlots: data.timeSlots,
-      guestroom: data.guestRooms,
-      youtubeLink: data.youtubeLink,
-      events:data.events,
-      isVerified: venueVerified,   
-    });
-
-    return { success: true, message: 'Venue added successfully!' };
-
-  } catch (error) {
-
-    throw new Error('Service Error: ' + (error instanceof Error ? error.message : 'Unknown error'));
-
   }
-}
 
 
       async allVenues(audiUserId:string){
@@ -88,50 +83,52 @@ constructor(){
 
      
       async updateVenue(venueId: string, data: any) {
-        try {
-          
-          const existingVenue = await this.auditoriumRepositories.findVenueById(venueId);
+    try {
+      const existingVenue = await this.auditoriumRepositories.findVenueById(venueId)
 
-          if (!existingVenue) {
-            return { success: false, message: "Venue not found" };
-          }
-
-          await this.auditoriumRepositories.updateVenue(venueId, {
-            name: data.name,
-            address: data.address,
-            audiUserId: data.audiUserId,
-            phone: data.phone,
-            altPhone: data.altPhone,
-            email: data.email,
-            pincode: data.pincode,
-            locations: data.locations,
-            acType: data.acType,
-            seatingCapacity: data.seatingCapacity,
-            diningCapacity: data.diningCapacity,
-            parkingSlots: data.parkingSlots,
-            changingRooms: data.changingRooms,
-            amenities: data.amenities,
-            foodPolicy: data.foodPolicy,
-            decorPolicy: data.decorPolicy,
-            tariff: data.tariff,
-            events:data.events,
-            termsAndConditions:data.termsAndConditions,
-            cancellationPolicy: data.cancellationPolicy,
-            stageSize: data.stageSize,
-            totalamount: data.totalamount,
-            advAmnt: data.advAmnt,
-            images: data.images,
-            timeSlots: data.timeSlots,
-            // events: data.events,
-          });
-
-          return { success: true, message: "Venue updated successfully!" };
-        } catch (error) {
-          console.error("Error in updateVenue service:", error);
-          throw new Error("Service Error: " + (error instanceof Error ? error.message : "Unknown error"));
-        }
+      if (!existingVenue) {
+        return { success: false, message: "Venue not found" }
       }
 
+      await this.auditoriumRepositories.updateVenue(venueId, {
+        name: data.name,
+        address: data.address,
+        audiUserId: data.audiUserId,
+        phone: data.phone,
+        altPhone: data.altPhone,
+        email: data.email,
+        pincode: data.pincode,
+        district: data.district,
+        locations: data.locations, // Now properly saving the locations array
+        acType: data.acType,
+        seatingCapacity: data.seatingCapacity,
+        diningCapacity: data.diningCapacity,
+        parkingSlots: data.parkingSlots,
+        changingRooms: data.changingRooms,
+        amenities: data.amenities,
+        foodPolicy: data.foodPolicy,
+        decorPolicy: data.decorPolicy,
+        tariff: data.tariff,
+        events: data.events,
+        termsAndConditions: data.termsAndConditions,
+        cancellationPolicy: data.cancellationPolicy,
+        stageSize: data.stageSize,
+        acAdvanceAmount: data.acAdvanceAmount, // New payment fields
+        acCompleteAmount: data.acCompleteAmount,
+        nonAcAdvanceAmount: data.nonAcAdvanceAmount,
+        nonAcCompleteAmount: data.nonAcCompleteAmount,
+        images: data.images,
+        timeSlots: data.timeSlots,
+        youtubeLink: data.youtubeLink,
+        guestroom: data.guestRooms,
+      })
+
+      return { success: true, message: "Venue updated successfully!" }
+    } catch (error) {
+      console.error("Error in updateVenue service:", error)
+      throw new Error("Service Error: " + (error instanceof Error ? error.message : "Unknown error"))
+    }
+  }
 
       async deleteVenue(id: string): Promise<{ status: boolean; message: string }> {
 
