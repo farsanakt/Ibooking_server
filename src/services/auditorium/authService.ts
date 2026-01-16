@@ -6,16 +6,20 @@ import { AuditoriumRepositories } from "../../repositories/implemention/Auditori
 import { OtpRepository } from "../../repositories/implemention/OtpRepositories";
 import { generateAccessToken, generateRefreshToken } from "../../utils/jwt";
 import { MailService } from "../MailService";
+import { sendOtpSms } from "../sms.service";
 
 const mailService = new MailService();
 
-  export const generateOtp = () => {
+//  export const generateOtp = (): string => {
+//   return Math.floor(10000 + Math.random() * 90000).toString();
+// };
 
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-  return otp;
-
+export const generateOtp = (): string => {
+  return Math.floor(Math.random() * 10000)
+    .toString()
+    .padStart(6, "0");
 };
+
 
 export class AuthService{
 
@@ -53,77 +57,54 @@ async userSignup(formData: any) {
 
   try {
     if (password !== confirmPassword) {
-      return { success: false, message: "Password and confirm password do not match" };
+      return { success: false, message: "Password mismatch" };
     }
-
 
     const existingUser = await this.auditoriumRepositories.findUserByEmail(email);
 
-    console.log(existingUser)
-    
-
-    if (existingUser  ) {
-      if (!existingUser.isOtp) {
-        
-
-        const getOtp = await this.otpRepositories.findOtpByEmail(email);
-
-        if (getOtp) {
-          const currentTime = new Date().getTime();
-          const expirationTime = new Date(getOtp.createdAt).getTime() + 5 * 60 * 1000;
-
-          if (currentTime < expirationTime) {
-            return { success: false, message: "OTP is still valid. Please verify using the same OTP." };
-          } else {
-            const newOtp = generateOtp();
-            await this.otpRepositories.updateOtpByEmail(email, newOtp);
-            await mailService.sendOtpEmail(email, newOtp);
-            return { success: false, message: "OTP expired. A new OTP has been sent to your email." };
-          }
-        } else {
-          const newOtp = generateOtp();
-          await this.otpRepositories.create({ email, otp: newOtp } as unknown as IOtp);
-          await mailService.sendOtpEmail(email, newOtp);
-          return { success: true, message: "No OTP found. A new OTP has been sent to your email." };
-        }
-      } else {
-        return { success: false, message: "email already registered" };
-      }
+    if (existingUser && existingUser.isOtp) {
+      return { success: false, message: "Email already registered" };
     }
 
-    
+    if (!existingUser) {
+      await this.auditoriumRepositories.createUser({
+        auditoriumName,
+        ownerName,
+        email,
+        phone,
+        password,
+        role: "auditorium",
+        address,
+        district,
+        panchayat,
+        municipality,
+        corporation,
+        events,
+        locations,
+      });
+    }
 
-    const savedDetails = await this.auditoriumRepositories.createUser({
-      auditoriumName,
-      phone,
-      ownerName,
-      email,
-      password,
-      role: "auditorium",
-      address,
-      district,
-      panchayat,
-      corporation,
-      municipality,
-      events,
-      locations,
-    });
+    const otp = generateOtp();
 
-   
-    const newOtp = generateOtp();
-    
+    // remove old OTP if exists
+    await this.otpRepositories.deleteOtp(email, phone);
 
-    await this.otpRepositories.create({
-      email,
-      otp: newOtp,
-    } as unknown as IOtp);
+    // save new OTP
+    await this.otpRepositories.createOtp({ email, phone, otp } as any);
 
-    await mailService.sendOtpEmail(email, newOtp);
+    // send email OTP
+    await mailService.sendOtpEmail(email, otp);
 
-    return { success: true, message: "Registered successfully..! Please verify your email with OTP." };
+    // send SMS OTP (2Factor)
+    sendOtpSms(phone, otp).catch(() => {});
+
+    return {
+      success: true,
+      message: "OTP sent to email and phone",
+    };
 
   } catch (error) {
-    console.error("❌ Error in userSignup:", error);
+    console.error("Signup error:", error);
     return { success: false, message: "Server error" };
   }
 }
@@ -256,45 +237,29 @@ async forgetPass(forgetPass:{email:string}){
 
 
   
-  async verifyUserOtp(otpdata: {email: string;otp: string;}): Promise<{ success: boolean; message: string }> {
+ async verifyUserOtp(data: { email: string; phone: string; otp: string }) {
+  const { email, phone, otp } = data;
 
-   
-
-    const { email, otp } = otpdata;
-
-
-    const validUser = await this.auditoriumRepositories.findUserByEmail(email);
-
-
-    if (!validUser) {
-
-      return { success: false, message: "this email is not registered" };
-
-    }
-
-    const currentOtp = await this.otpRepositories.findOtpByEmail(email);
-
-    
-
-    if (!currentOtp?.otp) return { success: false, message: "resend the otp" };
-
-    if (currentOtp.otp == otp) {
-
-      await this.auditoriumRepositories.verifyUser(email, true);
-
-      await this.otpRepositories.deleteOtpByEmail(email);
-
-      return { success: true, message: "otp verification completed" };
-
-    } else {
-
-      console.log("wrong")
-
-      return { success: false, message: "please enter valid otp" }
-
-    }
-
+  const user = await this.auditoriumRepositories.findUserByEmail(email);
+  if (!user) {
+    return { success: false, message: "User not found" };
   }
+
+  const savedOtp = await this.otpRepositories.findOtp(email, phone);
+  if (!savedOtp) {
+    return { success: false, message: "OTP expired or resend OTP" };
+  }
+
+  if (savedOtp.otp !== otp) {
+    return { success: false, message: "Invalid OTP" };
+  }
+
+  await this.auditoriumRepositories.verifyUser(email, true);
+  await this.otpRepositories.deleteOtp(email, phone);
+
+  return { success: true, message: "OTP verified successfully" };
+}
+
 
    async resetPass(resetPass:{pass:string,email:string}):Promise<{success:boolean,message:string}>{
 

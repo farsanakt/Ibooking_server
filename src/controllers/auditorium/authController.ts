@@ -7,31 +7,23 @@ const authService=new AuthService()
 
 class AuthController{
 
-  async signup(req: Request, res: Response) {
+ async signup(req: Request, res: Response) {
   try {
-    const formData = req.body;
+    const response = await authService.userSignup(req.body);
 
-    console.log(formData,'oppppprrr')
-    
-    const response = await authService.userSignup(formData);
-
-      
-    if (!response?.success) {
-      
-      res.status(HttpStatus.BAD_REQUEST).json(response);
-    } else {
-      res.status(HttpStatus.CREATED).json({ message: 'Registered successfully!!' });
+    if (!response.success) {
+       res.status(400).json(response);
+       return
     }
 
+    res.status(201).json(response);
   } catch (error) {
-    console.error('Signup error:', error);
-    res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+    res.status(500).json({
       success: false,
-      message: 'Internal server error',
+      message: "Internal server error",
     });
   }
 }
-
 
 async login(req: Request, res: Response) {
 
@@ -99,46 +91,25 @@ async login(req: Request, res: Response) {
   }
 
 
-  async verifyOtp(req: Request, res: Response) {
+async verifyOtp(req: Request, res: Response) {
+  try {
+    const { email, phone, otp } = req.body;
 
-    try {
+    const response = await authService.verifyUserOtp({ email, phone, otp });
 
-      const data = req.body;
-
-      const response = await authService.verifyUserOtp(data);
-
-      if (typeof response === "string") {
-
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: response });
-          
-        return
-
-      } else if (response?.success) {
-
-        res.status(HttpStatus.CREATED).json({ message: response });
-
-        return
-
-      }else{
-
-          res.status(HttpStatus.BAD_REQUEST) .json(response);
-    
-          return
-
-      }
-
-
-    } catch (error: any) {
-
-      console.log("error in otpverify of authcontroller");
-
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: "otp verification failed" });
-
-      return;
-
+    if (!response.success) {
+       res.status(400).json(response);
+      return
     }
 
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
+}
 
   async resetPass(req:Request,res:Response){
 
