@@ -1,79 +1,73 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface IAuditoriumUser extends Document {
+  role: "user" | "auditorium" | "admin";
   email: string;
   password: string;
-  role: 'user' | 'auditorium' | 'admin';
+  phone: string;
   isVerified: boolean;
-  isOtp:boolean;
+  isOtp: boolean;
   isBlocked: boolean;
-  auditoriumName?: string;
-  ownerName?: string;
+  acceptedBy: string;
+
+  auditoriumName: string;
+  ownerName: string;
   address: string;
   district: string;
-  panchayat: string;
-  corporation: string;
-  municipality: string;
-  phone?: string;
-  events?: string[];
-  locations?: string[];
-  acceptedBy:string
+  events:string[]
+
+  locations: {
+    name: string;
+    lat: number;
+    lon: number;
+    district: string;
+  }[];
+
+  logo?: string;
+  seal?: string;
 }
 
-const userSchema: Schema = new Schema(
+const userSchema = new Schema<IAuditoriumUser>(
   {
     role: {
       type: String,
-      enum: ['user', 'auditorium', 'admin'],
-      default: 'user',
-      required: true
-    },
-    email: {
-      type: String,
+      enum: ["user", "auditorium", "admin"],
+      default: "auditorium",
       required: true,
-      unique: true
-    },
-    password: {
-      type: String,
-      required: true
-    },
-    isVerified: {
-      type: Boolean,
-      default: false
-    },
-     isOtp: {
-      type: Boolean,
-      default: false
-    },
-    acceptedBy:{
-      type:String,
-      default:''
     },
 
-    isBlocked: {
-      type: Boolean,
-      default: false
-    },
-    auditoriumName: String,
-    ownerName: String,
-    address: String,
-    district: String,
-    panchayat: String,
-    corporation: String,
-    municipality: String,
-    phone: String,
+    email: { type: String, required: true, unique: true },
+    phone: { type: String, required: true },
+    password: { type: String, required: true },
+    events:{type:[String]},
 
-    // 👇 Add these new array fields
-    events: {
-      type: [String],
-      default: []
-    },
-    locations: {
-      type: [String],
-      default: []
-    }
+    isVerified: { type: Boolean, default: false },
+    isOtp: { type: Boolean, default: false },
+    isBlocked: { type: Boolean, default: false },
+
+    acceptedBy: { type: String, default: "" },
+
+    auditoriumName: { type: String, required: true },
+    ownerName: { type: String, required: true },
+    address: { type: String, required: true },
+    district: { type: String, required: true },
+
+    locations: [
+      {
+        name: String,
+        lat: Number,
+        lon: Number,
+        district: String,
+      },
+    ],
+
+    logo: String,
+    seal: String,
   },
   { timestamps: true }
 );
 
-export default mongoose.model<IAuditoriumUser>('AuditoriumUser', userSchema);
+export default mongoose.model<IAuditoriumUser>(
+  "AuditoriumUser",
+  userSchema
+);

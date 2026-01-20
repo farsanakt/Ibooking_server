@@ -1,5 +1,18 @@
 import mongoose, { Schema, type Document } from "mongoose"
 
+/* =======================
+   LOCATION
+======================= */
+export interface ILocation {
+  name: string
+  lat: number
+  lon: number
+  district: string
+}
+
+/* =======================
+   TIME SLOT
+======================= */
 export interface ITimeSlot {
   id: string
   label: string
@@ -8,11 +21,17 @@ export interface ITimeSlot {
   status: string
 }
 
+/* =======================
+   TARIFF
+======================= */
 export interface ITariff {
   wedding: string
   reception: string
 }
 
+/* =======================
+   VENUE
+======================= */
 export interface IVenue extends Document {
   name: string
   address: string
@@ -22,7 +41,9 @@ export interface IVenue extends Document {
   email: string
   pincode: string
   district?: string
-  locations: string[]
+
+  locations: ILocation[]   // ✅ FIXED
+
   events: string[]
   acType: "AC" | "Non-AC" | "Both"
   seatingCapacity: string
@@ -48,7 +69,23 @@ export interface IVenue extends Document {
   youtubeLink?: string
 }
 
-const timeSlotSchema: Schema = new Schema<ITimeSlot>(
+/* =======================
+   LOCATION SCHEMA
+======================= */
+const locationSchema = new Schema<ILocation>(
+  {
+    name: { type: String, required: true },
+    lat: { type: Number, required: true },
+    lon: { type: Number, required: true },
+    district: { type: String, required: true },
+  },
+  { _id: false }
+)
+
+/* =======================
+   TIME SLOT SCHEMA
+======================= */
+const timeSlotSchema = new Schema<ITimeSlot>(
   {
     id: { type: String, required: true },
     label: { type: String, required: true },
@@ -56,14 +93,16 @@ const timeSlotSchema: Schema = new Schema<ITimeSlot>(
     endTime: { type: String, required: true },
     status: {
       type: String,
-      required: true,
       enum: ["pending", "booked", "unavailable"],
       default: "pending",
     },
   },
-  { _id: false },
+  { _id: false }
 )
 
+/* =======================
+   VENUE SCHEMA
+======================= */
 const venueSchema: Schema<IVenue> = new Schema(
   {
     name: { type: String, required: true },
@@ -73,8 +112,11 @@ const venueSchema: Schema<IVenue> = new Schema(
     altPhone: { type: String },
     email: { type: String, required: true },
     pincode: { type: String, required: true },
-    district: { type: String }, // added district field to store user's district
-    locations: { type: [String], required: true },
+    district: { type: String },
+
+    // ✅ FIXED LOCATIONS
+    locations: { type: [locationSchema], required: true },
+
     events: { type: [String], required: true },
     acType: { type: String, enum: ["AC", "Non-AC", "Both"], required: true },
     seatingCapacity: { type: String, required: true },
@@ -87,27 +129,35 @@ const venueSchema: Schema<IVenue> = new Schema(
     foodPolicy: { type: String, required: true },
     decorPolicy: { type: String, required: true },
     youtubeLink: { type: String },
+
     isVerified: {
       type: Boolean,
       default: false,
     },
+
     tariff: {
       wedding: { type: String, required: true },
       reception: { type: String, required: true },
     },
+
     cancellationPolicy: { type: String, required: true },
     stageSize: { type: String, required: true },
-    acAdvanceAmount: { type: String }, // updated field names to match component
-    acCompleteAmount: { type: String }, // updated field names to match component
-    nonAcAdvanceAmount: { type: String }, // updated field names to match component
-    nonAcCompleteAmount: { type: String }, // updated field names to match component
+
+    acAdvanceAmount: { type: String },
+    acCompleteAmount: { type: String },
+    nonAcAdvanceAmount: { type: String },
+    nonAcCompleteAmount: { type: String },
+
     images: { type: [String], default: [] },
+
     timeSlots: { type: [timeSlotSchema], required: true },
-    auditoriumId: { type: mongoose.Schema.Types.ObjectId, ref: "AuditoriumUser" },
+
+    auditoriumId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "AuditoriumUser",
+    },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true }
 )
 
 export default mongoose.model<IVenue>("Venue", venueSchema)

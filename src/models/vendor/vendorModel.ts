@@ -49,7 +49,7 @@ const timeSlotSchema: Schema = new Schema<ITimeSlot>(
 const vendorSchema: Schema<IVendor> = new Schema(
   {
     name: { type: String, required: true },
-    address: { type: String, required: true },
+    address: { type: String },
     vendorUserId:{type:String,required:true},
     phone: { type: String, required: true },
     altPhone: { type: String },

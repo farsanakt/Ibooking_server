@@ -35,6 +35,15 @@ export class AuditoriumRepositories{
            return VoucherModel.findOne({ userId, isActive: true });
          }
 
+          async findByEmail(email: string) {
+    return AuditoriumUser.findOne({ email });
+  }
+
+  async create(data: any) {
+    const user = new AuditoriumUser(data);
+    return user.save();
+  }
+
         
        async findAuditoriumByName(name:string):Promise<IAuditoriumUser|null>{
 
@@ -110,6 +119,8 @@ export class AuditoriumRepositories{
      const enquiry = new Enquiry(enquiryData);
      return await enquiry.save();
     };
+
+
 
     
 

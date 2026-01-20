@@ -38,76 +38,67 @@ export class AuthService{
   }
 
 
-async userSignup(formData: any) {
-  const {
-    auditoriumName,
-    ownerName,
-    email,
-    phone,
-    password,
-    confirmPassword,
-    district,
-    panchayat,
-    address,
-    municipality,
-    corporation,
-    events,
-    locations,
-  } = formData;
+async signup(data: any, files: any) {
 
-  try {
-    if (password !== confirmPassword) {
-      return { success: false, message: "Password mismatch" };
+    if (
+      !data.email ||
+      !data.password ||
+      !data.auditoriumName ||
+      !data.ownerName
+    ) {
+      return { success: false, message: "Missing required fields" };
     }
 
-    const existingUser = await this.auditoriumRepositories.findUserByEmail(email);
-
-    if (existingUser && existingUser.isOtp) {
-      return { success: false, message: "Email already registered" };
+   
+    const existingUser = await this.auditoriumRepositories.findByEmail(data.email);
+    if (existingUser) {
+      return { success: false, message: "Email already exists" };
+    }
+let events=[]
+if(data.events){
+  events=typeof data.events=='string'?JSON.parse(data.events):data.events
+}
+    let locations = [];
+    if (data.locations) {
+      locations =
+        typeof data.locations === "string"
+          ? JSON.parse(data.locations)
+          : data.locations;
     }
 
-    if (!existingUser) {
-      await this.auditoriumRepositories.createUser({
-        auditoriumName,
-        ownerName,
-        email,
-        phone,
-        password,
-        role: "auditorium",
-        address,
-        district,
-        panchayat,
-        municipality,
-        corporation,
-        events,
-        locations,
-      });
-    }
+    // 🖼️ Get S3 image URLs
+    const logo = files?.logo?.[0]?.location || "";
+    const seal = files?.seal?.[0]?.location || "";
 
-    const otp = generateOtp();
+    // 🔐 Hash password
+    const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    // remove old OTP if exists
-    await this.otpRepositories.deleteOtp(email, phone);
+    // 📦 Create user payload
+    const userPayload = {
+      role: "auditorium",
+      auditoriumName: data.auditoriumName,
+      ownerName: data.ownerName,
+      email: data.email,
+      phone: data.phone,
+      password: hashedPassword,
+      district: data.district,
+      address: data.address,
+      events,
+      locations,
+      logo,
+      seal,
+      isVerified: false,
+      isBlocked: false,
+    };
 
-    // save new OTP
-    await this.otpRepositories.createOtp({ email, phone, otp } as any);
-
-    // send email OTP
-    await mailService.sendOtpEmail(email, otp);
-
-    // send SMS OTP (2Factor)
-    sendOtpSms(phone, otp).catch(() => {});
+    // 💾 Save to DB
+    await this.auditoriumRepositories.create(userPayload);
 
     return {
       success: true,
-      message: "OTP sent to email and phone",
+      message: "Signup successful",
     };
-
-  } catch (error) {
-    console.error("Signup error:", error);
-    return { success: false, message: "Server error" };
   }
-}
 
 
 
@@ -171,9 +162,13 @@ async login(data: any) {
       return { success: false, message: "User not found" };
     }
 
-    if (password !== existingUser.password) {
-      return { success: false, message: "Incorrect password" };
-    }
+   
+
+     const isMatch = await bcrypt.compare(password, existingUser.password);
+
+     if(!isMatch){
+ return { success: false, message: "Incorrect password" };
+     }
 
     const payload = {
       id: existingUser._id,

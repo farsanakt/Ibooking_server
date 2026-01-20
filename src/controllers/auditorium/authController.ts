@@ -7,23 +7,28 @@ const authService=new AuthService()
 
 class AuthController{
 
- async signup(req: Request, res: Response) {
-  try {
-    const response = await authService.userSignup(req.body);
+async signup(req: Request, res: Response) {
+    try {
+      const response = await authService.signup(req.body, req.files);
 
-    if (!response.success) {
-       res.status(400).json(response);
+      console.log(response,'this is the auth response')
+
+      if (!response.success) {
+         res.status(400).json(response);
+         return
+      }
+
+       res.status(201).json(response);
        return
+    } catch (error: any) {
+      console.error("Signup error:", error);
+       res.status(500).json({
+        success: false,
+        message: "Internal server error",
+      });
+      return
     }
-
-    res.status(201).json(response);
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-    });
   }
-}
 
 async login(req: Request, res: Response) {
 

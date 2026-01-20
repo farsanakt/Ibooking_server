@@ -1,11 +1,15 @@
 import express from 'express'
 import AuthController from '../../controllers/auditorium/authController'
+import upload from '../../middleware/upload'
 
 const authController=new AuthController()
 
 const auditoriumAuth_route=express.Router()
 
-auditoriumAuth_route.post('/signup',authController.signup)
+auditoriumAuth_route.post('/signup',   upload.fields([
+    { name: "logo", maxCount: 1 },
+    { name: "seal", maxCount: 1 },
+  ]),authController.signup)
 
 auditoriumAuth_route.post('/login',authController.login)
 

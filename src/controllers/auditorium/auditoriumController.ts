@@ -11,15 +11,30 @@ const offerService = new OfferService();
 
 const auditoriumService=new AuditoriumService()
 
-const safeJsonParse = (value: any) => {
-  if (typeof value !== "string") return value;
+const safeParse = (field: any) => {
+  if (!field) return [];
 
-  try {
-    return JSON.parse(value);
-  } catch {
-    return value;
+ 
+  if (Array.isArray(field)) {
+    try {
+      return JSON.parse(field[0]);
+    } catch {
+      return [];
+    }
   }
+
+
+  if (typeof field === "string") {
+    try {
+      return JSON.parse(field);
+    } catch {
+      return [];
+    }
+  }
+
+  return field;
 };
+
 
 
 console.log('hi farsana iam here ewhere arer yu actually')
@@ -28,16 +43,18 @@ console.log('hi farsana iam here ewhere arer yu actually')
 class AuditoriumController{
 
 async addVenue(req: Request, res: Response) {
+
+
   try {
-    const data = req.body
+    
+    const data = req.body;
 
-    console.log(data, "data")
+data.locations = safeParse(data.locations);
+data.events = safeParse(data.events);
+data.timeSlots = safeParse(data.timeSlots);
+data.amenities = safeParse(data.amenities);
+data.tariff = safeParse(data.tariff);
 
-    data.events = safeJsonParse(data.events)
-    data.locations = safeJsonParse(data.locations)
-    data.timeSlots = safeJsonParse(data.timeSlots)
-    data.amenities = safeJsonParse(data.amenities)
-    data.tariff = safeJsonParse(data.tariff)
 
     const files = req.files as Express.Multer.File[]
     const imageUrls = files?.map((file) => (file as any).location) || []
@@ -87,27 +104,25 @@ async addVenue(req: Request, res: Response) {
     }
 
   
-async  updateVenue(req: Request, res: Response) {
+async updateVenue(req: Request, res: Response) {
   try {
     const venueId = req.params.id
     const data = req.body
 
-    if (data.locations && typeof data.locations === "string") data.locations = JSON.parse(data.locations)
-    if (data.timeSlots && typeof data.timeSlots === "string") data.timeSlots = JSON.parse(data.timeSlots)
-    if (data.amenities && typeof data.amenities === "string") data.amenities = JSON.parse(data.amenities)
-    if (data.tariff && typeof data.tariff === "string") data.tariff = JSON.parse(data.tariff)
-    if (data.events && typeof data.events === "string") data.events = JSON.parse(data.events)
+    data.locations = safeParse(data.locations)
+    data.timeSlots = safeParse(data.timeSlots)
+    data.amenities = safeParse(data.amenities)
+    data.tariff = safeParse(data.tariff)
+    data.events = safeParse(data.events)
 
     const files = req.files as Express.Multer.File[]
-    const newImageUrls = files.map((file) => (file as any).location)
+    const newImageUrls = files?.map(file => (file as any).location) || []
 
     let existingImages: string[] = []
     if (data.existingImages) {
-      if (Array.isArray(data.existingImages)) {
-        existingImages = data.existingImages
-      } else if (typeof data.existingImages === "string") {
-        existingImages = [data.existingImages]
-      }
+      existingImages = Array.isArray(data.existingImages)
+        ? data.existingImages
+        : [data.existingImages]
     }
 
     const mergedImages = [...existingImages, ...newImageUrls]
@@ -116,21 +131,25 @@ async  updateVenue(req: Request, res: Response) {
       data.audiUserId = data.audiUserId[0]
     }
 
-    const response = await auditoriumService.updateVenue(venueId, { ...data, images: mergedImages })
+    const response = await auditoriumService.updateVenue(
+      venueId,
+      { ...data, images: mergedImages }
+    )
 
     if (!response.success) {
-      res.status(HttpStatus.BAD_REQUEST).json(response)
-      return
+      return res.status(HttpStatus.BAD_REQUEST).json(response)
     }
 
     res.status(HttpStatus.OK).json(response)
   } catch (error) {
     console.error("Error in updateVenue controller:", error)
-    res
-      .status(HttpStatus.INTERNAL_SERVER_ERROR)
-      .json({ success: false, message: "Internal server error while updating venue" })
+    res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Internal server error while updating venue",
+    })
   }
 }
+
 
 
     async deleteVenue(req: Request, res: Response) {
