@@ -10,6 +10,7 @@ class AdminController{
 
     async findcount(req:Request,res:Response){
 
+
         try {
 
             const response=await adminService.findcount()

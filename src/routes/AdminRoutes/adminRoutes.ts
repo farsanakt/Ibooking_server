@@ -1,10 +1,19 @@
 import express from 'express'
 import AdminController from '../../controllers/admin/adminController'
+import { bulkUpload } from "../../controllers/admin/bulkUpload.controller";
+import { uploadExcel } from "../../middleware/upload.middleware";
+import { authenticate, authorizeRoles } from '../../middleware/auth';
 
 const adminController=new AdminController()
 
 const admin_route=express.Router()
 
+admin_route.post(
+  "/bulk-upload",
+ // Super Admin only
+  uploadExcel.single("file"),bulkUpload
+  
+);
 admin_route.get('/findcount',adminController.findcount)
 
 admin_route.get('/allaudilist',adminController.allAuditoriumList)
