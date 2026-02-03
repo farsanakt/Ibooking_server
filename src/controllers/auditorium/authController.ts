@@ -11,7 +11,7 @@ async signup(req: Request, res: Response) {
     try {
       const response = await authService.signup(req.body, req.files);
 
-      console.log(response,'this is the auth response')
+      console.log(req.body,'this is the auth response')
 
       if (!response.success) {
          res.status(400).json(response);

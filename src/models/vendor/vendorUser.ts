@@ -11,6 +11,7 @@ export interface IVendorUser extends Document {
   vendortype?: string;
   address:string;
   acceptedBy:string
+  gstNumber:string
   phone?: string;
 }
 
@@ -29,6 +30,7 @@ const vendorSchema: Schema = new Schema({
     required: true,
     unique: true
   },
+  gstNumber:{type:String},
   acceptedBy:{
     type:String,
     default:''

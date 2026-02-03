@@ -49,31 +49,37 @@ export class AuthService{
       const existingUser = await this.userRepositories.findUserByEmail(email)
       console.log('Existing user:', existingUser)
 
-      if (existingUser) {
-        if (!existingUser.isVerified) {
-          const getOtp = await  this.otpRepositories.findOtpByEmail(email)
-          console.log(getOtp,'otp')
-          if (getOtp) {
-            const currentTime = new Date().getTime()
-            const expirationTime = new Date(getOtp.createdAt).getTime() + 5 * 60 * 1000
-            if (currentTime < expirationTime) {
-              return { success: true, message: 'OTP is still valid. Please verify using the same OTP.' }
-            } else {
-              const newOtp = generateOtp()
-              await this.otpRepositories.updateOtpByEmail(email, newOtp)
-              await mailService.sendOtpEmail(email, newOtp)
-              return { success: true, message: 'OTP expired. A new OTP has been sent to your email.' }
-            }
-          } else {
-            console.log('else condition')
-            const newOtp = generateOtp()
-            await this.otpRepositories.create({ email, otp: newOtp } as unknown as IOtp)
-            await mailService.sendOtpEmail(email, newOtp)
-            return { success: true, message: 'No OTP found. A new OTP has been sent to your email.' }
-          }
-        } else {
-          return { success: false, message: 'Username already exists' }
-        }
+      // if (existingUser) {
+      //   if (!existingUser.isVerified) {
+      //     const getOtp = await  this.otpRepositories.findOtpByEmail(email)
+      //     console.log(getOtp,'otp')
+      //     if (getOtp) {
+      //       const currentTime = new Date().getTime()
+      //       const expirationTime = new Date(getOtp.createdAt).getTime() + 5 * 60 * 1000
+      //       if (currentTime < expirationTime) {
+      //         return { success: true, message: 'OTP is still valid. Please verify using the same OTP.' }
+      //       } else {
+      //         const newOtp = generateOtp()
+      //         await this.otpRepositories.updateOtpByEmail(email, newOtp)
+      //         await mailService.sendOtpEmail(email, newOtp)
+      //         return { success: true, message: 'OTP expired. A new OTP has been sent to your email.' }
+      //       }
+      //     } else {
+      //       console.log('else condition')
+      //       const newOtp = generateOtp()
+      //       await this.otpRepositories.create({ email, otp: newOtp } as unknown as IOtp)
+      //       await mailService.sendOtpEmail(email, newOtp)
+      //       return { success: true, message: 'No OTP found. A new OTP has been sent to your email.' }
+      //     }
+      //   } else {
+      //     return { success: false, message: 'Username already exists' }
+      //   }
+      // }
+
+      if(existingUser){
+ return { success: false, message: 'Username already exists' }
+
+
       }
 
       const savedDetails = await this.userRepositories.createUser({
@@ -84,10 +90,10 @@ export class AuthService{
         password,
       })
 
-      const newOtp = generateOtp()
-      console.log(newOtp,'otpeeee')
-      await this.otpRepositories.create({ email, otp: newOtp } as unknown as IOtp)
-      await mailService.sendOtpEmail(email, newOtp)
+      // const newOtp = generateOtp()
+      // console.log(newOtp,'otpeeee')
+      // await this.otpRepositories.create({ email, otp: newOtp } as unknown as IOtp)
+      // await mailService.sendOtpEmail(email, newOtp)
       return { success: true, message: 'Registered successfully. OTP sent to your email.' }
     } catch (error) {
       console.error('Error in userRegistration:', error)
@@ -309,7 +315,7 @@ async verifyUserOtp(otpdata: {email: string;otp: string;}): Promise<{ success: b
 
    async vendorRegistration(formData:any){
 
-        const {name,vendortype,email,phone,password,confirmPassword,address}=formData
+        const {name,vendortype,email,phone,password,confirmPassword,address,gstNumber}=formData
 
         try {
 
@@ -334,6 +340,7 @@ async verifyUserOtp(otpdata: {email: string;otp: string;}): Promise<{ success: b
                   vendortype:vendortype,
                   email: email,
                   password: password,
+                  gstNumber:gstNumber,
                   role:'vendor',
                   address:address
 

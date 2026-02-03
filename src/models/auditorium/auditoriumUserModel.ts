@@ -9,6 +9,7 @@ export interface IAuditoriumUser extends Document {
   isOtp: boolean;
   isBlocked: boolean;
   acceptedBy: string;
+  gstNumber:string
 
   auditoriumName: string;
   ownerName: string;
@@ -37,6 +38,7 @@ const userSchema = new Schema<IAuditoriumUser>(
     },
 
     email: { type: String, required: true, unique: true },
+    gstNumber:{type:String},
     phone: { type: String, required: true },
     password: { type: String, required: true },
     events:{type:[String]},

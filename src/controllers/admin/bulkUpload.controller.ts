@@ -89,7 +89,7 @@ export const bulkUpload = async (req: Request, res: Response) => {
 
         row.password = await bcrypt.hash(row.password, 10);
         row.role = "auditorium";
-        row.isVerified = true;
+        row.isVerified = false;
         row.isBlocked = false;
 
         // REQUIRED DEFAULTS FOR SCHEMA

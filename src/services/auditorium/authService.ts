@@ -83,6 +83,7 @@ if(data.events){
       password: hashedPassword,
       district: data.district,
       address: data.address,
+      gstNumber:data.gstNumber,
       events,
       locations,
       logo,
