@@ -58,6 +58,7 @@ constructor(){
         timeSlots: data.timeSlots,
         guestroom: data.guestRooms,
         youtubeLink: data.youtubeLink,
+        isPriceNegotiationNeeded:data.isPriceNegotiationNeeded,
         events: data.events,
         isVerified: venueVerified,
       })
@@ -109,6 +110,7 @@ constructor(){
         amenities: data.amenities,
         foodPolicy: data.foodPolicy,
         decorPolicy: data.decorPolicy,
+        isPriceNegotiationNeeded:data.isPriceNegotiationNeeded,
         tariff: data.tariff,
         events: data.events,
         termsAndConditions: data.termsAndConditions,

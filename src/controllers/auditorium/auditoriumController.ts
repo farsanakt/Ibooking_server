@@ -49,6 +49,8 @@ async addVenue(req: Request, res: Response) {
     
     const data = req.body;
 
+    console.log(data,'hi')
+
 data.locations = safeParse(data.locations);
 data.events = safeParse(data.events);
 data.timeSlots = safeParse(data.timeSlots);
@@ -108,6 +110,7 @@ async updateVenue(req: Request, res: Response) {
   try {
     const venueId = req.params.id
     const data = req.body
+    console.log(data,'daaaa')
 
     data.locations = safeParse(data.locations)
     data.timeSlots = safeParse(data.timeSlots)

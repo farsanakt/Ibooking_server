@@ -65,6 +65,7 @@ export interface IVenue extends Document {
   timeSlots: ITimeSlot[]
   auditoriumId?: mongoose.Types.ObjectId
   isVerified: boolean
+  isPriceNegotiationNeeded:boolean
   guestroom: string
   youtubeLink?: string
 }
@@ -131,6 +132,10 @@ const venueSchema: Schema<IVenue> = new Schema(
     youtubeLink: { type: String },
 
     isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    isPriceNegotiationNeeded: {
       type: Boolean,
       default: false,
     },
