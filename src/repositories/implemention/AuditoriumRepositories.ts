@@ -50,6 +50,27 @@ export class AuditoriumRepositories{
         return AuditoriumUser.findOne({auditoriumName:name})
 
        }  
+
+       async updateBookingAmount(id: string, totalAmount: number, balanceAmount: number) {
+
+    const updatedBooking = await Booking.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          totalAmount: totalAmount,
+          balanceAmount: balanceAmount
+        }
+      },
+      { new: true }
+    );
+
+    return updatedBooking;
+  }
+
+
+       async findBookingById(id: string) {
+    return await Booking.findById(id);
+  }
        
          async createVoucher(data: Partial<IVoucher>): Promise<IVoucher> {
            const offer = new VoucherModel(data);

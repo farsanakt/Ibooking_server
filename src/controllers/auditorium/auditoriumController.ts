@@ -234,6 +234,35 @@ async updateVenue(req: Request, res: Response) {
 
     }
 
+   async updateBookings(req: Request, res: Response) {
+
+  try {
+
+    const id = req.params.id;
+    const { totalAmount } = req.body;
+
+    const response = await auditoriumService.updateBookings(id, totalAmount);
+
+     res.status(200).json({
+      success: true,
+      message: "Booking updated successfully",
+      data: response
+    });
+    return
+
+  } catch (error: any) {
+
+     res.status(500).json({
+      success: false,
+      message: error.message
+    });
+    return
+
+  }
+
+}
+
+
   async checkUserExist(req: Request, res: Response) {
 
     try {

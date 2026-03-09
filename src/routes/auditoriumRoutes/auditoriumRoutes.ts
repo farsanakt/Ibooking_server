@@ -20,6 +20,8 @@ auditorium_route.get('/upcomigevents/:id',auditoriumController.getUpcomingEvents
 
 auditorium_route.get('/audibookings/:id',auditoriumController.existingBookings)
 
+auditorium_route.put('/updatebooking/:id',auditoriumController.updateBookings)
+
 auditorium_route.post('/userexist',auditoriumController.checkUserExist)
 
 auditorium_route.get('/userDetails',auditoriumController.userDetails)

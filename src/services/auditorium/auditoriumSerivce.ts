@@ -188,6 +188,30 @@ constructor(){
 
      }
 
+
+     async updateBookings(id: string, totalAmount: number) {
+
+    // get booking
+    const booking = await this.auditoriumRepositories.findBookingById(id);
+
+    if (!booking) {
+      throw new Error("Booking not found");
+    }
+
+    const paidAmount = Number(booking.paidAmount);
+    const newTotalAmount = Number(totalAmount);
+
+    const balanceAmount = newTotalAmount - paidAmount;
+
+    const updatedBooking = await this.auditoriumRepositories.updateBookingAmount(
+      id,
+      newTotalAmount,
+      balanceAmount
+    );
+
+    return updatedBooking;
+  }
+
      async checkUserExist(email:string){
 
       try {
