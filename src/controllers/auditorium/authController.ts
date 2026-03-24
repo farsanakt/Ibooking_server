@@ -31,14 +31,14 @@ async signup(req: Request, res: Response) {
   }
 
 async login(req: Request, res: Response) {
-
+console.log('jpppppp')
   
   try {
     const data = req.body;
 
     
     const response = await authService.login(data)
-    console.log('njn ivde und',data)
+    console.log('njn ivde undeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',data)
 
     if (!response?.success) {
 

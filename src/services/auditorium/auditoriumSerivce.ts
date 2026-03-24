@@ -1,5 +1,5 @@
 import { AuditoriumRepositories } from "../../repositories/implemention/AuditoriumRepositories";
-
+import bcrypt from "bcryptjs";
 
 export class AuditoriumService{
 
@@ -188,6 +188,18 @@ constructor(){
 
      }
 
+     async getProfile(id: string) {
+    return this.auditoriumRepositories.getUserById(id);
+  }
+
+  async verifyPasswordd(id: string, password: string) {
+    return this.verifyPassword(id, password);
+  }
+
+  async updateProfile(id: string, updateData: any, password: string) {
+    return this.auditoriumRepositories.updateProfileSecure(id, updateData, password);
+  }
+
 
      async updateBookings(id: string, totalAmount: number) {
 
@@ -261,37 +273,28 @@ constructor(){
       }
 
      }
+async verifyPassword(id: string, password: string) {
+  try {
+    const user = await this.auditoriumRepositories.findAudiById(id);
 
-     async verifyPassword(id:string,password:string){
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
 
-      console.log('hiiileoope')
+    // compare password (assuming bcrypt)
+    const isMatch = await bcrypt.compare(password, user.password);
 
-      try {
+    if (isMatch) {
+      return { success: true, message: 'Password verified successfully' };
+    } else {
+      return { success: false, message: 'Invalid password' };
+    }
 
-        const user=await this.auditoriumRepositories.findAudiById(id)
-
-        if(!user){
-
-          return {success:false,message:'user not found'}
-
-        }
-
-        if(user.password == password){
-
-
-          return {success:true,message:'Password verified successfully'}
-
-        }else{
-
-          return {success:false,message:'invalid password'}
-
-        }
-        
-      } catch (error) {
-        
-      }
-
-     }
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: 'Something went wrong' };
+  }
+}
 
 
 

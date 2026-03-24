@@ -340,11 +340,15 @@ async updateVenue(req: Request, res: Response) {
 
     async verifyPassword(req:Request,res:Response){
 
+      console.log('njnneee')
+
         try {
 
             const id=req.params.id
 
             const {password}=req.body
+
+            console.log(id,password)
 
             const response=await auditoriumService.verifyPassword(id,password)
 
@@ -674,6 +678,48 @@ async fetchAllOffer(req:Request,res:Response){
   }
 
 }
+
+async  getAuditoriumProfile (req: Request, res: Response) {
+  try {
+    const user = await auditoriumService.getProfile(req.params.id);
+    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+
+    res.status(200).json(user);   // Direct object (matches your current response)
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+async  verifyPswrd (req: Request, res: Response){
+  console.log('hiiiiiiiiiiiiiopwww')
+  console.log(req.params.id,req.body.password,'lo')
+  try {
+    const isValid = await auditoriumService.verifyPassword(req.params.id, req.body.password);
+    res.json({ success: isValid, message: isValid ? "Verified" : "Incorrect password" });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+async  updateProfileSecure (req: Request, res: Response) {
+
+  console.log('jiiio')
+  try {
+    const { password, ...updateData } = req.body;
+    if (!password) return res.status(400).json({ success: false, message: "Password required" });
+
+    const updatedUser = await auditoriumService.updateProfile(req.params.id, updateData, password);
+
+    res.json({
+      success: true,
+      message: "Profile updated successfully",
+      data: updatedUser
+    });
+  } catch (error: any) {
+    const status = error.message === "Incorrect password" ? 401 : 500;
+    res.status(status).json({ success: false, message: error.message });
+  }
+};
 
 
 

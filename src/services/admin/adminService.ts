@@ -36,6 +36,10 @@ class AdminService{
 
     const allAuditorium = await this.adminRepositories.findAllAuditorium()
 
+    const allAuditoriumBookings=await this.adminRepositories.findAllAuditoriumBookings()
+
+    console.log(allUsers,'keeee')
+
     const allVouchers=await this.adminRepositories.findAllVocuhers()
 
     const allstaff=await this.adminRepositories.allAdminStaff()
@@ -50,7 +54,9 @@ class AdminService{
 
    const totalstaff=allstaff?.length
 
-    return {status: true, data: { totalUsers, totalVendors,totalAuditorium,totalVouchers,totalstaff},}
+   const totalAudiBkngs=allAuditoriumBookings?.length
+
+    return {status: true, data: { totalUsers, totalVendors,totalAuditorium,totalVouchers,totalstaff,totalAudiBkngs},}
 
   } catch (error) {
 

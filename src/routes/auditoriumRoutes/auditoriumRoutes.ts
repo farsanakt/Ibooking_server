@@ -60,4 +60,9 @@ auditorium_route.delete("/offers/:id",auditoriumController .deleteOffer);
 auditorium_route.get('/fetchalloffers',auditoriumController.fetchAllOffer)
 
 
+auditorium_route.get("/profile/:id", auditoriumController.getAuditoriumProfile);
+// auditorium_route.post("/verify-password/:id",auditoriumController.verifyPswrd);
+auditorium_route.patch("/profile/:id/secure-update", auditoriumController.updateProfileSecure);
+
+
 export default auditorium_route

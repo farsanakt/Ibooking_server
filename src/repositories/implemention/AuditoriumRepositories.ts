@@ -12,6 +12,7 @@ import mongoose from "mongoose";
 import vendorUser, { IVendorUser } from "../../models/vendor/vendorUser";
 import { IVoucher, VoucherModel } from "../../models/vendor/voucherModel";
 import auditoriumUserModel from "../../models/auditorium/auditoriumUserModel";
+import bcrypt from "bcryptjs";
 
 
 export class AuditoriumRepositories{
@@ -368,6 +369,32 @@ export class AuditoriumRepositories{
     
     }
 
+
+    async getUserById(id: string) {
+    return auditoriumUserModel.findById(id).select("-password");
+  }
+
+  async verifyPassword(userId: string, password: string): Promise<boolean> {
+    const user = await auditoriumUserModel.findById(userId).select("+password");
+    if (!user) return false;
+    return bcrypt.compare(password, user.password);
+  }
+
+  async updateProfileSecure(userId: string, updateData: any, providedPassword: string) {
+    const isValid = await this.verifyPassword(userId, providedPassword);
+    if (!isValid) throw new Error("Incorrect password");
+
+    const { password, role, isVerified, isOtp, isBlocked, ...safeUpdate } = updateData;
+
+    const updated = await auditoriumUserModel.findByIdAndUpdate(
+      userId,
+      { $set: safeUpdate },
+      { new: true, runValidators: true }
+    ).select("-password");
+
+    if (!updated) throw new Error("User not found");
+    return updated;
+  }
 
 
 }

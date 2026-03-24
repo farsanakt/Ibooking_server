@@ -10,7 +10,7 @@ class AdminController{
 
     async findcount(req:Request,res:Response){
 
-
+console.log('hiiiiiii')
         try {
 
             const response=await adminService.findcount()
@@ -443,7 +443,9 @@ async adminLogin(req: Request, res: Response) {
     try {
       const data = req.body;
 
-      console.log('njn',data)
+      console.log('njnooooooooooooooooooooooooooo',data)
+
+      console.log('hemmmeeeeee')
 
       const response = await adminService.adminLogin(data);
 
